@@ -8,7 +8,7 @@
  * Thin client: every number comes from /api/v2. No statistic computed in JS (M5).
  * Additive & isolated: NEW route; does not touch /workbench or src/lib/api.ts.
  */
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import {
   type IngestResponse,
   type EquilibriumResponse,
@@ -25,8 +25,60 @@ export default function ObservatoryPage() {
   const [asOf, setAsOf] = useState<string | null>(null);
   const [equilibrium, setEquilibrium] = useState<EquilibriumResponse | null>(null);
   const [windowSel, setWindowSel] = useState<{ start: string | null; end: string | null }>({ start: null, end: null });
+  // true once the user has DELIBERATELY committed a window end (typed/Enter/blur). While false the
+  // end auto-tracks the cursor. This distinguishes "respect a deliberate sub-window" from "follow
+  // the cursor", which is the crux of Part 1. ISO 'YYYY-MM-DD' dates compare lexicographically.
+  const endManualRef = useRef(false);
+  const [scoreNonce, setScoreNonce] = useState(0);   // bump → HabitatPanel re-fetches (commit path)
+  const [clampNote, setClampNote] = useState<string | null>(null);
 
   const datasetId = ingest?.dataset.dataset_id ?? '';
+
+  // PART 1 — the as-of cursor is a HARD UPPER BOUND on the habitat window end (causal firewall).
+  // start is NEVER auto-updated by the cursor. end:
+  //   • no manual end yet            → tracks the cursor (forward AND back)
+  //   • manual end, end > cursor     → clamp down to the cursor (firewall)
+  //   • manual end, end ≤ cursor     → leave (deliberate sub-window)
+  const handleAsOf = useCallback((d: string) => {
+    setAsOf(d);
+    setWindowSel((w) => {
+      if (!endManualRef.current) return { start: w.start, end: d };
+      if (w.end && w.end > d) return { start: w.start, end: d };
+      return w;
+    });
+  }, []);
+
+  // live (uncommitted) field edits — keep the controlled date inputs responsive; no clamp/fetch yet.
+  const liveWindow = useCallback((w: { start: string | null; end: string | null }) => setWindowSel(w), []);
+
+  // PART 2 — commit a manually edited window field (blur/Enter): clamp end ≤ as-of, then score.
+  const commitWindow = useCallback(
+    (field: 'start' | 'end', raw: string | null) => {
+      let value = raw;
+      if (field === 'end') {
+        endManualRef.current = true;
+        if (value && asOf && value > asOf) {
+          value = asOf;
+          setClampNote('window end clamped to as-of date (causal firewall)');
+        } else {
+          setClampNote(null);
+        }
+      }
+      setWindowSel((w) => ({ ...w, [field]: value }));
+      setScoreNonce((n) => n + 1);   // → HabitatPanel re-fetches for the committed window
+    },
+    [asOf],
+  );
+
+  // "≤ as-of" convenience: full causal window that RESUMES cursor-tracking of the end.
+  const trackToAsOf = useCallback(
+    (start: string | null) => {
+      endManualRef.current = false;
+      setClampNote(null);
+      setWindowSel({ start, end: asOf });
+    },
+    [asOf],
+  );
 
   return (
     <div style={{ display: 'flex', flex: 1, minHeight: 0, background: C.bg, padding: 10, gap: 10 }}>
@@ -39,6 +91,9 @@ export default function ObservatoryPage() {
               setAsOf(null);
               setEquilibrium(null);
               setWindowSel({ start: null, end: null });
+              endManualRef.current = false;
+              setClampNote(null);
+              setScoreNonce(0);
             }}
           />
         </Panel>
@@ -63,10 +118,13 @@ export default function ObservatoryPage() {
             <PriceChart
               datasetId={datasetId}
               asOf={asOf}
-              onAsOfChange={setAsOf}
+              onAsOfChange={handleAsOf}
               onEquilibrium={setEquilibrium}
               windowSel={windowSel}
-              onWindowSel={setWindowSel}
+              onWindowSel={liveWindow}
+              onCommitWindow={commitWindow}
+              onTrackToAsOf={trackToAsOf}
+              clampNote={clampNote}
             />
           </Panel>
         ) : (
@@ -78,7 +136,7 @@ export default function ObservatoryPage() {
       <div style={{ width: 420, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
         <Panel title="4 · MR habitat — surrogate-relative" style={{ flex: 1 }}>
           {datasetId ? (
-            <HabitatPanel datasetId={datasetId} asOf={asOf} window={windowSel} />
+            <HabitatPanel datasetId={datasetId} asOf={asOf} window={windowSel} scoreNonce={scoreNonce} />
           ) : (
             <span style={{ ...mono, fontSize: 11, color: C.textDim }}>ingest a dataset to score a window.</span>
           )}

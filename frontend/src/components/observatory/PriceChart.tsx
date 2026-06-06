@@ -37,9 +37,14 @@ interface Props {
   onEquilibrium: (e: EquilibriumResponse | null) => void;
   windowSel: { start: string | null; end: string | null };
   onWindowSel: (w: { start: string | null; end: string | null }) => void;
+  // commit a manually edited window field (blur/Enter) → page clamps end ≤ as-of, then scores.
+  onCommitWindow: (field: 'start' | 'end', value: string | null) => void;
+  // "≤ as-of" convenience: full causal window that resumes cursor-tracking of the end.
+  onTrackToAsOf: (start: string | null) => void;
+  clampNote: string | null;
 }
 
-export function PriceChart({ datasetId, asOf, onAsOfChange, onEquilibrium, windowSel, onWindowSel }: Props) {
+export function PriceChart({ datasetId, asOf, onAsOfChange, onEquilibrium, windowSel, onWindowSel, onCommitWindow, onTrackToAsOf, clampNote }: Props) {
   const priceRef = useRef<HTMLDivElement>(null);
   const zRef = useRef<HTMLDivElement>(null);
   const priceChart = useRef<IChartApi | null>(null);
@@ -256,31 +261,43 @@ export function PriceChart({ datasetId, asOf, onAsOfChange, onEquilibrium, windo
         <span style={{ ...mono, fontSize: 11, color: C.accent, whiteSpace: 'nowrap' }}>{asOf ?? '—'}</span>
       </div>
 
-      {/* window selection for habitat (≤ as_of) */}
+      {/* window selection for habitat (≤ as_of). onChange = live (controlled value); the clamp +
+          habitat fetch happen on COMMIT (blur or Enter), per Part 2. */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <span style={{ ...mono, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.textDim }}>habitat window</span>
         <input
           type="date"
+          aria-label="habitat window start"
+          data-testid="window-start"
           value={windowSel.start ?? ''}
           max={asOf ?? undefined}
           onChange={(e) => onWindowSel({ ...windowSel, start: e.target.value || null })}
+          onBlur={(e) => onCommitWindow('start', e.target.value || null)}
+          onKeyDown={(e) => { if (e.key === 'Enter') onCommitWindow('start', (e.target as HTMLInputElement).value || null); }}
           style={dateInput}
         />
         <span style={{ color: C.textDim }}>→</span>
         <input
           type="date"
+          aria-label="habitat window end"
+          data-testid="window-end"
           value={windowSel.end ?? ''}
           max={asOf ?? undefined}
           onChange={(e) => onWindowSel({ ...windowSel, end: e.target.value || null })}
+          onBlur={(e) => onCommitWindow('end', e.target.value || null)}
+          onKeyDown={(e) => { if (e.key === 'Enter') onCommitWindow('end', (e.target as HTMLInputElement).value || null); }}
           style={dateInput}
         />
         <button
           data-testid="window-full"
-          onClick={() => onWindowSel({ start: allTimes[0] ?? null, end: asOf })}
+          onClick={() => onTrackToAsOf(allTimes[0] ?? null)}
           style={btn}
         >
           ≤ as-of
         </button>
+        {clampNote && (
+          <span data-testid="clamp-note" style={{ ...mono, fontSize: 10, color: C.warn }}>⚠ {clampNote}</span>
+        )}
       </div>
 
       {prov && (

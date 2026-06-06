@@ -10,7 +10,7 @@
  *   - the calibration badge (OU 71.3 / RW 49.2 / trend 17.2 validated_non_inverting)
  *   - a raw ↔ deseason toggle; if raw_vs_deseason.verdict_changed → contamination flag.
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   observatory,
   binForHistogram,
@@ -22,9 +22,10 @@ interface Props {
   datasetId: string;
   asOf: string | null;
   window: { start: string | null; end: string | null };
+  scoreNonce: number;   // bumped by the page on a window commit → re-fetch the score (Part 2)
 }
 
-export function HabitatPanel({ datasetId, asOf, window }: Props) {
+export function HabitatPanel({ datasetId, asOf, window, scoreNonce }: Props) {
   const [deseason, setDeseason] = useState(false);
   const [resp, setResp] = useState<HabitatResponse | null>(null);
   const [busy, setBusy] = useState(false);
@@ -37,14 +38,23 @@ export function HabitatPanel({ datasetId, asOf, window }: Props) {
       setError('Select a habitat window (≤ as-of) on the chart first.');
       return;
     }
+    // MANDATORY CAUSAL FIREWALL — fires before EVERY habitat call. The as-of cursor is the
+    // temporal firewall; a window end beyond it would score on lookahead data. Clamp, never
+    // silently send a future end. as_of is ALWAYS the cursor date (never the window end).
+    let windowEnd = window.end;
+    if (asOf && windowEnd > asOf) {
+      console.warn(`habitat: window end ${windowEnd} > as-of ${asOf} — clamping to as-of (causal firewall)`);
+      windowEnd = asOf;
+    }
     setBusy(true);
     setError(null);
     try {
       const r = await observatory.habitat({
         dataset_id: datasetId,
-        window: { start: window.start, end: window.end },
+        window: { start: window.start, end: windowEnd },
         as_of: asOf,
         deseason: ds,
+        params: { vr_qs: [2, 5, 10, 20], ns_null: 200, seed: 42 },
       });
       setResp(r);
       setDeseason(ds);
@@ -54,6 +64,14 @@ export function HabitatPanel({ datasetId, asOf, window }: Props) {
       setBusy(false);
     }
   }
+
+  // Part 2 — a committed window edit (page bumps scoreNonce) re-fetches for the new window.
+  // nonce 0 = initial/no-commit → do nothing (scoring stays a deliberate action).
+  useEffect(() => {
+    if (scoreNonce === 0) return;
+    void run(deseason);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scoreNonce]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
