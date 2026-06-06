@@ -43,6 +43,7 @@ export function AppNav() {
         {[
           { href: '/', label: 'Workstation' },
           { href: '/workbench', label: 'Workbench' },
+          { href: '/observatory', label: 'Observatory' },
         ].map(({ href, label }) => {
           const active = pathname === href;
           return (

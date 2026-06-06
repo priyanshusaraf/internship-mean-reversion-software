@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import market
+from app.routers import market, observatory
 from app.services import store
 
 
@@ -29,6 +29,7 @@ app.add_middleware(
 )
 
 app.include_router(market.router)
+app.include_router(observatory.router)
 
 
 @app.get("/health")

@@ -21,95 +21,37 @@ from __future__ import annotations
 import sys, os
 import numpy as np
 
-VENV_PYTHON = True  # running in backend venv
+# Import shim — single null-generating code path lives in the backend engine (contract M3).
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
+from app.services.analytics_habitat import (  # noqa: E402
+    habitat_score_full,
+    vr_q,
+    min_vr,
+    VR_QS,
+    NS_NULL,
+    SEED_CAL,
+)
 
-# Habitat score parameters (to be frozen in pre-reg)
-VR_QS       = [5, 10, 20]          # lags for min-VR
-NS_NULL     = 2000                  # surrogates per score evaluation
-SEED_CAL    = 20260606              # calibration seed
+VENV_PYTHON = True  # running in backend venv
 
 # Synthetic ground-truth parameters
 H           = 40                    # forward window length (same as live test)
 N_TRIALS    = 200                   # synthetic trials per process type
 
 
-# ── VR helper ────────────────────────────────────────────────────────────────────
-
-def vr_q(x: np.ndarray, q: int) -> float:
-    """Variance ratio at lag q. x is a level series."""
-    x = x[np.isfinite(x)]
-    n = len(x)
-    if n < q + 5:
-        return float("nan")
-    dr = np.diff(x)
-    var1 = np.var(dr, ddof=1)
-    if var1 <= 1e-14:
-        return float("nan")
-    ret_q = x[q:] - x[:-q]
-    return float(np.var(ret_q, ddof=1) / (q * var1))
-
-
-def min_vr(x: np.ndarray, qs: list[int] = VR_QS) -> float:
-    """Min VR over a set of lags."""
-    vals = [vr_q(x, q) for q in qs]
-    vals = [v for v in vals if np.isfinite(v)]
-    return min(vals) if vals else float("nan")
-
-
 # ── Habitat score ─────────────────────────────────────────────────────────────────
+# VR helpers (vr_q, min_vr) and the null loop now live in the single engine code path
+# `app.services.analytics_habitat` (contract M3). They are imported above.
 
 def habitat_score(x: np.ndarray, seed: int = SEED_CAL) -> float:
     """
     Surrogate-relative MR habitat score for window x.
     Returns 0–100; high = more reverting than null.
+
+    Delegates to the single null-generating code path (contract M3) so the calibration
+    badge and live scoring can never drift apart.
     """
-    real_mvr = min_vr(x)
-    if not np.isfinite(real_mvr):
-        return float("nan")
-
-    x_fin = x[np.isfinite(x)]
-    n = len(x_fin)
-    if n < max(VR_QS) + 5:
-        return float("nan")
-
-    dr = np.diff(x_fin)
-    mu_dr  = float(np.mean(dr))
-    sig_dr = float(np.std(dr, ddof=1))
-    rng = np.random.default_rng(seed)
-
-    null_mvrs = []
-
-    # Null 1: RW (iid, vol-matched)
-    for _ in range(NS_NULL // 2):
-        path = np.concatenate([[x_fin[0]], x_fin[0] + np.cumsum(rng.normal(mu_dr, sig_dr, n - 1))])
-        v = min_vr(path)
-        if np.isfinite(v):
-            null_mvrs.append(v)
-
-    # Null 2: MA(1) (vol-matched, decorrelation-free at q≥2 asymptotically)
-    # Estimate MA(1) theta from the first autocorrelation of increments
-    if len(dr) > 5:
-        acf1 = float(np.corrcoef(dr[:-1], dr[1:])[0, 1])
-        theta_ma = np.clip(acf1, -0.95, 0.95)
-    else:
-        theta_ma = 0.0
-
-    for _ in range(NS_NULL // 2):
-        eps = rng.normal(0, sig_dr, n + 1)
-        ma1_rets = eps[1:] + theta_ma * eps[:-1]
-        ma1_rets *= sig_dr / (np.std(ma1_rets, ddof=1) + 1e-12)  # re-scale to match vol
-        path = np.concatenate([[x_fin[0]], x_fin[0] + np.cumsum(ma1_rets[:n-1])])
-        v = min_vr(path)
-        if np.isfinite(v):
-            null_mvrs.append(v)
-
-    if not null_mvrs:
-        return float("nan")
-
-    # Score = fraction of nulls WITH HIGHER (less reverting) min-VR than real
-    # i.e. fraction of nulls that are LESS sub-diffusive → real is more MR than that fraction
-    score = 100.0 * float(np.mean(np.array(null_mvrs) >= real_mvr))
-    return score
+    return habitat_score_full(x, seed)["score"]
 
 
 # ── Synthetic process generators ──────────────────────────────────────────────────
