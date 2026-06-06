@@ -1,0 +1,573 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------- packages ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{abstract}
+\usepackage[hidelinks]{hyperref}
+
+% ---------- formatting ----------
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\small}
+
+\definecolor{verdictbg}{HTML}{F3F4F6}
+\definecolor{verdictrule}{HTML}{374151}
+
+\newtcolorbox{verdict}[1]{
+  colback=verdictbg, colframe=verdictrule, boxrule=0.8pt,
+  arc=1.5pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  title={\bfseries #1}, fonttitle=\bfseries\small, coltitle=verdictrule,
+  breakable
+}
+
+\newcommand{\status}[1]{{\small\textsc{[#1]}}}
+\newcommand{\VR}{\mathrm{VR}}
+\newcommand{\half}{t_{1/2}}
+
+% ---------- title ----------
+\title{\bfseries From Falsification to a Validated Apparatus:\\[2pt]
+\large Mean Reversion in Commodity Calendar Spreads Inside Structurally Trendy Markets}
+\author{Adaptive Mean-Reversion (AMR) Research Programme\\
+\small Internal Research Dossier --- Compiled Synthesis}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+We report the trajectory of a falsification-first research programme over the interval in which its
+flagship regime-transition object was killed and a deployment-relevant mean-reversion edge was, for
+the first time, validly confirmed. The programme's original object---a pre-reversion ``stabilization''
+morphology in the equilibrium residual---is falsified across twelve instruments spanning five habitats
+and three sampling resolutions, and the falsification is extended to a sixty-two file cross-habitat
+sweep with zero exceptions; a single mechanism, \emph{selection-on-deviation}, reproduces the entire
+result with no transition object required. A provenance audit then disqualifies every pre-existing
+spread in the data set, and a controlled study shows that even a strictly causal, pre-registered
+\emph{rolling} hedge-ratio estimator \emph{manufactures} the variance-ratio structure it purports to
+measure---hedge-ratio update noise accounts for $82$--$97\%$ of the differenced-spread variance.
+Restricting construction to definitional unit-ratio calendar spreads removes this artifact and
+furnishes a real-data positive control. On a natural-gas front calendar the apparatus confirms genuine
+short-horizon stochastic mean reversion ($\VR(20)=0.448$, $p=0.005$ against random-walk, GARCH and
+moving-average microstructure nulls), corroborated on an independently constructed Brent calendar.
+A rolling-local analysis finds the natural-gas signal statistically persistent across nineteen years
+(pooled standardized distance $-0.627$, $t=-4.37$, $p\approx 2\times10^{-4}$) and economically
+\emph{uneconomic}: a causal mean-reversion book is break-even before costs and negative after. We
+maintain throughout a strict separation of three claims---that the \emph{apparatus works}, that the
+\emph{signal is real}, and that the edge \emph{clears costs}---and conclude that the first two are
+earned and the third is not. We close with the corrected methodological framework, the open problems,
+and three forward hypotheses.
+\end{abstract}
+
+\noindent\textbf{Keywords:} mean reversion; variance ratio; commodity calendar spreads; theory of
+storage; surrogate-relative inference; look-ahead bias; falsification.
+
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+
+\textbf{Status legend.}
+\status{frozen} decided, not reopened without justification;
+\status{killed/archived} falsified-in-form;
+\status{conditional survival} valid in named regimes with a stated kill trigger;
+\status{persistent-but-uneconomic} statistically real, does not clear costs;
+\status{open} genuinely unresolved;
+\status{deferred} deprioritized with a named reopen trigger.
+Confidence labels (trustworthiness of evidence): \textsc{low, low--medium, medium, medium--high, high}.
+
+\section{Introduction}
+
+The programme seeks a narrow but genuine edge: to trade mean reversion inside markets that look
+structurally trendy, and to \emph{stop}---treating stopping as a successful outcome---if the edge is
+not there. This dossier covers the interval bounded by two events. It opens at the falsification of the
+programme's flagship regime-shift object and closes at the present research frontier. The narrative is
+a single arc: \emph{diagnosis}, \emph{falsification}, \emph{reconstruction}, \emph{corrected
+framework}, and \emph{forward path}.
+
+The organising discipline of the report is a separation that the field routinely blurs. A research
+result can be a success in three different and non-interchangeable senses:
+
+\begin{description}[leftmargin=1.4em,itemsep=2pt]
+  \item[Research win.] The measurement apparatus works: it has power, selectivity, a calibrated
+  false-positive rate, and the ability to discriminate genuine mean reversion from microstructure
+  noise, demonstrated on controls of known construction.
+  \item[Empirical win.] The signal is real: a specific instrument separates from a matched surrogate
+  in the mean-reverting direction, robustly across regimes.
+  \item[Deployment win.] The edge clears costs: a causal trading rule has positive net expectancy
+  after all-in transaction costs over a forward hold-out.
+\end{description}
+
+As of this writing the programme holds a research win and an empirical win. It does \emph{not} hold a
+deployment win. Every claim below is filed under exactly one of these headings.
+
+The principal methodological commitments are inherited and unrelaxed: at time $t$ only information
+available at $t$ may enter a causal computation; every statistic is read \emph{surrogate-relative}
+(against a matched null run through identical extraction), never against a fixed constant or the
+instrument's own history; hypotheses, windows, and decision rules are fixed before data are touched;
+and a falsified idea is named and closed rather than silently revived.
+
+\section{The Falsification of the Pre-Reversion Morphology}
+\label{sec:statet}
+
+\subsection{The object and its pre-registered signature}
+
+The original Layer-2 object posited that an extended deviation from a latent equilibrium price
+$\mu^*$ \emph{loses momentum and stabilizes before reverting}, leaving a measurable pre-reversion
+morphology. This was operationalized---deliberately as an observational existence question, not a
+detector---on the causal one-step innovation stream of an anchored Kalman equilibrium filter. The
+signature was fixed in advance: in high-$|z|$ causal pre-windows (selected by a symmetric partition on
+the causal standardized deviation, $\theta\in\{1.0,1.5,2.0\}$, window $W=30$), relative to a matched
+null, all three of the following would hold:
+\begin{enumerate}[label=(D\arabic*),leftmargin=2.4em,itemsep=1pt]
+  \item innovation variance $\downarrow$ (residual stabilization);
+  \item innovation autocorrelation $\mathrm{ACF}(1)\downarrow$ (deviation losing momentum);
+  \item directional efficiency $\downarrow$ (price chops rather than continues).
+\end{enumerate}
+A ``signature'' required all three negative. The claim was distributional---about an ensemble, never a
+single bar---so that its meaning did not depend on \emph{when} it was read.
+
+\subsection{The method was validated before it was trusted}
+
+Synthetic calibration established that the measurement was not blind: it produced no false positive on
+ordinary Ornstein--Uhlenbeck (OU) or random-walk mean reversion (all standardized mean differences
+$|d|\leq 0.15$), and it fired loudly and in the correct direction on a clean stabilize-then-revert
+positive control ($d\approx -1.9$ for innovation variance, $-2.1$ to $-2.5$ for $\mathrm{ACF}(1)$,
+$-0.9$ for directional efficiency). A first, mis-built positive control was rejected and recorded
+rather than quietly discarded. The method's confidence entered the real-data phase at
+\textsc{medium--high}; the existence of the object itself remained \textsc{untested}.
+
+\subsection{The kill}
+
+The decisive instrument was committed in advance: a canonical mean-reverting equity pair spread. The
+committed rule stated that directional continuation in that instrument, like the rest of the cohort,
+would meet the kill condition. It did. Across twelve instruments spanning five habitats, two to three
+resolutions, two comparison methods and three thresholds, directional efficiency was \emph{positive in
+every one}---high-deviation windows were \emph{more} directionally efficient, the exact opposite of the
+pre-registered stabilization. The within-instrument, confound-controlled comparison reproduced the
+sign, ruling out a null-calibration artifact.
+
+A single null reproduces the entire result with no transition object: \emph{selection-on-deviation}.
+Conditioning on $|z|\geq\theta$ samples paths that arrived at an extreme \emph{by directional travel};
+those pre-windows are directionally efficient by construction. The effect is the Lo--MacKinlay
+\cite{LoMacKinlay1990} cross-autocovariance selection trap, and continuation around extremes is the
+expected result at these horizons in the momentum literature \cite{GeorgeHwang2004,JT1993}. The
+result is textbook, not anomalous.
+
+A subsequent sweep over sixty-two files and twenty-plus instruments---equities, commodities, foreign
+exchange and rates at three resolutions---returned sixty-two rejections, zero confirmations, zero
+inconclusive and zero noise, with the relevant descriptors universally and substantially wrong-signed.
+
+\begin{verdict}{Verdict --- Section \ref{sec:statet}}
+\small
+The pre-reversion stabilization morphology is \status{killed/archived} \textbf{(structural;
+confidence \textsc{high} in the kill)}. Confidence that it reflects a real phenomenon in any tested
+habitat: $<5\%$. The programme's question inverts from \emph{when} reversion ignites to \emph{where}
+and \emph{whether} reversion robustly exists, and its bottleneck moves from theory to data
+trustworthiness. The surviving load-bearing rule: residual reversion and residual half-life are
+\emph{smoother-manufactured}---``did price come back?'' is a contaminated question; the valid
+discriminator is equilibrium stability (did $\mu^*$ stay put?), and the return-space variance ratio is
+the one core statistic that escapes the trap. No transition-morphology variant reopens without a new
+mechanism and new evidence.
+\end{verdict}
+
+\section{The Provenance and Construction Crisis}
+\label{sec:crisis}
+
+\subsection{Provenance is upstream of every statistic}
+
+The kill exposed an inverted ordering: the programme had pursued \emph{when} before establishing
+\emph{where}, on data whose causality was unverified. A provenance audit, with disposition rules fixed
+before inspection, returned a binding fact: every deployment-domain spread in the data set was a
+pre-computed single price column with its constituent legs discarded. With the legs gone, the
+hedge-ratio's causality is unrecoverable, and a full-sample hedge ratio---which renders a spread
+stationary by hindsight construction---is mechanically indistinguishable from genuine mean reversion.
+Consequently \emph{none} of the eight pre-existing spreads survived to the analysis whitelist; all were
+contaminated by default. Contamination is the default; trust is earned by a constructive causal proof.
+
+The resolution was a deep cohort of forty-six trusted raw legs across energy, metals, agriculture,
+foreign exchange and equities, from which seven spreads are constructible under a causal protocol. For
+the first time the programme held instruments whose causality could be proven by construction rather
+than assumed.
+
+\subsection{The construction law}
+
+The audit was generalised into a construction-legality standard governing data only, upstream of every
+reversion statistic. Its governing question, applied to every derived value at every bar, is whether
+that value could have existed using only information available at time $t$. The standard fixes a
+hedge-ratio ontology ordered from safest to most assumption-laden---unit ratio (definitional,
+zero look-ahead) $\succ$ structural/economic ratio $\succ$ causal rolling regression $\succ$ causal
+rolling cointegration $\succ$ dynamic state-space ratio (deferred)---and forbids a full-sample ratio of
+any kind as evidence. It requires trailing-window estimation lagged to $t-1$, timestamp (not index)
+synchronisation, inner-join alignment, and a level-difference representation for any spread that can
+cross zero (logarithmic and ratio statistics are undefined through zero). It treats naive spread
+high/low constructed from separately-timed leg extrema as counterfactual states that never existed.
+
+\subsection{A causal estimator that manufactures its own answer}
+
+The first verdict-capable study built seven spreads under this protocol using a causal, lagged
+\emph{rolling} ordinary-least-squares hedge ratio on a sixty-bar window, and tested the level-difference
+variance ratio against random-walk, GARCH and OU surrogates. Every spread passed a future-injection
+causal acceptance test, and the engine was ground-truth validated. The headline result was
+nonetheless \emph{inconclusive and construction-defective}. Decompose the differenced spread,
+$S_t = A_t - \beta_t B_t$:
+\begin{equation}
+\Delta S_t \;=\; \underbrace{\big(\Delta A_t - \beta_{t-1}\,\Delta B_t\big)}_{\text{spread innovation}}
+\;-\; \underbrace{(\beta_{t-1}-\beta_{t-2})\,B_{t-1}}_{\text{hedge-ratio update noise}\,\times\,\text{trending level}}.
+\label{eq:betanoise}
+\end{equation}
+The second term---the change in the estimated ratio multiplied by the \emph{level} of a trending
+leg---was measured at $82$--$97\%$ of $\mathrm{Var}(\Delta S)$ on the failing spreads, with
+autocorrelation $\approx 0.81$, injecting a smooth persistent component that drives the variance ratio
+far above one (spurious super-diffusion). On synthetic ground truth where the true spread is OU (true
+$\VR<1$), the true-ratio variance ratios $[0.97,0.91,0.81,0.65]$ were inflated by the rolling estimator
+to $[1.81,3.68,5.46,6.23]$; ablating the update term in \eqref{eq:betanoise} recovered $\VR<1$. The
+estimator manufactures the property it measures. The cohort yielded zero admissible confirmations: two
+apparent confirmations were a stale-quote artifact ($75.6\%$ flat bars) and a volatility-clustering
+near-miss (separates from a random walk at $p=0.005$ but not from a GARCH martingale at $p=0.094$); the
+remainder were construction-invalid.
+
+\begin{verdict}{Verdict --- Section \ref{sec:crisis}}
+\small
+\textbf{No pre-existing spread is admissible} \status{frozen}; the construction law is \status{frozen}.
+\textbf{The rolling-OLS-on-levels estimator is killed as inadmissible} for variance-ratio habitat tests
+on trending legs (confidence \textsc{high}: synthetic ground truth, ablation, two independent variance
+decompositions, a monotone window-length gradient). The load-bearing finding is methodological, not
+about the market: a causal time-varying hedge ratio can leak \emph{interpretively}---manufacturing the
+measured property---without leaking \emph{temporally}. The deployment-domain reversion premise is thus
+\emph{neither confirmed nor validly damaged}; the bottleneck moves from data to construction. The only
+artifact-free construction available is the definitional unit ratio, which both fixes the estimator and
+supplies a real-data positive control.
+\end{verdict}
+
+\section{Apparatus Validation: Natural-Gas Storage Mean Reversion}
+\label{sec:apparatus}
+
+\subsection{The positive-control mandate and the unit-ratio restriction}
+
+Every positive control to date had been synthetic, so a negative result was formally indistinguishable
+from a too-blunt test. The standing requirement is therefore that, before any further negative is
+credible, the apparatus must \emph{confirm} a known, literature- and economically-anchored real edge.
+The chosen edge is storage/term-structure mean reversion in a commodity calendar spread---grounded in
+the theory of storage \cite{Working1949} and the commodity term-premium literature
+\cite{Szymanowska2014}---and the primary instrument is a natural-gas front calendar, $S_t = G_{m1}-G_{m2}$.
+Construction is restricted to definitional unit-ratio calendar spreads: the two legs are the same
+commodity, so the one-to-one relationship is definitional rather than estimated, the construction
+carries zero hedge-ratio degrees of freedom, and it is structurally immune to the artifact of
+\eqref{eq:betanoise}.
+
+\subsection{The synthetic calibration gate}
+
+Because the surrogate ensemble was extended with a moving-average ($\mathrm{MA}(1)$) microstructure
+null, the calibration was re-earned on synthetic ground truth before any real verdict. All four
+controls passed (Table~\ref{tab:gate}). The decisive control is the third: a pure random walk plus
+i.i.d.\ level noise (zero mean reversion) produces a variance ratio below one that the random-walk and
+GARCH nulls \emph{cannot} absorb---precisely the bid-ask-bounce artifact a calendar spread inherits.
+Only the $\mathrm{MA}(1)$-in-increments null discriminates genuine reversion from lag-one
+microstructure.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}p{0.50\linewidth} p{0.24\linewidth} p{0.20\linewidth}@{}}
+\toprule
+\textbf{Control} & \textbf{Required} & \textbf{Result} \\
+\midrule
+True seasonal-OU calendar & confirm (power) & confirms \\
+True random-walk calendar & null at $\approx 5\%$ & FPR $=3.0\%$ (200 seeds) \\
+Random walk $+$ i.i.d.\ noise (zero MR) & $\mathrm{MA}(1)$ must reject & rejected by $\mathrm{MA}(1)$ \\
+No-seam invariance (clean OU) & $\VR$ shift $\approx 0$ & shift $=0.000$ \\
+\bottomrule
+\end{tabular}
+\caption{Synthetic calibration gate. The 3.0\% false-positive rate over 200 seeds is below the nominal
+5\% and tighter than any single surrogate family because the gate is a conjunction.}
+\label{tab:gate}
+\end{table}
+
+\subsection{Confirmation}
+
+Table~\ref{tab:confirm} reports the verdict matrix (real minus matched surrogate; multiplicity-corrected
+minimum-variance-ratio $p$). The natural-gas calendar beats all three martingale-class nulls at the
+fifth-percentile gate, sitting at the surrogate floor. The confirmation survives causal
+deseasonalization (the raw confirmation is load-bearing; the deseasonalized strengthening is reported
+but not relied upon), is consistent across the open and close sampling points, and---critically---is
+corroborated on an \emph{independently constructed} Brent calendar built from raw legs under a
+controlled roll rule with no vendor back-adjustment, which confirms at \emph{all} horizons. The
+apparatus is also selective: it correctly nulls a refined-products back-month calendar at the book
+horizon ($q\leq 20$, $p=0.537$) and recovers its reversion only at the long horizon ($q\geq 60$,
+$p=0.005$), exactly the back-month storage profile theory predicts.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}l c r l c c c l@{}}
+\toprule
+\textbf{Instrument} & \textbf{Role} & $n$ & $\VR(2,5,10,20)$ & $p_{\mathrm{RW}}$ & $p_{\mathrm{GARCH}}$ & $p_{\mathrm{MA1}}$ & \textbf{gate} \\
+\midrule
+NG calendar (daily) & primary & 4969 & $0.92,\,0.83,\,0.61,\,\mathbf{0.45}$ & $0.005$ & $0.025$ & $0.005$ & \textbf{confirm} \\
+Brent calendar (built, 60\,min) & control & 22955 & $0.91,\,0.80,\,0.71,\,\mathbf{0.63}$ & $0.005$ & $0.010$ & $0.005$ & \textbf{confirm (all $q$)} \\
+RB calendar (daily) & reference & 5170 & $0.996,\,0.993,\,0.983,\,0.979$ & $0.537$ & --- & --- & null (expected) \\
+RB long-horizon & --- & 5170 & $q_{40}{=}0.63,\;q_{60}{=}0.49,\;q_{120}{=}0.42$ & $0.005$ & --- & --- & reverts $q{\geq}60$ \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Verdict matrix. The natural-gas confirmation is carried at the long horizon ($q=10,20$); the
+self-built Brent calendar confirms at all horizons, the opposite of the long-horizon-only compression
+signature that vendor back-adjustment would produce.}
+\label{tab:confirm}
+\end{table}
+
+\subsection{The residual open channel}
+
+An adversarial review returned \emph{holds-with-caveats}. The one artifact the battery does not fully
+discriminate is vendor back-adjustment: additive back-adjustment at the monthly roll mechanically
+compresses long-horizon variance, producing a declining variance ratio that is indistinguishable from
+storage mean reversion under a level-difference statistic. This channel is \emph{partially mitigated}
+by the construction-controlled Brent corroboration but \emph{not eliminated} for the natural-gas daily
+series specifically.
+
+\begin{verdict}{Verdict --- Section \ref{sec:apparatus}}
+\small
+\status{conditional survival}: the real-data positive control is \textbf{passed in the conditional
+sense}. \textbf{Research win (apparatus works) --- \textsc{medium--high}}: demonstrated power,
+selectivity, $3.0\%$ false-positive rate, noise-discrimination, and construction-controlled
+corroboration; the synthetic-only prior state is materially improved. \textbf{Empirical win (signal
+real) --- \textsc{medium}}: the confirmation is surrogate-relative and robust, but \emph{clean storage
+mean reversion} versus \emph{partial vendor-construction artifact} is mitigated, not eliminated.
+\textbf{Deployment win --- not claimed}: a positive control is not a deployment target.
+\end{verdict}
+
+\section{Rolling-Local Deployability: Persistent but Uneconomic}
+\label{sec:rolling}
+
+\subsection{The trader-relevant question and an honest instrument}
+
+Rolling/local estimation is the principal look-ahead and degrees-of-freedom surface---it manufactured
+the super-diffusion of \eqref{eq:betanoise}---so the rolling-local analysis was pre-registered under a
+binding guard: windows fixed in advance, surrogate-relative under identical extraction, multiplicity
+controlled, and local survivability defined as persistence across \emph{multiple disjoint} windows
+rather than appearance in one. A first-draft per-window binary flag was falsified pre-registration on
+synthetic ground truth (underpowered on genuine OU, firing \emph{higher} on bid-ask bounce, blind to
+back-adjustment) and replaced---before any real rolling estimate was computed---by a pooled continuous
+statistic. For each window $w$,
+\begin{equation}
+z_w \;=\; \frac{\VR(20)_w - \overline{\VR(20)}^{\,\mathrm{RW}}_w}{\widehat{\sigma}\big(\VR(20)^{\mathrm{RW}}_w\big)},
+\qquad
+\text{pooled mean-}z \;=\; \frac{1}{W}\sum_{w=1}^{W} z_w,
+\label{eq:poolz}
+\end{equation}
+with the random-walk band computed in-window so the small-sample variance-ratio bias self-cancels.
+Synthetic anchors were frozen first: a random-walk null at $+0.02$ (5--95\% band $[-0.32,+0.41]$),
+genuine moderate reversion (OU, $\phi=0.95$) at $-0.33$, and a back-adjustment splice (fraction $0.5$)
+at $-0.99$.
+
+\subsection{Results}
+
+The natural-gas signal is statistically persistent (Table~\ref{tab:rolling}): pooled mean-$z=-0.627$
+($t=-4.37$, $p\approx 2\times 10^{-4}$) over nineteen disjoint years, with fourteen of nineteen years
+below the random-walk median, present both before and after 2020. The global half-life is $12.9$ bars
+($\approx 2.6$ weeks, inside the tradeable band). And the structure is reversion-favoring: the signal
+\emph{switches off in five years}---all storage-glut / low-scarcity regimes in which the physical
+restoring force is weakest, not acute shocks. A uniform back-adjustment artifact would not selectively
+switch off in glut years, which is the strongest evidence the persistence is genuine storage mean
+reversion.
+
+\begin{table}[h]
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}l r r l@{}}
+\toprule
+\textbf{Read} & \textbf{mean-}$z$ & $n$ & \textbf{note} \\
+\midrule
+NG yearly (primary) & $\mathbf{-0.627}$ & 19 & $t=-4.37$, $p\approx 2\times10^{-4}$; 14/19 below RW median \\
+NG post-2020 & $-0.438$ & 6 & below $-0.32$: recency holds, attenuated \\
+Brent (built, no back-adj.) & $-3.54$ & 8 & hourly/off-scale: apparatus control, not NG-level evidence \\
+splice frac.\ $0.25$ / $0.5$ & $-0.657$ / $-1.053$ & --- & NG $(-0.627)\approx$ the quarter-strength splice anchor \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Rolling-local persistence. The natural-gas pooled distance is statistically indistinguishable
+from the quarter-strength splice anchor ($p=0.84$), so genuine reversion versus partial back-adjustment
+remains \textsc{medium} confidence.}
+\label{tab:rolling}
+\end{table}
+
+The economics, however, are decisive. A frozen causal mean-reversion rule (enter at $|z|\geq 1$, exit
+at $z=0$ or a twenty-bar stop, round-trip cost $0.003$ spread units) yields, over 200 trades, an
+average \emph{gross} capture of $+0.0004$ and an average \emph{net} of $-0.0026$ per trade
+(hit-rate $0.53$). The signal is break-even before costs and negative after; clearing the cost floor
+would require a gross improvement of roughly seven-fold that no admissible rule-optimization can supply
+on this instrument.
+
+\begin{verdict}{Verdict --- Section \ref{sec:rolling}}
+\small
+\status{persistent-but-uneconomic} \textbf{(confidence \textsc{medium})}. \textbf{Empirical win ---
+strengthened, qualified}: the natural-gas calendar sub-diffusion is persistent versus a random walk
+(\textsc{high}: $t=-4.37$) and reversion-favoringly structured (switches off in gluts, not shocks);
+that it is genuine storage mean reversion versus partial back-adjustment remains \textsc{medium}
+($p=0.84$ against the quarter-strength splice). \textbf{Deployment win --- no} (\textsc{high}: the naive
+single-instrument book is uneconomic). The deployable object is accordingly redefined from an
+\emph{instrument} to a \emph{cost-aware book}; whether a portfolio of individually sub-cost,
+leg-netted spread edges can clear costs is the decisive untested question.
+\end{verdict}
+
+\section{Corrected Framework and Forward Path}
+\label{sec:forward}
+
+\subsection{A rolling-local ontology under a binding guard}
+
+The arc above motivates a change of ontology that is directional, not methodological. The market is
+treated as piecewise and regime-local rather than as one global object; the operative question is
+\emph{where} and \emph{when} mean reversion exists, not whether it exists universally. Rolling/local
+estimation becomes a first-class default but only under the binding guard of
+Section~\ref{sec:rolling}---pre-registered windows, surrogate-relative extraction, multiplicity
+control, and survivability across multiple disjoint windows---because rolling estimation is the single
+most dangerous degrees-of-freedom surface in the programme. Global claims now require cross-habitat
+replication plus a mechanism; local conditional claims are the default currency.
+
+\subsection{Deployability as a portfolio property, evaluated after costs}
+
+The deployable object is a \emph{book}, not an instrument: the unit of success is positive
+cost-adjusted portfolio expectancy, evaluated after transaction cost, roll, borrow, capacity and
+sizing. A spread that mean-reverts but is uneconomic after costs is a non-finding---precisely the
+status of the natural-gas calendar. Transaction costs, capacity and risk are first-class research
+outputs, not afterthoughts. This prioritization decides \emph{which} questions earn effort; it never
+relaxes \emph{how rigorously} a survivor is judged.
+
+\subsection{Open problems}
+
+\begin{description}[leftmargin=1.4em,itemsep=2pt]
+  \item[No cross-habitat daily replication.] \status{open} The natural-gas confirmation is a single
+  daily instrument; the Brent corroboration is at an off-scale hourly resolution. The unit of evidence
+  is survival across independent habitats, not appearance in one.
+  \item[Back-adjustment not closed.] \status{open} The natural-gas persistence is statistically
+  indistinguishable from a quarter-strength splice; genuine-reversion confidence stays \textsc{medium}
+  until the seam is splice-tested or the series is rebuilt from raw legs.
+  \item[No controlled-ratio pair.] \status{deferred} The deployment construction proper---pairs and
+  cross-asset relative value with a regularized hedge ratio---is untested; the rolling estimator was
+  shown to mishandle it, and a regularized ratio must be validated by equilibrium stability rather than
+  residual reversion.
+  \item[Trend-death detector.] \status{deferred} A trend-death$\,\rightarrow\,$reversion operationalization
+  returned no content (a permissive $18$--$20\%$ firing rate, zero of four instruments meeting the
+  pre-committed criteria, and anti-thesis continuation in structural growth equities); the thesis is not
+  falsified but is untested in the right instrument domain, and any redesign must target a firing rate
+  below $5\%$.
+  \item[Portfolio economics.] \status{open} The decisive door: whether aggregating sub-cost per-trade
+  calendar edges with leg-netting clears costs is the only demonstrated path from ``merely true'' to
+  ``deployable''.
+\end{description}
+
+\subsection{Three forward hypotheses}
+
+The following are forward directions, not findings; each is open or deferred, carries a reopen trigger,
+and inherits the multiplicity and surrogate-relative discipline above.
+
+\begin{description}[leftmargin=1.4em,itemsep=2pt]
+  \item[H-Residual-Growth \normalfont(\status{deferred}).] That the expansion/compression dynamics of
+  the equilibrium residual around \emph{realized} reversions carry market-specific, conditional
+  structure that a matched surrogate does not already produce. This is the legitimate \emph{observational}
+  successor to the killed morphology---strictly descriptive, never a detector; any drift toward predicting
+  reversion from residual shape is a resurrection and is forbidden without a new, independent
+  pre-registration.
+  \item[H-Confluence \normalfont(\status{open}).] That a deployable selectivity edge arises not from any
+  single signal but from the confluence of multiple independent, surrogate-relative conditions---each
+  individually weak, jointly informative for \emph{where not to trade}. Its danger is multiple-comparison
+  degrees of freedom; it is admissible only with pre-registered cohorts and cross-habitat
+  out-of-sample replication.
+  \item[H-Econ-Confluence \normalfont(\status{deferred}, data-gated, long-term only).] The
+  economically-conditioned form: that causal, non-price fundamental variables (inventory surprise,
+  positioning, signed order flow) condition the confluence---the etiology-conditioned reversion principle
+  (inventory/flow $\rightarrow$ reverts; information $\rightarrow$ continues). It is the best-grounded
+  mechanism in the programme and is blocked on data acquisition; a price-level conditioning attempt was
+  already killed as a selection-on-regime artifact, so the admissible form is surprise- or flow-based.
+\end{description}
+
+\subsection{The long-term object}
+
+The terminal ambition is a multi-instrument mean-reversion portfolio engine: a book of independently
+cost-clearing, surrogate-validated, causally constructed spread edges across deployment habitats, sized
+and risk-managed so that net-of-cost expectancy is positive over a forward hold-out. The path is now
+empirically posable for the first time, because the apparatus is validated and one real edge is
+confirmed; it is also honestly long, requiring the back-adjustment channel to be closed, replication
+across daily habitats, validation of the controlled-ratio construction, and a demonstration that a book
+of individually sub-cost edges can net to a cost-clearing aggregate. None of that is done. The posture
+is to build that book one validated, cost-aware sleeve at a time---and to stop, and call it a success,
+the moment the evidence says the book does not pay.
+
+\section{Conclusion}
+
+Over the interval reported, the programme killed its flagship transition object cleanly and at scale,
+diagnosed the structural error that produced it (asking \emph{when} before establishing \emph{where},
+on untrustworthy data), rebuilt its data foundation, discovered and removed a construction artifact in
+which a causal estimator manufactured its own signal, and---on a corrected, definitional
+construction---confirmed for the first time a known real mean-reversion edge with a calibrated,
+selective, noise-discriminating apparatus. That same edge, read honestly against transaction costs, is
+persistent but uneconomic as a single instrument. The programme therefore holds a research win and an
+empirical win and has not earned a deployment win. The remaining path runs through portfolio economics
+and causal conditioning variables, never through a resurrected timing object. Throughout, stopping
+where the evidence stops is treated as a successful outcome.
+
+\appendix
+\section{Definitions and Core Formulae}
+
+\textbf{Level-difference variance ratio.} For a level series $S_t$ that may cross zero,
+\[
+\VR(q) \;=\; \frac{\mathrm{Var}(S_t - S_{t-q})}{q\,\mathrm{Var}(S_t - S_{t-1})},
+\]
+with $\VR<1$ indicating sub-diffusion (the mean-reverting direction), $\VR\approx 1$ a martingale, and
+$\VR>1$ super-diffusion. Read surrogate-relative (real minus matched null under identical extraction),
+never against a fixed constant.
+
+\textbf{Surrogate ensemble.} Random walk, GARCH$(1,1)$, $\mathrm{MA}(1)$ microstructure noise, and OU,
+each at identical length and extraction; the gate is the multiplicity-corrected minimum-variance-ratio
+$p$ at the fifth percentile.
+
+\textbf{Half-life.} From a causal first-order autoregressive coefficient $\phi$,
+$\half = \ln(0.5)/\ln(\phi)$; the tradeable band is $\approx 3$--$40$ bars.
+
+\textbf{Cost hurdle.} A rule is deployable only if the expected net per trade,
+$\mathbb{E}[\text{gross capture} - \text{round-trip cost}]$, is positive. For the natural-gas calendar,
+gross $+0.0004$ against cost $0.003$ yields net $-0.0026$: uneconomic.
+
+\textbf{Selection-on-deviation.} Conditioning on $|z|\geq\theta$ samples directionally-efficient paths
+by construction; it is the complete and sufficient null for the killed pre-reversion morphology.
+
+\begin{thebibliography}{9}
+\small
+\bibitem{Working1949} Working, H. (1949). The theory of price of storage. \emph{American Economic
+Review}, 39(6), 1254--1262.
+\bibitem{Szymanowska2014} Szymanowska, M., de Roon, F., Nijman, T., \& van den Goorbergh, R. (2014).
+An anatomy of commodity futures risk premia. \emph{Journal of Finance}, 69(1), 453--482.
+\bibitem{LoMacKinlay1988} Lo, A.\,W., \& MacKinlay, A.\,C. (1988). Stock market prices do not follow
+random walks: evidence from a simple specification test. \emph{Review of Financial Studies}, 1(1),
+41--66.
+\bibitem{LoMacKinlay1990} Lo, A.\,W., \& MacKinlay, A.\,C. (1990). When are contrarian profits due to
+stock market overreaction? \emph{Review of Financial Studies}, 3(2), 175--205.
+\bibitem{GeorgeHwang2004} George, T.\,J., \& Hwang, C.-Y. (2004). The 52-week high and momentum
+investing. \emph{Journal of Finance}, 59(5), 2145--2176.
+\bibitem{JT1993} Jegadeesh, N., \& Titman, S. (1993). Returns to buying winners and selling losers:
+implications for stock market efficiency. \emph{Journal of Finance}, 48(1), 65--91.
+\bibitem{EngleGranger1987} Engle, R.\,F., \& Granger, C.\,W.\,J. (1987). Co-integration and error
+correction: representation, estimation, and testing. \emph{Econometrica}, 55(2), 251--276.
+\bibitem{McLeanPontiff2016} McLean, R.\,D., \& Pontiff, J. (2016). Does academic research destroy stock
+return predictability? \emph{Journal of Finance}, 71(1), 5--32.
+\end{thebibliography}
+
+\end{document}
