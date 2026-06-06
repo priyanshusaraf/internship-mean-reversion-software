@@ -21,6 +21,9 @@ frontend/.next/
 frontend/out/
 dist/
 build/
+# but docs/build/ holds the frozen API contract + build specs, not compiled artifacts
+!docs/build/
+!docs/build/**
 
 # env
 .env
