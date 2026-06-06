@@ -11,7 +11,7 @@ import { useBacktestStore } from '@/lib/store';
 import { C, mono } from '@/components/observatory/ui';
 import {
   RED, fmt1, fmt2, pct1,
-  MetricCard, EquityChart, TradeLog,
+  MetricCard, EnhancedEquityChart, TradeLog, habitatTint,
 } from './PnLShared';
 import type { BacktestResult } from '@/lib/types';
 
@@ -23,9 +23,11 @@ interface Props {
 }
 
 export function PnLPane({ onRun, canRun }: Props) {
-  const { status, result, error } = useBacktestStore();
+  const { status, result, error, habitatResult, habitatStatus } = useBacktestStore();
   const loading = status === 'loading';
   const r: BacktestResult | null = result;
+  const habitatScore = habitatResult?.score ?? null;
+  const tint = habitatTint(habitatScore);
 
   const m = (render: (res: BacktestResult) => { value: string; color?: string }) =>
     r ? render(r) : { value: '—', color: '#2d3a4a' };
@@ -68,18 +70,52 @@ export function PnLPane({ onRun, canRun }: Props) {
         )}
       </div>
 
-      {/* ── equity curve (~40%) ── */}
+      {/* ── equity curve + habitat overlay (~40%) ── */}
       <div style={{ flex: '0 0 40%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ flexShrink: 0, padding: '4px 10px', background: C.bgPanel, borderBottom: `1px solid ${C.borderSoft}` }}>
-          <span style={{ ...mono, fontSize: 9, color: C.textDim, letterSpacing: '0.08em' }}>equity curve · cumulative net P&L</span>
+          <span style={{ ...mono, fontSize: 9, color: C.textDim, letterSpacing: '0.08em' }}>equity curve · habitat band + trade markers</span>
         </div>
         {r ? (
-          <EquityChart data={r.equity_curve} />
+          <EnhancedEquityChart
+            data={r.equity_curve}
+            trades={r.trades}
+            habitatScore={habitatScore}
+            habitatStatus={habitatStatus}
+          />
         ) : (
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {loading
               ? <span style={{ width: 20, height: 20, border: `2px solid ${C.border}`, borderTopColor: C.accent, borderRadius: '50%', display: 'inline-block', animation: 'cockpit-spin 0.7s linear infinite' }} />
               : <span style={{ ...mono, fontSize: 11, color: C.textDim }}>Select a window and press ▶ to run</span>}
+          </div>
+        )}
+        {/* ── annotation row + permanent rigor disclaimer ── */}
+        {r && (
+          <div style={{
+            flexShrink: 0, height: 32, display: 'flex', alignItems: 'center',
+            background: C.bgPanel, borderTop: `1px solid ${C.borderSoft}`, padding: '0 10px', gap: 10,
+          }}>
+            {habitatScore != null ? (
+              <>
+                <span style={{ ...mono, fontSize: 9, color: tint.text, whiteSpace: 'nowrap' }}>
+                  <span style={{ display: 'inline-block', width: 8, height: 8, background: tint.text, marginRight: 5, borderRadius: 1 }} />
+                  Window habitat: {Math.round(habitatScore)} — {tint.tag}
+                </span>
+                <span style={{ width: 1, height: 16, background: C.borderSoft }} />
+                <span style={{ ...mono, fontSize: 9, color: C.textDim, whiteSpace: 'nowrap' }}>
+                  Trades in window: {r.n_trades} — {pct1(r.win_rate)} win rate
+                </span>
+              </>
+            ) : (
+              <span style={{ ...mono, fontSize: 9, color: C.textDim }}>
+                habitat not scored — run Observatory or select a window first
+              </span>
+            )}
+            <span style={{ flex: 1 }} />
+            {/* RIGOR (QA check c): unconditional, no hover/toggle */}
+            <span style={{ ...mono, fontSize: 8.5, color: C.warn, whiteSpace: 'nowrap', textAlign: 'right', lineHeight: 1.15 }}>
+              Single-window score — not per-bar.<br />High score ≠ deployable edge.
+            </span>
           </div>
         )}
       </div>

@@ -11,7 +11,7 @@
 import { useEffect, useRef } from 'react';
 import {
   createChart, ColorType, CrosshairMode, LineStyle,
-  type IChartApi, type ISeriesApi, type Time, type MouseEventParams,
+  type IChartApi, type ISeriesApi, type Time, type MouseEventParams, type SeriesMarker,
 } from 'lightweight-charts';
 import type { BacktestTrade, EquityPoint } from '@/lib/types';
 
@@ -71,6 +71,117 @@ export function EquityChart({ data }: { data: EquityPoint[] }) {
   }, [data]);
 
   return <div ref={ref} style={{ flex: 1, minHeight: 0 }} />;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════════════════════════
+// Enhanced equity curve — first VISUAL test of habitat regime-discrimination.
+//
+//   LAYER 1  habitat background band  — a single full-area div tinted by the WINDOW score.
+//            The score is a SINGLE SCALAR for the whole window (HabitatResult has no per-bar
+//            series), so the band is one flat colour — NOT a per-bar gradient. No interpolation,
+//            no invented per-bar score. Tint thresholds are display-only colour mapping.
+//   LAYER 2  equity curve line        — identical init to EquityChart (chart bg made transparent
+//            so the band shows through; the relative host carries the dark base colour).
+//   LAYER 3  trade entry markers      — setMarkers(), colour straight from trade.net_pnl sign.
+//
+// RIGOR: nothing here is a statistic. `score` is rendered verbatim from the store; marker colour
+// is the sign of net_pnl from the BacktestResult. The "single-window score ≠ edge" disclaimer is
+// rendered unconditionally below the chart in PnLPane (and the in-chip note here is permanent).
+// ══════════════════════════════════════════════════════════════════════════════════════════════════
+
+// display-only colour mapping for a habitat score (NO statistic — a threshold→colour lookup)
+export function habitatTint(score: number | null): { band: string; text: string; tag: 'GREEN' | 'AMBER' | 'RED' | null } {
+  if (score == null || !Number.isFinite(score)) return { band: 'transparent', text: '#6b7787', tag: null };
+  if (score >= 60) return { band: 'rgba(63, 185, 80, 0.08)', text: GREEN, tag: 'GREEN' };
+  if (score >= 40) return { band: 'rgba(186, 117, 23, 0.08)', text: '#d2993c', tag: 'AMBER' };
+  return { band: 'rgba(248, 81, 73, 0.08)', text: RED, tag: 'RED' };
+}
+
+export function EnhancedEquityChart({
+  data, trades, habitatScore, habitatStatus,
+}: {
+  data: EquityPoint[];
+  trades: BacktestTrade[];
+  habitatScore: number | null;
+  habitatStatus: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<ISeriesApi<'Line'> | null>(null);
+
+  // ── chart init — copied from EquityChart, only the background is made transparent so the
+  //    habitat band (a sibling div behind the canvas) is visible through it. ──
+  useEffect(() => {
+    if (!ref.current) return;
+    const chart = createChart(ref.current, {
+      layout: { background: { type: ColorType.Solid, color: 'rgba(0,0,0,0)' }, textColor: '#3d4d5e', fontSize: 9 },
+      grid: { vertLines: { color: '#0e1520' }, horzLines: { color: '#0e1520' } },
+      crosshair: { mode: CrosshairMode.Normal },
+      rightPriceScale: { borderColor: '#161d27' },
+      timeScale: { borderColor: '#161d27' },
+      width: ref.current.clientWidth,
+      height: ref.current.clientHeight,
+    });
+    const series = chart.addLineSeries({ lineWidth: 1, lastValueVisible: true, priceLineVisible: false });
+    series.createPriceLine({
+      price: 0, color: '#3d4d5e', lineWidth: 1, lineStyle: LineStyle.Dashed,
+      axisLabelVisible: false, title: '',
+    });
+    chartRef.current = chart;
+    seriesRef.current = series;
+    const ro = new ResizeObserver(() =>
+      ref.current && chart.applyOptions({ width: ref.current.clientWidth, height: ref.current.clientHeight }));
+    ro.observe(ref.current);
+    return () => { ro.disconnect(); chart.remove(); chartRef.current = null; seriesRef.current = null; };
+  }, []);
+
+  // LAYER 2 — equity line (identical logic to EquityChart)
+  useEffect(() => {
+    if (!seriesRef.current) return;
+    const final = data.length ? data[data.length - 1].cumulative_pnl : 0;
+    seriesRef.current.applyOptions({ color: final >= 0 ? GREEN : RED });
+    seriesRef.current.setData(data.map(p => ({ time: p.date as Time, value: p.cumulative_pnl })));
+    chartRef.current?.timeScale().fitContent();
+  }, [data]);
+
+  // LAYER 3 — trade entry markers (colour = sign of net_pnl, taken directly; sorted ascending)
+  useEffect(() => {
+    if (!seriesRef.current) return;
+    const markers: SeriesMarker<Time>[] = [...trades]
+      .sort((a, b) => (a.entry_bar < b.entry_bar ? -1 : a.entry_bar > b.entry_bar ? 1 : 0))
+      .map(t => ({
+        time: t.entry_bar as Time,
+        position: 'inBar' as const,
+        shape: 'circle' as const,
+        size: 1,
+        color: t.net_pnl > 0 ? GREEN : t.net_pnl < 0 ? RED : '#8b949e',
+        text: '',
+      }));
+    seriesRef.current.setMarkers(markers);
+  }, [trades]);
+
+  const tint = habitatTint(habitatScore);
+  const cornerLabel =
+    habitatScore != null && Number.isFinite(habitatScore) ? `MR habitat: ${Math.round(habitatScore)}`
+    : habitatStatus === 'loading' ? 'habitat: scoring…'
+    : 'habitat: not scored';
+  const cornerColor = habitatScore != null && Number.isFinite(habitatScore) ? tint.text : '#6b7787';
+
+  return (
+    <div style={{ position: 'relative', flex: 1, minHeight: 0, background: '#070b10' }}>
+      {/* LAYER 1 — habitat background band (behind the transparent chart canvas) */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+        background: tint.band, transition: 'background 0.2s ease',
+      }}>
+        <span style={{ ...mono, position: 'absolute', top: 4, right: 8, fontSize: 9, color: cornerColor }}>
+          {cornerLabel}
+        </span>
+      </div>
+      {/* LAYER 2/3 — chart canvas (transparent bg) sits above the band */}
+      <div ref={ref} style={{ position: 'absolute', inset: 0, zIndex: 2 }} />
+    </div>
+  );
 }
 
 // ══════════════════════════════════════════════════════════════════════════════════════════════════
