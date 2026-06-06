@@ -4,9 +4,22 @@
 //
 // Candles for the FULL stored range. Kalman μ* overlay from GET /diagnostics (mu_star_kalman/bar).
 // The scrubber window is made VISIBLE: a muted vertical line at START, an accent line at END, a
-// low-opacity highlight band between them, and DIMMED candles after END (per-bar colour override —
-// not a mask). Vertical lines/band/dim update only when start/end change (i.e. on scrubber RELEASE).
-// No toolbar, no zoom controls.
+// low-opacity highlight band between them, and the region OUTSIDE the window shaded by two
+// absolutely-positioned overlay divs (pre-window left + post-window right). No toolbar, no zoom.
+//
+// ── FIX LOG: symmetric out-of-window dimming (left + right overlays) ──────────────────────────────
+// Q1 (where/how the old dim lived): drawOverlay() drove a SINGLE overlay div (`dimRef`, anchored
+//     right:0, width = totalWidth − endX). Overlay-div approach (the per-bar colour override that an
+//     earlier version of this header described was already removed in a prior pass).
+// Q2 (why it didn't work): there was NO pre-window (left-of-START) overlay at all — only the post-
+//     window right shade existed, so candles BEFORE the start date were never dimmed.
+// Q3 (the fix): add a second overlay (`leftDimRef`, anchored left:0, width = startX); keep the right
+//     overlay (`rightDimRef`, width = totalWidth − endX); drive BOTH from one updateDim() with the
+//     guarded formulas; call it from the three redraw paths ([start,end]+50ms settle, visible-range
+//     change, ResizeObserver). Boundary lines + band were already correct and are kept.
+// (Overlays live in the sibling overlay-layer, which shares the host's exact inset:0 box — same
+//  coordinate space — rather than literally inside hostRef, to avoid React-vs-lightweight-charts
+//  child-reconciliation conflicts. host.clientWidth is therefore the correct totalWidth.)
 
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -38,7 +51,8 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
   const startLineRef = useRef<HTMLDivElement>(null);
   const endLineRef = useRef<HTMLDivElement>(null);
   const bandRef = useRef<HTMLDivElement>(null);
-  const dimRef = useRef<HTMLDivElement>(null); // post-window shade (right of END)
+  const leftDimRef = useRef<HTMLDivElement>(null);  // pre-window shade  (left of START)
+  const rightDimRef = useRef<HTMLDivElement>(null); // post-window shade (right of END)
   const winRef = useRef<{ start: string | null; end: string | null }>({ start: null, end: null });
   winRef.current = { start, end };
 
@@ -113,8 +127,13 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
     return () => { cancelled = true; };
   }, [instrumentId]);
 
-  // redraw overlay when the committed window changes (scrubber release)
-  useEffect(() => { drawOverlay(); }, [start, end]); // eslint-disable-line react-hooks/exhaustive-deps
+  // redraw overlay when the committed window changes (scrubber release). The 50ms settle lets
+  // lightweight-charts finish laying out the time scale so timeToCoordinate(start/end) is accurate.
+  useEffect(() => {
+    drawOverlay();
+    const id = setTimeout(() => drawOverlay(), 50);
+    return () => clearTimeout(id);
+  }, [start, end]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function drawOverlay() {
     const chart = chartRef.current;
@@ -148,14 +167,31 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
       }
     }
 
-    // post-window shade: a semi-transparent rectangle from the END x to the right edge.
-    // Width follows the END date through zoom/pan/resize (drawOverlay is the single update
-    // path — subscribed to visible-range change + ResizeObserver + the [start,end] effect).
-    const dim = dimRef.current;
-    if (dim) {
-      const shade = xe != null ? Math.max(0, w - xe) : 0;
-      dim.style.width = `${shade}px`;
+    updateDim();
+  }
+
+  // Two out-of-window shades: LEFT covers [0, startX], RIGHT covers [endX, totalWidth]. The middle
+  // (start→end) is left at full brightness. No window selected (start or end null) → both widths 0.
+  function updateDim() {
+    const chart = chartRef.current;
+    const host = hostRef.current;
+    const leftDim = leftDimRef.current;
+    const rightDim = rightDimRef.current;
+    if (!chart || !host || !leftDim || !rightDim) return;
+
+    const { start: s, end: e } = winRef.current;
+    if (!s || !e) {
+      leftDim.style.width = '0px';
+      rightDim.style.width = '0px';
+      return;
     }
+    const ts = chart.timeScale();
+    const totalWidth = host.clientWidth;
+    const startX = ts.timeToCoordinate(s as Time);
+    const endX = ts.timeToCoordinate(e as Time);
+
+    leftDim.style.width = startX != null && startX > 0 ? `${Math.max(0, startX)}px` : '0px';
+    rightDim.style.width = endX != null && endX < totalWidth ? `${Math.max(0, totalWidth - endX)}px` : '0px';
   }
 
   // NOTE: the chart host is ALWAYS rendered (never early-returned) so the one-shot init effect can
@@ -167,10 +203,13 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
 
       {!instrumentId && <div style={empty}>Select an instrument to begin</div>}
 
-      {/* overlay layer — vertical lines + highlight band + post-window shade (pointer-events off) */}
+      {/* overlay layer — out-of-window shades + vertical lines + highlight band (pointer-events off).
+          Shares the host's exact inset:0 box so host.clientWidth == this layer's width. */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-        {/* post-window shade: covers everything to the RIGHT of the END date (width set in drawOverlay) */}
-        <div ref={dimRef} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '0px', background: 'rgba(0,0,0,0.55)', pointerEvents: 'none', zIndex: 2, transition: 'width 0.15s ease' }} />
+        {/* pre-window shade: covers everything to the LEFT of the START date (width set in updateDim) */}
+        <div ref={leftDimRef} style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: '0px', background: 'rgba(0,0,0,0.55)', pointerEvents: 'none', zIndex: 3, transition: 'width 0.15s ease' }} />
+        {/* post-window shade: covers everything to the RIGHT of the END date (width set in updateDim) */}
+        <div ref={rightDimRef} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '0px', background: 'rgba(0,0,0,0.55)', pointerEvents: 'none', zIndex: 3, transition: 'width 0.15s ease' }} />
         <div ref={bandRef} style={{ position: 'absolute', top: 0, bottom: 0, display: 'none', background: 'rgba(56,139,253,0.06)' }} />
         <div ref={startLineRef} style={{ position: 'absolute', top: 0, bottom: 0, width: 0, display: 'none', borderLeft: `1px solid ${C.text}` }} />
         <div ref={endLineRef} style={{ position: 'absolute', top: 0, bottom: 0, width: 0, display: 'none', borderLeft: `1px solid ${C.accent}` }} />
@@ -183,7 +222,7 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
       </div>
       {start && end && (
         <div style={{ position: 'absolute', top: 6, right: 12, ...mono, fontSize: 9, color: C.textDim, pointerEvents: 'none' }}>
-          <span style={{ color: C.text }}>▏start {start}</span> · <span style={{ color: C.accent }}>end {end} ▕</span> · after-end dimmed
+          <span style={{ color: C.text }}>▏start {start}</span> · <span style={{ color: C.accent }}>end {end} ▕</span> · out-of-window dimmed
         </div>
       )}
     </div>
