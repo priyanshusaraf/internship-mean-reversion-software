@@ -1,0 +1,33 @@
+{
+  "_DO_NOT_OPEN_UNTIL": "you have classified every HABITAT_* instrument as reverting / non-reverting / uncertain using ONLY REP, RES, CMP, asking 'did the equilibrium stay put?' (NOT 'did price come back?').",
+  "protocol": "State T native-habitat blind adjudication (Rank-1 mu*-catch-up gate). Mirrors #11 F4 exactly: metric-free, REP-first, sealed. The decisive case is whether OU_IN_TREND (genuine reversion around a moving equilibrium) is separable from the drifted random walks (mu*-catch-up theater). 'Residual reverts on a RW' is EXPECTED mechanics, NOT a kill. The test is DISCRIMINATION.",
+  "window": {
+    "ref": "ADANIENT",
+    "start": 650,
+    "len": 600,
+    "dates": "2015-06-08..2017-11-09"
+  },
+  "scale": {
+    "base": 54.35389709,
+    "sigma_abs": 1.6878272601933382,
+    "mu_abs": 0.06587196926390651,
+    "lam": -0.05
+  },
+  "positivity_filter": "null/synthetic seeds chosen as lowest >= base with min price >= POS_FLOOR (realism constraint, orthogonal to reversion).",
+  "mapping": {
+    "HABITAT_1": "A0_ou_seed202",
+    "HABITAT_2": "N2_drift_seed204",
+    "HABITAT_3": "H0_ou_in_trend_seed201",
+    "HABITAT_4": "N1_rw_seed203",
+    "HABITAT_5": "N2b_drift_seed205"
+  },
+  "ground_truth": {
+    "A0_ou_seed202": "OU around a FLAT level - genuine reversion (flat-equilibrium contrast)",
+    "N2_drift_seed204": "drifted random walk - non-reverting (trend-lag / mu*-catch-up only)",
+    "H0_ou_in_trend_seed201": "OU reversion around a MOVING equilibrium - genuine reversion (State T native habitat)",
+    "N1_rw_seed203": "pure random walk - non-reverting (mechanical residual only)",
+    "N2b_drift_seed205": "drifted random walk (duplicate non-reverting trend; defeats one-of-each)"
+  },
+  "master_seed": 20260602,
+  "note": "SEPARATE from #11's blind_key.json; #11 BLIND_* packet untouched."
+}

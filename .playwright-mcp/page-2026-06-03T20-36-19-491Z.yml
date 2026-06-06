@@ -1,0 +1,300 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+    - button "⚙" [ref=e6] [cursor=pointer]
+  - generic [ref=e8]:
+    - complementary [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e12]: Instruments
+        - generic [ref=e13]:
+          - button "Load" [ref=e14] [cursor=pointer]
+          - button "Spread" [active] [ref=e15] [cursor=pointer]
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - generic [ref=e100]: Leg A
+          - generic [ref=e101]:
+            - combobox [ref=e102] [cursor=pointer]:
+              - option "— select —" [selected]
+              - option "ADANIENT"
+              - option "ANCHOR_OU"
+              - option "BLIND_1"
+              - option "BLIND_2"
+              - option "BLIND_3"
+              - option "BLIND_4"
+              - option "BLIND_5"
+              - option "COMEX_DL_GC2!, 60"
+              - option "COMEX_DL_HG1!, 15"
+              - option "COMEX_DL_HG1!, 60"
+              - option "FOREXCOM_COFFEE, 60"
+              - option "FOREXCOM_USDCHF, 15"
+              - option "G1"
+              - option "HABITAT_1"
+              - option "HABITAT_2"
+              - option "HABITAT_3"
+              - option "HABITAT_4"
+              - option "HABITAT_5"
+              - option "ICEEUR_DLY_BRN1!, 1D"
+              - option "NG12"
+              - option "NIFTY50"
+              - option "NIFTY_SYN"
+              - option "NULL_DRIFT"
+              - option "NULL_RW"
+              - option "OU_IN_TREND"
+              - option "TVC_DXY, 60"
+              - option "TVC_SILVER, 1D"
+            - generic: ▾
+        - generic [ref=e103]:
+          - generic [ref=e104]: Leg B
+          - generic [ref=e105]:
+            - combobox [ref=e106] [cursor=pointer]:
+              - option "— select —" [selected]
+              - option "ADANIENT"
+              - option "ANCHOR_OU"
+              - option "BLIND_1"
+              - option "BLIND_2"
+              - option "BLIND_3"
+              - option "BLIND_4"
+              - option "BLIND_5"
+              - option "COMEX_DL_GC2!, 60"
+              - option "COMEX_DL_HG1!, 15"
+              - option "COMEX_DL_HG1!, 60"
+              - option "FOREXCOM_COFFEE, 60"
+              - option "FOREXCOM_USDCHF, 15"
+              - option "G1"
+              - option "HABITAT_1"
+              - option "HABITAT_2"
+              - option "HABITAT_3"
+              - option "HABITAT_4"
+              - option "HABITAT_5"
+              - option "ICEEUR_DLY_BRN1!, 1D"
+              - option "NG12"
+              - option "NIFTY50"
+              - option "NIFTY_SYN"
+              - option "NULL_DRIFT"
+              - option "NULL_RW"
+              - option "OU_IN_TREND"
+              - option "TVC_DXY, 60"
+              - option "TVC_SILVER, 1D"
+            - generic: ▾
+        - generic [ref=e107]:
+          - generic [ref=e108]: β hedge ratio
+          - spinbutton [ref=e109]: "1"
+        - textbox "Name (optional)" [ref=e110]
+        - button "Create Spread" [disabled] [ref=e111]
+      - generic [ref=e22]:
+        - button "ADANIENT ↺ 2012-10-10 – 2022-10-07 2,463 bars" [ref=e112] [cursor=pointer]:
+          - generic [ref=e113]:
+            - generic [ref=e114]: ADANIENT
+            - button "↺" [ref=e115]
+          - generic [ref=e116]: 2012-10-10 – 2022-10-07
+          - generic [ref=e117]: 2,463 bars
+        - button "ANCHOR_OU ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e118] [cursor=pointer]:
+          - generic [ref=e119]:
+            - generic [ref=e120]: ANCHOR_OU
+            - button "↺" [ref=e121]
+          - generic [ref=e122]: 2015-06-08 – 2017-11-09
+          - generic [ref=e123]: 600 bars
+        - button "BLIND_1 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e124] [cursor=pointer]:
+          - generic [ref=e125]:
+            - generic [ref=e126]: BLIND_1
+            - button "↺" [ref=e127]
+          - generic [ref=e128]: 2015-06-08 – 2017-11-09
+          - generic [ref=e129]: 600 bars
+        - button "BLIND_2 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e130] [cursor=pointer]:
+          - generic [ref=e131]:
+            - generic [ref=e132]: BLIND_2
+            - button "↺" [ref=e133]
+          - generic [ref=e134]: 2015-06-08 – 2017-11-09
+          - generic [ref=e135]: 600 bars
+        - button "BLIND_3 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e136] [cursor=pointer]:
+          - generic [ref=e137]:
+            - generic [ref=e138]: BLIND_3
+            - button "↺" [ref=e139]
+          - generic [ref=e140]: 2015-06-08 – 2017-11-09
+          - generic [ref=e141]: 600 bars
+        - button "BLIND_4 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]:
+            - generic [ref=e144]: BLIND_4
+            - button "↺" [ref=e145]
+          - generic [ref=e146]: 2015-06-08 – 2017-11-09
+          - generic [ref=e147]: 600 bars
+        - button "BLIND_5 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e148] [cursor=pointer]:
+          - generic [ref=e149]:
+            - generic [ref=e150]: BLIND_5
+            - button "↺" [ref=e151]
+          - generic [ref=e152]: 2015-06-08 – 2017-11-09
+          - generic [ref=e153]: 600 bars
+        - button "COMEX_DL_GC2!, 60 ↺ 2022-06-03 – 2026-06-03 23,189 bars" [ref=e154] [cursor=pointer]:
+          - generic [ref=e155]:
+            - generic [ref=e156]: COMEX_DL_GC2!, 60
+            - button "↺" [ref=e157]
+          - generic [ref=e158]: 2022-06-03 – 2026-06-03
+          - generic [ref=e159]: 23,189 bars
+        - button "COMEX_DL_HG1!, 15 ↺ 2025-06-30 – 2026-06-03 290 bars" [ref=e160] [cursor=pointer]:
+          - generic [ref=e161]:
+            - generic [ref=e162]: COMEX_DL_HG1!, 15
+            - button "↺" [ref=e163]
+          - generic [ref=e164]: 2025-06-30 – 2026-06-03
+          - generic [ref=e165]: 290 bars
+        - button "COMEX_DL_HG1!, 60 ↺ 2023-01-02 – 2026-06-03 1,065 bars" [ref=e166] [cursor=pointer]:
+          - generic [ref=e167]:
+            - generic [ref=e168]: COMEX_DL_HG1!, 60
+            - button "↺" [ref=e169]
+          - generic [ref=e170]: 2023-01-02 – 2026-06-03
+          - generic [ref=e171]: 1,065 bars
+        - button "FOREXCOM_COFFEE, 60 ↺ 2023-04-27 – 2026-06-03 7,416 bars" [ref=e172] [cursor=pointer]:
+          - generic [ref=e173]:
+            - generic [ref=e174]: FOREXCOM_COFFEE, 60
+            - button "↺" [ref=e175]
+          - generic [ref=e176]: 2023-04-27 – 2026-06-03
+          - generic [ref=e177]: 7,416 bars
+        - button "FOREXCOM_USDCHF, 15 ↺ 2025-07-31 – 2026-06-03 264 bars" [ref=e178] [cursor=pointer]:
+          - generic [ref=e179]:
+            - generic [ref=e180]: FOREXCOM_USDCHF, 15
+            - button "↺" [ref=e181]
+          - generic [ref=e182]: 2025-07-31 – 2026-06-03
+          - generic [ref=e183]: 264 bars
+        - button "G1 ↺ 1981-06-30 – 2026-04-14 11,399 bars" [ref=e184] [cursor=pointer]:
+          - generic [ref=e185]:
+            - generic [ref=e186]: G1
+            - button "↺" [ref=e187]
+          - generic [ref=e188]: 1981-06-30 – 2026-04-14
+          - generic [ref=e189]: 11,399 bars
+        - button "HABITAT_1 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e190] [cursor=pointer]:
+          - generic [ref=e191]:
+            - generic [ref=e192]: HABITAT_1
+            - button "↺" [ref=e193]
+          - generic [ref=e194]: 2015-06-08 – 2017-11-09
+          - generic [ref=e195]: 600 bars
+        - button "HABITAT_2 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e196] [cursor=pointer]:
+          - generic [ref=e197]:
+            - generic [ref=e198]: HABITAT_2
+            - button "↺" [ref=e199]
+          - generic [ref=e200]: 2015-06-08 – 2017-11-09
+          - generic [ref=e201]: 600 bars
+        - button "HABITAT_3 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e202] [cursor=pointer]:
+          - generic [ref=e203]:
+            - generic [ref=e204]: HABITAT_3
+            - button "↺" [ref=e205]
+          - generic [ref=e206]: 2015-06-08 – 2017-11-09
+          - generic [ref=e207]: 600 bars
+        - button "HABITAT_4 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e208] [cursor=pointer]:
+          - generic [ref=e209]:
+            - generic [ref=e210]: HABITAT_4
+            - button "↺" [ref=e211]
+          - generic [ref=e212]: 2015-06-08 – 2017-11-09
+          - generic [ref=e213]: 600 bars
+        - button "HABITAT_5 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e214] [cursor=pointer]:
+          - generic [ref=e215]:
+            - generic [ref=e216]: HABITAT_5
+            - button "↺" [ref=e217]
+          - generic [ref=e218]: 2015-06-08 – 2017-11-09
+          - generic [ref=e219]: 600 bars
+        - button "ICEEUR_DLY_BRN1!, 1D ↺ 1989-03-01 – 2026-06-03 9,526 bars" [ref=e220] [cursor=pointer]:
+          - generic [ref=e221]:
+            - generic [ref=e222]: ICEEUR_DLY_BRN1!, 1D
+            - button "↺" [ref=e223]
+          - generic [ref=e224]: 1989-03-01 – 2026-06-03
+          - generic [ref=e225]: 9,526 bars
+        - button "NG12 ↺ 2005-07-15 – 2026-04-15 5,054 bars" [ref=e226] [cursor=pointer]:
+          - generic [ref=e227]:
+            - generic [ref=e228]: NG12
+            - button "↺" [ref=e229]
+          - generic [ref=e230]: 2005-07-15 – 2026-04-15
+          - generic [ref=e231]: 5,054 bars
+        - button "NIFTY50 ↺ 2025-06-02 – 2026-05-29 246 bars" [ref=e232] [cursor=pointer]:
+          - generic [ref=e233]:
+            - generic [ref=e234]: NIFTY50
+            - button "↺" [ref=e235]
+          - generic [ref=e236]: 2025-06-02 – 2026-05-29
+          - generic [ref=e237]: 246 bars
+        - button "NIFTY_SYN ↺ 2022-01-03 – 2023-12-01 500 bars" [ref=e238] [cursor=pointer]:
+          - generic [ref=e239]:
+            - generic [ref=e240]: NIFTY_SYN
+            - button "↺" [ref=e241]
+          - generic [ref=e242]: 2022-01-03 – 2023-12-01
+          - generic [ref=e243]: 500 bars
+        - button "NULL_DRIFT ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e244] [cursor=pointer]:
+          - generic [ref=e245]:
+            - generic [ref=e246]: NULL_DRIFT
+            - button "↺" [ref=e247]
+          - generic [ref=e248]: 2015-06-08 – 2017-11-09
+          - generic [ref=e249]: 600 bars
+        - button "NULL_RW ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e250] [cursor=pointer]:
+          - generic [ref=e251]:
+            - generic [ref=e252]: NULL_RW
+            - button "↺" [ref=e253]
+          - generic [ref=e254]: 2015-06-08 – 2017-11-09
+          - generic [ref=e255]: 600 bars
+        - button "OU_IN_TREND ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e256] [cursor=pointer]:
+          - generic [ref=e257]:
+            - generic [ref=e258]: OU_IN_TREND
+            - button "↺" [ref=e259]
+          - generic [ref=e260]: 2015-06-08 – 2017-11-09
+          - generic [ref=e261]: 600 bars
+        - button "TVC_DXY, 60 ↺ 2023-01-03 – 2026-06-03 21,109 bars" [ref=e262] [cursor=pointer]:
+          - generic [ref=e263]:
+            - generic [ref=e264]: TVC_DXY, 60
+            - button "↺" [ref=e265]
+          - generic [ref=e266]: 2023-01-03 – 2026-06-03
+          - generic [ref=e267]: 21,109 bars
+        - button "TVC_SILVER, 1D ↺ 1802-01-04 – 2026-06-03 14,805 bars" [ref=e268] [cursor=pointer]:
+          - generic [ref=e269]:
+            - generic [ref=e270]: TVC_SILVER, 1D
+            - button "↺" [ref=e271]
+          - generic [ref=e272]: 1802-01-04 – 2026-06-03
+          - generic [ref=e273]: 14,805 bars
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - button "1M" [disabled] [ref=e28]
+          - button "3M" [disabled] [ref=e29]
+          - button "6M" [disabled] [ref=e30]
+          - button "1Y" [disabled] [ref=e31]
+          - button "2Y" [disabled] [ref=e32]
+          - button "ALL" [disabled] [ref=e33]
+        - generic [ref=e35]:
+          - textbox [ref=e36]
+          - generic [ref=e37]: —
+          - textbox [ref=e38]
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e42]:
+            - generic:
+              - generic:
+                - img
+              - generic: Select an instrument to begin
+            - table [ref=e45]:
+              - row [ref=e46]:
+                - cell
+                - cell [ref=e47]:
+                  - link "Charting by TradingView" [ref=e51] [cursor=pointer]:
+                    - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/
+                    - img [ref=e52]
+                - cell [ref=e56]
+              - row [ref=e60]:
+                - cell
+                - cell [ref=e61]
+                - cell [ref=e65]
+          - generic [ref=e69]:
+            - generic [ref=e71]: Research
+            - generic [ref=e73]: Select an instrument to begin
+        - complementary [ref=e75]:
+          - generic [ref=e77]: Estimators
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e81]: μ* EMA
+              - button "Toggle EMA estimator" [ref=e82] [cursor=pointer]
+            - generic [ref=e84]:
+              - generic [ref=e85]: window
+              - spinbutton [disabled] [ref=e86]: "20"
+          - generic [ref=e89]: Rolling Mean
+          - generic [ref=e92]: Kalman
+          - generic [ref=e95]: VWAP
+  - button "Open Next.js Dev Tools" [ref=e279] [cursor=pointer]:
+    - img [ref=e280]
+  - alert [ref=e97]

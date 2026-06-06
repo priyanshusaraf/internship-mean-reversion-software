@@ -1,0 +1,50 @@
+{
+  "stage": 1,
+  "data_note": {
+    "prereg_date_min": "2006-07-28",
+    "effective_date_min": "2015-01-08",
+    "deviation": "EIA data 2010-2026 only; 5yr avg valid from 2015; documented deviation."
+  },
+  "eia_threshold_pct": 10.0,
+  "n_surrogates": 200,
+  "conditional": {
+    "n": 65,
+    "gross": 0.005630769230769233,
+    "net": 0.0026307692307692347,
+    "hit": 0.6307692307692307,
+    "avg_hold": 25.723076923076924,
+    "top3_pct": 0.21211586010136738
+  },
+  "unconditional_baseline": {
+    "n": 86,
+    "gross": 0.0037093023255813946,
+    "net": 0.0007093023255813972,
+    "hit": 0.627906976744186,
+    "avg_hold": 24.662790697674417,
+    "top3_pct": 0.1718045919339243
+  },
+  "oos_conditional": {
+    "n": 49,
+    "gross": 0.007775510204081629,
+    "net": 0.004775510204081637,
+    "hit": 0.6326530612244898,
+    "avg_hold": 26.040816326530614,
+    "top3_pct": 0.2409952844144682
+  },
+  "jackknife": {
+    "gross": 0.029671875000000004,
+    "drop_pct": 4.269594528623921,
+    "dropped_gross": -1.5330000000000001
+  },
+  "p_rw_200": 0.5024875621890548,
+  "rw_null_pctiles": {
+    "p5": -0.06606422753100855,
+    "p25": -0.02777285817647411,
+    "p50": 0.005671152233400338,
+    "p75": 0.03454861930645397,
+    "p95": 0.07263814869169032
+  },
+  "stage1_verdict": "KILL_PVAL",
+  "stage1_rationale": "p_rw=0.502 > 0.20: cannot be significant at any N. Stage 1 KILL.",
+  "proceed_to_stage2": false
+}

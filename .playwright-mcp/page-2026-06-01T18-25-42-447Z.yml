@@ -1,0 +1,50 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+  - generic [ref=e7]:
+    - complementary [ref=e8]:
+      - generic [ref=e10]: Instruments
+      - generic [ref=e11]:
+        - textbox "INSTRUMENT_ID" [ref=e12]
+        - textbox "/path/to/data.csv or .parquet" [ref=e13]
+        - button "Load File" [disabled] [ref=e14]
+      - generic [ref=e16]: No instruments loaded
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - button "1M" [disabled] [ref=e20]
+          - button "3M" [disabled] [ref=e21]
+          - button "6M" [disabled] [ref=e22]
+          - button "1Y" [disabled] [ref=e23]
+          - button "2Y" [disabled] [ref=e24]
+          - button "ALL" [disabled] [ref=e25]
+        - generic [ref=e27]:
+          - textbox [ref=e28]
+          - generic [ref=e29]: —
+          - textbox [ref=e30]
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e34]:
+            - generic:
+              - generic:
+                - img
+              - generic: Select an instrument to begin
+          - generic [ref=e37]:
+            - generic [ref=e39]: Research
+            - generic [ref=e41]: Select an instrument to begin
+        - complementary [ref=e42]:
+          - generic [ref=e44]: Estimators
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e48]: μ* EMA
+              - button "Toggle EMA estimator" [ref=e49] [cursor=pointer]
+            - generic [ref=e51]:
+              - generic [ref=e52]: window
+              - spinbutton [disabled] [ref=e53]: "20"
+          - generic [ref=e56]: Rolling Mean
+          - generic [ref=e59]: Kalman
+          - generic [ref=e62]: VWAP

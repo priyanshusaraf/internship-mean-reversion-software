@@ -1,0 +1,436 @@
+{
+  "RB-CL (F6, \u03b2=1.0)": {
+    "name": "RB-CL (F6, \u03b2=1.0)",
+    "n": 7003,
+    "total_valid_bars": 6998,
+    "beta_val": 1.0,
+    "gate0": {
+      "name": "RB-CL (F6, \u03b2=1.0)",
+      "vr20_raw": 0.898,
+      "p_rw_raw": 0.0348,
+      "vr20_ds": 0.6434,
+      "p_rw_ds": 0.005,
+      "raw_spread_mean": -5.2094,
+      "raw_spread_std": 28.6582,
+      "mean_std_ratio": 0.1818,
+      "deseason_amplification": 1.714,
+      "gate0_classification": "CLEAN"
+    },
+    "splice_A": {
+      "leg": "NYMEX_DL_RB2!, 1D.csv",
+      "n_total": 7006,
+      "n_neg": 0,
+      "pct_neg": 0.0,
+      "level_mean": 45.0542,
+      "level_std": 24.1934,
+      "mean_std_ratio": 1.8623,
+      "grade": "CLEAN",
+      "note": "LEVEL_RATIO_HIGH but expected for commodity price level (not a contamination signal)"
+    },
+    "splice_B": {
+      "leg": "NYMEX_DL_CL2!, 1D.csv",
+      "n_total": 9230,
+      "n_neg": 232,
+      "pct_neg": 2.51,
+      "level_mean": 43.3788,
+      "level_std": 28.9875,
+      "mean_std_ratio": 1.4965,
+      "grade": "CONTAMINATED",
+      "note": "LEVEL_RATIO_HIGH but expected for commodity price level (not a contamination signal)"
+    },
+    "book_metrics_full": {
+      "n_trades": 270,
+      "n_years": 27.8,
+      "trades_per_year": 9.7,
+      "mean_gross": 0.666,
+      "mean_net": 0.466,
+      "std_net": 3.4651,
+      "annualized_sharpe": 0.419,
+      "max_drawdown_units": -76.5712,
+      "median_net": 1.3569,
+      "mdd_in_median_trades": 56.4,
+      "cumulative_net": 125.8187
+    },
+    "book_metrics_oos": {
+      "n_trades": 72,
+      "n_years": 8.3,
+      "trades_per_year": 8.6,
+      "mean_gross": 0.7977,
+      "mean_net": 0.5977,
+      "std_net": 3.503,
+      "annualized_sharpe": 0.502,
+      "max_drawdown_units": -14.5189,
+      "median_net": 1.4062,
+      "mdd_in_median_trades": 10.3,
+      "cumulative_net": 43.0337
+    },
+    "capacity": {
+      "limiting_leg_adv": 80000,
+      "max_contracts_5pct_adv": 4000,
+      "contract_size_units": 1000,
+      "net_per_trade_units": 0.466,
+      "max_net_per_trade_usd": 1864000.0,
+      "trades_per_year": 9.7,
+      "theoretical_annual_capacity_usd": 18080800.0,
+      "label": "$/bbl"
+    },
+    "breakeven": {
+      "full_net_by_cost": {
+        "0.05": 0.616,
+        "0.1": 0.566,
+        "0.15": 0.516,
+        "0.2": 0.466,
+        "0.3": 0.366,
+        "0.4": 0.266,
+        "0.5": 0.166,
+        "0.6": 0.066,
+        "0.8": -0.134,
+        "1.0": -0.334
+      },
+      "oos_net_by_cost": {
+        "0.05": 0.74769,
+        "0.1": 0.69769,
+        "0.15": 0.64769,
+        "0.2": 0.59769,
+        "0.3": 0.49769,
+        "0.4": 0.39769,
+        "0.5": 0.29769,
+        "0.6": 0.19769,
+        "0.8": -0.00231,
+        "1.0": -0.20231
+      },
+      "breakeven_full": 0.666,
+      "breakeven_oos": 0.798
+    },
+    "gate4_gradient": {
+      "name": "RB-CL (F6, \u03b2=1.0)",
+      "real_gross_by_theta": {
+        "1.0": 0.666,
+        "1.5": 0.6755,
+        "2.0": 0.88044,
+        "2.5": 0.92969
+      },
+      "real_slope": 0.1992,
+      "median_surr_gross_rw": {
+        "1.0": -0.01675,
+        "1.5": -0.02281,
+        "2.0": -0.03118,
+        "2.5": -0.0122
+      },
+      "median_surr_gross_ou": {
+        "1.0": 0.06371,
+        "1.5": 0.0932,
+        "2.0": 0.09878,
+        "2.5": 0.13444
+      },
+      "median_rw_slope": -0.00651,
+      "median_ou_slope": 0.05444,
+      "p95_rw_slope": 0.37008,
+      "p95_ou_slope": 0.44167,
+      "ratio_real_vs_rw": 30.6,
+      "ratio_real_vs_ou": 3.66,
+      "gradient_verdict": "GENUINE"
+    }
+  },
+  "LE-GF (F5, \u03b2=0.565)": {
+    "name": "LE-GF (F5, \u03b2=0.565)",
+    "n": 5889,
+    "total_valid_bars": 4416,
+    "beta_val": 0.5649756201532277,
+    "gate0": {
+      "name": "LE-GF (F5, \u03b2=0.565)",
+      "vr20_raw": 0.7662,
+      "p_rw_raw": 0.005,
+      "vr20_ds": 0.5484,
+      "p_rw_ds": 0.005,
+      "raw_spread_mean": 13.8795,
+      "raw_spread_std": 11.4269,
+      "mean_std_ratio": 1.2146,
+      "deseason_amplification": 1.482,
+      "gate0_classification": "CLEAN"
+    },
+    "splice_A": {
+      "leg": "CME_DL_LE2!, 1D.csv",
+      "n_total": 6604,
+      "n_neg": 0,
+      "pct_neg": 0.0,
+      "level_mean": 138.7785,
+      "level_std": 23.7939,
+      "mean_std_ratio": 5.8325,
+      "grade": "CLEAN",
+      "note": "LEVEL_RATIO_HIGH but expected for commodity price level (not a contamination signal)"
+    },
+    "splice_B": {
+      "leg": "CME_DL_GF2!, 1D.csv",
+      "n_total": 5944,
+      "n_neg": 0,
+      "pct_neg": 0.0,
+      "level_mean": 224.6405,
+      "level_std": 34.2171,
+      "mean_std_ratio": 6.5651,
+      "grade": "CLEAN",
+      "note": "LEVEL_RATIO_HIGH but expected for commodity price level (not a contamination signal)"
+    },
+    "book_metrics_full": {
+      "n_trades": 164,
+      "n_years": 17.5,
+      "trades_per_year": 9.4,
+      "mean_gross": 0.8158,
+      "mean_net": 0.6158,
+      "std_net": 2.3646,
+      "annualized_sharpe": 0.797,
+      "max_drawdown_units": -16.8093,
+      "median_net": 1.2575,
+      "mdd_in_median_trades": 13.4,
+      "cumulative_net": 100.9872
+    },
+    "book_metrics_oos": {
+      "n_trades": 58,
+      "n_years": 7.0,
+      "trades_per_year": 8.3,
+      "mean_gross": 0.4023,
+      "mean_net": 0.2023,
+      "std_net": 2.6388,
+      "annualized_sharpe": 0.221,
+      "max_drawdown_units": -11.5973,
+      "median_net": 1.2046,
+      "mdd_in_median_trades": 9.6,
+      "cumulative_net": 11.7355
+    },
+    "capacity": {
+      "limiting_leg_adv": 8000,
+      "max_contracts_5pct_adv": 400,
+      "contract_size_units": 50000,
+      "net_per_trade_units": 0.6158,
+      "max_net_per_trade_usd": 123160.0,
+      "trades_per_year": 9.4,
+      "theoretical_annual_capacity_usd": 1157704.0,
+      "label": "\u00a2/lb"
+    },
+    "breakeven": {
+      "full_net_by_cost": {
+        "0.05": 0.76578,
+        "0.1": 0.71578,
+        "0.15": 0.66578,
+        "0.2": 0.61578,
+        "0.25": 0.56578,
+        "0.3": 0.51578,
+        "0.35": 0.46578,
+        "0.4": 0.41578,
+        "0.5": 0.31578
+      },
+      "oos_net_by_cost": {
+        "0.05": 0.35234,
+        "0.1": 0.30234,
+        "0.15": 0.25234,
+        "0.2": 0.20234,
+        "0.25": 0.15234,
+        "0.3": 0.10234,
+        "0.35": 0.05234,
+        "0.4": 0.00234,
+        "0.5": -0.09766
+      },
+      "breakeven_full": null,
+      "breakeven_oos": 0.402
+    },
+    "gate4_gradient": {
+      "name": "LE-GF (F5, \u03b2=0.565)",
+      "real_gross_by_theta": {
+        "1.0": 0.81578,
+        "1.5": 0.83935,
+        "2.0": 1.16965,
+        "2.5": 1.49414
+      },
+      "real_slope": 0.47308,
+      "median_surr_gross_rw": {
+        "1.0": -0.00697,
+        "1.5": 0.01222,
+        "2.0": 0.00858,
+        "2.5": 0.04136
+      },
+      "median_surr_gross_ou": {
+        "1.0": 0.17042,
+        "1.5": 0.21185,
+        "2.0": 0.22907,
+        "2.5": 0.24597
+      },
+      "median_rw_slope": 0.01595,
+      "median_ou_slope": 0.05625,
+      "p95_rw_slope": 0.4802,
+      "p95_ou_slope": 0.45935,
+      "ratio_real_vs_rw": 29.66,
+      "ratio_real_vs_ou": 8.41,
+      "gradient_verdict": "GENUINE"
+    }
+  },
+  "gate2_multiplicity": {
+    "economic_test_family": [
+      {
+        "rank": 1,
+        "pair": "LE-GF",
+        "beta": "F5",
+        "p_rw": 0.002,
+        "bh_threshold_q010": 0.0333,
+        "bonferroni_threshold": 0.0167,
+        "survives_bh_q010": true,
+        "survives_bonferroni": true
+      },
+      {
+        "rank": 2,
+        "pair": "RB-CL",
+        "beta": "F6",
+        "p_rw": 0.006,
+        "bh_threshold_q010": 0.0667,
+        "bonferroni_threshold": 0.0167,
+        "survives_bh_q010": true,
+        "survives_bonferroni": true
+      },
+      {
+        "rank": 3,
+        "pair": "HO-CL",
+        "beta": "F5",
+        "p_rw": 0.072,
+        "bh_threshold_q010": 0.1,
+        "bonferroni_threshold": 0.0167,
+        "survives_bh_q010": true,
+        "survives_bonferroni": false
+      }
+    ],
+    "bh_q010_threshold_at_rank": [
+      0.03333333333333333,
+      0.06666666666666667,
+      0.1
+    ],
+    "bonferroni_threshold_3tests": 0.0167,
+    "bonferroni_threshold_5pairs_broadest": 0.01,
+    "vr_screening_family": [
+      {
+        "pair": "HO-CL",
+        "beta": "F5",
+        "period": "FULL",
+        "doc": 39,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "HO-CL",
+        "beta": "F6",
+        "period": "FULL",
+        "doc": 39,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "HO-CL",
+        "beta": "F5",
+        "period": "OOS",
+        "doc": 39,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "HO-CL",
+        "beta": "F6",
+        "period": "OOS",
+        "doc": 39,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "RB-CL",
+        "beta": "F6",
+        "period": "FULL",
+        "doc": 40,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "RB-CL",
+        "beta": "F6",
+        "period": "OOS",
+        "doc": 40,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "RB-CL",
+        "beta": "F5",
+        "period": "FULL",
+        "doc": 40,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "RB-CL",
+        "beta": "F5",
+        "period": "OOS",
+        "doc": 40,
+        "status": "OOS_FAIL"
+      },
+      {
+        "pair": "GC-PL",
+        "beta": "F5",
+        "period": "FULL",
+        "doc": 41,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "GC-PL",
+        "beta": "F5",
+        "period": "OOS",
+        "doc": 41,
+        "status": "OOS_FAIL"
+      },
+      {
+        "pair": "GC-PL",
+        "beta": "F6",
+        "period": "FULL",
+        "doc": 41,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "GC-PL",
+        "beta": "F6",
+        "period": "OOS",
+        "doc": 41,
+        "status": "MARGINAL"
+      },
+      {
+        "pair": "LE-GF",
+        "beta": "F5",
+        "period": "FULL",
+        "doc": 42,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "LE-GF",
+        "beta": "F5",
+        "period": "OOS",
+        "doc": 42,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "LE-GF",
+        "beta": "F6",
+        "period": "FULL",
+        "doc": 42,
+        "status": "NO_CONFIRM"
+      },
+      {
+        "pair": "KE-ZW",
+        "beta": "F5",
+        "period": "FULL",
+        "doc": 42,
+        "status": "CONFIRM"
+      },
+      {
+        "pair": "KE-ZW",
+        "beta": "F5",
+        "period": "OOS",
+        "doc": 42,
+        "status": "OOS_FAIL"
+      }
+    ],
+    "summary": {
+      "rb_cl_survives_bh_q010": true,
+      "rb_cl_survives_bonferroni_3": true,
+      "rb_cl_survives_bonferroni_5pairs": true,
+      "le_gf_survives_bh_q010": true,
+      "le_gf_survives_bonferroni_3": true,
+      "le_gf_survives_bonferroni_5pairs": true
+    }
+  }
+}

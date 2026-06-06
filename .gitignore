@@ -1,0 +1,33 @@
+data/amr.duckdb
+data/amr.duckdb.wal
+.DS_Store
+
+# dependencies
+node_modules/
+frontend/node_modules/
+backend/.venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# playwright logs
+.playwright-mcp/
+
+# build artifacts
+frontend/.next/
+frontend/out/
+dist/
+build/
+
+# env
+.env
+.env.local
+.env*.local
+
+# large binary data (keep processed CSVs and JSON, exclude databases)
+*.duckdb
+*.duckdb.wal
+*.parquet

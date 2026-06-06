@@ -1,0 +1,174 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+  - generic [ref=e7]:
+    - complementary [ref=e8]:
+      - generic [ref=e10]: Instruments
+      - generic [ref=e11]:
+        - textbox "INSTRUMENT_ID" [ref=e12]
+        - textbox "/path/to/data.csv or .parquet" [ref=e13]
+        - button "Load File" [disabled] [ref=e14]
+      - generic [ref=e15]:
+        - button "ADANIENT ↺ 2012-10-10 – 2022-10-07 2,463 bars" [ref=e98] [cursor=pointer]:
+          - generic [ref=e99]:
+            - generic [ref=e100]: ADANIENT
+            - button "↺" [ref=e101]
+          - generic [ref=e102]: 2012-10-10 – 2022-10-07
+          - generic [ref=e103]: 2,463 bars
+        - button "ANCHOR_OU ↺ 2015-06-08 – 2017-11-09 600 bars" [active] [ref=e104] [cursor=pointer]:
+          - generic [ref=e105]:
+            - generic [ref=e106]: ANCHOR_OU
+            - button "↺" [ref=e107]
+          - generic [ref=e108]: 2015-06-08 – 2017-11-09
+          - generic [ref=e109]: 600 bars
+        - button "BLIND_1 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]:
+            - generic [ref=e112]: BLIND_1
+            - button "↺" [ref=e113]
+          - generic [ref=e114]: 2015-06-08 – 2017-11-09
+          - generic [ref=e115]: 600 bars
+        - button "BLIND_2 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e116] [cursor=pointer]:
+          - generic [ref=e117]:
+            - generic [ref=e118]: BLIND_2
+            - button "↺" [ref=e119]
+          - generic [ref=e120]: 2015-06-08 – 2017-11-09
+          - generic [ref=e121]: 600 bars
+        - button "BLIND_3 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e122] [cursor=pointer]:
+          - generic [ref=e123]:
+            - generic [ref=e124]: BLIND_3
+            - button "↺" [ref=e125]
+          - generic [ref=e126]: 2015-06-08 – 2017-11-09
+          - generic [ref=e127]: 600 bars
+        - button "BLIND_4 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e128] [cursor=pointer]:
+          - generic [ref=e129]:
+            - generic [ref=e130]: BLIND_4
+            - button "↺" [ref=e131]
+          - generic [ref=e132]: 2015-06-08 – 2017-11-09
+          - generic [ref=e133]: 600 bars
+        - button "BLIND_5 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e134] [cursor=pointer]:
+          - generic [ref=e135]:
+            - generic [ref=e136]: BLIND_5
+            - button "↺" [ref=e137]
+          - generic [ref=e138]: 2015-06-08 – 2017-11-09
+          - generic [ref=e139]: 600 bars
+        - button "G1 ↺ 1981-06-30 – 2026-04-14 11,399 bars" [ref=e140] [cursor=pointer]:
+          - generic [ref=e141]:
+            - generic [ref=e142]: G1
+            - button "↺" [ref=e143]
+          - generic [ref=e144]: 1981-06-30 – 2026-04-14
+          - generic [ref=e145]: 11,399 bars
+        - button "HABITAT_1 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e146] [cursor=pointer]:
+          - generic [ref=e147]:
+            - generic [ref=e148]: HABITAT_1
+            - button "↺" [ref=e149]
+          - generic [ref=e150]: 2015-06-08 – 2017-11-09
+          - generic [ref=e151]: 600 bars
+        - button "HABITAT_2 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e152] [cursor=pointer]:
+          - generic [ref=e153]:
+            - generic [ref=e154]: HABITAT_2
+            - button "↺" [ref=e155]
+          - generic [ref=e156]: 2015-06-08 – 2017-11-09
+          - generic [ref=e157]: 600 bars
+        - button "HABITAT_3 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e158] [cursor=pointer]:
+          - generic [ref=e159]:
+            - generic [ref=e160]: HABITAT_3
+            - button "↺" [ref=e161]
+          - generic [ref=e162]: 2015-06-08 – 2017-11-09
+          - generic [ref=e163]: 600 bars
+        - button "HABITAT_4 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]:
+            - generic [ref=e166]: HABITAT_4
+            - button "↺" [ref=e167]
+          - generic [ref=e168]: 2015-06-08 – 2017-11-09
+          - generic [ref=e169]: 600 bars
+        - button "HABITAT_5 ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e170] [cursor=pointer]:
+          - generic [ref=e171]:
+            - generic [ref=e172]: HABITAT_5
+            - button "↺" [ref=e173]
+          - generic [ref=e174]: 2015-06-08 – 2017-11-09
+          - generic [ref=e175]: 600 bars
+        - button "NG12 ↺ 2005-07-15 – 2026-04-15 5,054 bars" [ref=e176] [cursor=pointer]:
+          - generic [ref=e177]:
+            - generic [ref=e178]: NG12
+            - button "↺" [ref=e179]
+          - generic [ref=e180]: 2005-07-15 – 2026-04-15
+          - generic [ref=e181]: 5,054 bars
+        - button "NIFTY50 ↺ 2025-06-02 – 2026-05-29 246 bars" [ref=e182] [cursor=pointer]:
+          - generic [ref=e183]:
+            - generic [ref=e184]: NIFTY50
+            - button "↺" [ref=e185]
+          - generic [ref=e186]: 2025-06-02 – 2026-05-29
+          - generic [ref=e187]: 246 bars
+        - button "NIFTY_SYN ↺ 2022-01-03 – 2023-12-01 500 bars" [ref=e188] [cursor=pointer]:
+          - generic [ref=e189]:
+            - generic [ref=e190]: NIFTY_SYN
+            - button "↺" [ref=e191]
+          - generic [ref=e192]: 2022-01-03 – 2023-12-01
+          - generic [ref=e193]: 500 bars
+        - button "NULL_DRIFT ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e194] [cursor=pointer]:
+          - generic [ref=e195]:
+            - generic [ref=e196]: NULL_DRIFT
+            - button "↺" [ref=e197]
+          - generic [ref=e198]: 2015-06-08 – 2017-11-09
+          - generic [ref=e199]: 600 bars
+        - button "NULL_RW ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e200] [cursor=pointer]:
+          - generic [ref=e201]:
+            - generic [ref=e202]: NULL_RW
+            - button "↺" [ref=e203]
+          - generic [ref=e204]: 2015-06-08 – 2017-11-09
+          - generic [ref=e205]: 600 bars
+        - button "OU_IN_TREND ↺ 2015-06-08 – 2017-11-09 600 bars" [ref=e206] [cursor=pointer]:
+          - generic [ref=e207]:
+            - generic [ref=e208]: OU_IN_TREND
+            - button "↺" [ref=e209]
+          - generic [ref=e210]: 2015-06-08 – 2017-11-09
+          - generic [ref=e211]: 600 bars
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - button "1M" [ref=e20] [cursor=pointer]
+          - button "3M" [ref=e21] [cursor=pointer]
+          - button "6M" [ref=e22] [cursor=pointer]
+          - button "1Y" [ref=e23] [cursor=pointer]
+          - button "2Y" [ref=e24] [cursor=pointer]
+          - button "ALL" [ref=e25] [cursor=pointer]
+        - generic [ref=e27]:
+          - textbox [ref=e28]
+          - generic [ref=e29]: —
+          - textbox [ref=e30]
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - table [ref=e37]:
+            - row [ref=e38]:
+              - cell
+              - cell [ref=e39]:
+                - link "Charting by TradingView" [ref=e43] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/
+                  - img [ref=e44]
+              - cell [ref=e48]
+            - row [ref=e52]:
+              - cell
+              - cell [ref=e53]
+              - cell [ref=e57]
+          - generic [ref=e61]:
+            - generic [ref=e63]: Research
+            - generic [ref=e212]: Enable μ* estimator to see research data
+        - complementary [ref=e66]:
+          - generic [ref=e68]: Estimators
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - generic [ref=e72]: μ* EMA
+              - button "Toggle EMA estimator" [ref=e73] [cursor=pointer]
+            - generic [ref=e75]:
+              - generic [ref=e76]: window
+              - spinbutton [disabled] [ref=e77]: "20"
+          - generic [ref=e80]: Rolling Mean
+          - generic [ref=e83]: Kalman
+          - generic [ref=e86]: VWAP
+  - button "Open Next.js Dev Tools" [ref=e93] [cursor=pointer]:
+    - img [ref=e94]
+  - alert [ref=e97]

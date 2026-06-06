@@ -1,0 +1,125 @@
+{
+  "gate_a": {
+    "methodology_note": "VR test on RAW spread (doc 44 Gate 0 method); economic fade on DESEASONALIZED spread (doc 43 method). IS period \u2248 1998\u20132017; OOS \u2248 2017\u20132026. Excision window 2020-03-01 to 2021-06-30 falls almost entirely in OOS (0 IS bars, 337 OOS bars excised). Consequence: excision barely changes IS VR (excision window is post-IS).",
+    "baseline": {
+      "n_full": 7003,
+      "n_is": 4902,
+      "is_period": "~1998-07-19 to 2018-01-24",
+      "oos_period": "~2018-01-25 to 2026-06-02",
+      "vr20_full_period_raw": 0.898,
+      "p_rw_full_period_raw": 0.0149,
+      "vr20_is_only_raw": 0.9656,
+      "p_rw_is_only_raw": 0.3134,
+      "is_metrics_ds": {
+        "n_trades": 195,
+        "n_years": 19.5,
+        "trades_per_year": 10.0,
+        "mean_gross": 0.62776,
+        "mean_net": 0.42776,
+        "median_net": 1.34322,
+        "std_net": 3.47818,
+        "annualized_sharpe": 0.389,
+        "max_drawdown_units": -76.5712,
+        "mdd_in_median_trades": 57.0,
+        "cumulative_net": 83.4136,
+        "hit_rate": 0.8
+      },
+      "oos_metrics_ds": {
+        "n_trades": 72,
+        "n_years": 8.3,
+        "trades_per_year": 8.6,
+        "mean_gross": 0.79096,
+        "mean_net": 0.59096,
+        "median_net": 1.4062,
+        "std_net": 3.50204,
+        "annualized_sharpe": 0.496,
+        "max_drawdown_units": -14.5189,
+        "mdd_in_median_trades": 10.3,
+        "cumulative_net": 42.5491,
+        "hit_rate": 0.708
+      }
+    },
+    "excised": {
+      "excise_window": "2020-03-01 to 2021-06-30",
+      "n_excised_total": 337,
+      "n_excised_in_IS": 0,
+      "n_excised_in_OOS": 337,
+      "n_remaining": 6666,
+      "vr20_is_excised_raw": 0.9705,
+      "p_rw_is_excised_raw": 0.3582,
+      "is_metrics_excised_ds": {
+        "n_trades": 186,
+        "n_years": 18.5,
+        "trades_per_year": 10.0,
+        "mean_gross": 0.62384,
+        "mean_net": 0.42384,
+        "median_net": 1.37159,
+        "std_net": 3.53089,
+        "annualized_sharpe": 0.38,
+        "max_drawdown_units": -76.5712,
+        "mdd_in_median_trades": 55.8,
+        "cumulative_net": 78.8342,
+        "hit_rate": 0.796
+      },
+      "oos_metrics_orig_ds": {
+        "n_trades": 72,
+        "n_years": 8.3,
+        "trades_per_year": 8.6,
+        "mean_gross": 0.79096,
+        "mean_net": 0.59096,
+        "median_net": 1.4062,
+        "std_net": 3.50204,
+        "annualized_sharpe": 0.496,
+        "max_drawdown_units": -14.5189,
+        "mdd_in_median_trades": 10.3,
+        "cumulative_net": 42.5491,
+        "hit_rate": 0.708
+      }
+    },
+    "pass_criteria": {
+      "excised_IS_VR_p_lt_050": false,
+      "excised_IS_net_gt_0": true,
+      "orig_OOS_net_gt_0": true
+    },
+    "gate_a_pass": false,
+    "confirmed_sleeve_upgrade": false,
+    "critical_finding": "IS (1998\u20132017) raw VR p=0.3134 \u2014 NOT significant, even before excision. Full-period VR p=0.0149 \u2014 this was the doc 44 Gate 0 result (full series, incl. OOS). Sub-diffusion in RB-CL is concentrated in the post-2017 OOS period, not the IS."
+  },
+  "gate_b": {
+    "skipped": "Gate A failed; RB-CL not in book"
+  },
+  "gate_c": {
+    "skipped": "Gate A failed; single-sleeve test only"
+  },
+  "le_gf_standalone": {
+    "is_metrics": {
+      "n_trades": 102,
+      "n_years": 16.4,
+      "trades_per_year": 6.2,
+      "mean_gross": 1.02955,
+      "mean_net": 0.82955,
+      "median_net": 1.29883,
+      "std_net": 2.2056,
+      "annualized_sharpe": 0.939,
+      "max_drawdown_units": -16.8093,
+      "mdd_in_median_trades": 12.9,
+      "cumulative_net": 84.6145,
+      "hit_rate": 0.775
+    },
+    "oos_metrics": {
+      "n_trades": 58,
+      "n_years": 7.0,
+      "trades_per_year": 8.3,
+      "mean_gross": 0.4149,
+      "mean_net": 0.2149,
+      "median_net": 1.20455,
+      "std_net": 2.6476,
+      "annualized_sharpe": 0.233,
+      "max_drawdown_units": -11.5973,
+      "mdd_in_median_trades": 9.6,
+      "cumulative_net": 12.4643,
+      "hit_rate": 0.69
+    }
+  },
+  "verdict": "SINGLE-SLEEVE-LE-GF-ONLY"
+}

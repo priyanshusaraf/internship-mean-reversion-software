@@ -1,0 +1,457 @@
+{
+  "meta": {
+    "n_synth": 5000,
+    "n_draws": 200,
+    "seed": 20260604,
+    "tau_fupdate": 0.1,
+    "no_manufacture_band": [
+      0.8,
+      1.2
+    ],
+    "families_tested": [
+      "F6_economic_anchor",
+      "F5_presample_ols",
+      "F1_kalman",
+      "F3_longwindow_ols",
+      "F2_ridge"
+    ],
+    "controls_tested": [
+      "P_positive_control",
+      "Z1_martingale",
+      "Z2_stress_null",
+      "Z3_independent"
+    ]
+  },
+  "gate_verdict": "CLEARED_FOR_REAL_DATA",
+  "admissible_families": [
+    "F6_economic_anchor",
+    "F5_presample_ols"
+  ],
+  "per_family": {
+    "F6_economic_anchor": {
+      "admissible": true,
+      "P_pass": true,
+      "N_pass": true,
+      "M_pass": true,
+      "gate_flags": {
+        "P": true,
+        "N_Z1_martingale": true,
+        "M_Z1_martingale": true,
+        "N_Z2_stress_null": true,
+        "M_Z2_stress_null": true,
+        "N_Z3_independent": true,
+        "M_Z3_independent": true
+      },
+      "per_control": {
+        "P_positive_control": {
+          "vr20": 0.6423,
+          "real_vr": {
+            "2": 0.9913,
+            "5": 0.9231,
+            "10": 0.8138,
+            "20": 0.6423
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.194,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": null,
+          "f_below_tau": true
+        },
+        "Z1_martingale": {
+          "vr20": 1.0564,
+          "real_vr": {
+            "2": 1.0078,
+            "5": 1.0243,
+            "10": 1.0114,
+            "20": 1.0564
+          },
+          "p_rw": 0.8607,
+          "p_garch": 0.8607,
+          "p_ma1": 0.8557,
+          "p_ou": 0.99,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        },
+        "Z2_stress_null": {
+          "vr20": 0.9701,
+          "real_vr": {
+            "2": 0.9896,
+            "5": 0.978,
+            "10": 0.9772,
+            "20": 0.9701
+          },
+          "p_rw": 0.4726,
+          "p_garch": 0.4726,
+          "p_ma1": 0.6119,
+          "p_ou": 0.4975,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        },
+        "Z3_independent": {
+          "vr20": 1.159,
+          "real_vr": {
+            "2": 1.0008,
+            "5": 1.0384,
+            "10": 1.0937,
+            "20": 1.159
+          },
+          "p_rw": 0.7811,
+          "p_garch": 0.7811,
+          "p_ma1": 0.7861,
+          "p_ou": 0.7612,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        }
+      }
+    },
+    "F5_presample_ols": {
+      "admissible": true,
+      "P_pass": true,
+      "N_pass": true,
+      "M_pass": true,
+      "gate_flags": {
+        "P": true,
+        "N_Z1_martingale": true,
+        "M_Z1_martingale": true,
+        "N_Z2_stress_null": true,
+        "M_Z2_stress_null": true,
+        "N_Z3_independent": true,
+        "M_Z3_independent": true
+      },
+      "per_control": {
+        "P_positive_control": {
+          "vr20": 0.6101,
+          "real_vr": {
+            "2": 0.984,
+            "5": 0.9095,
+            "10": 0.7868,
+            "20": 0.6101
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.005,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": null,
+          "f_below_tau": true
+        },
+        "Z1_martingale": {
+          "vr20": 1.0202,
+          "real_vr": {
+            "2": 0.9965,
+            "5": 1.0021,
+            "10": 0.9726,
+            "20": 1.0202
+          },
+          "p_rw": 0.5174,
+          "p_garch": 0.5174,
+          "p_ma1": 0.4876,
+          "p_ou": 0.9851,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        },
+        "Z2_stress_null": {
+          "vr20": 0.9272,
+          "real_vr": {
+            "2": 0.9588,
+            "5": 0.9317,
+            "10": 0.9363,
+            "20": 0.9272
+          },
+          "p_rw": 0.2587,
+          "p_garch": 0.2587,
+          "p_ma1": 0.3184,
+          "p_ou": 0.3582,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        },
+        "Z3_independent": {
+          "vr20": 0.9118,
+          "real_vr": {
+            "2": 0.9866,
+            "5": 0.9509,
+            "10": 0.9358,
+            "20": 0.9118
+          },
+          "p_rw": 0.1692,
+          "p_garch": 0.1692,
+          "p_ma1": 0.2239,
+          "p_ou": 0.3532,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.0,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        }
+      }
+    },
+    "F1_kalman": {
+      "admissible": false,
+      "P_pass": true,
+      "N_pass": false,
+      "M_pass": false,
+      "gate_flags": {
+        "P": true,
+        "N_Z1_martingale": false,
+        "M_Z1_martingale": false,
+        "N_Z2_stress_null": false,
+        "M_Z2_stress_null": false,
+        "N_Z3_independent": false,
+        "M_Z3_independent": false
+      },
+      "per_control": {
+        "P_positive_control": {
+          "vr20": 0.0578,
+          "real_vr": {
+            "2": 0.5434,
+            "5": 0.228,
+            "10": 0.117,
+            "20": 0.0578
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.005,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.45866,
+          "vr20_in_band": null,
+          "f_below_tau": false
+        },
+        "Z1_martingale": {
+          "vr20": 0.1427,
+          "real_vr": {
+            "2": 0.6129,
+            "5": 0.3296,
+            "10": 0.217,
+            "20": 0.1427
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.005,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.38636,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        },
+        "Z2_stress_null": {
+          "vr20": 0.0501,
+          "real_vr": {
+            "2": 0.4991,
+            "5": 0.1981,
+            "10": 0.0993,
+            "20": 0.0501
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.005,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.48669,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        },
+        "Z3_independent": {
+          "vr20": 0.3367,
+          "real_vr": {
+            "2": 0.8499,
+            "5": 0.6054,
+            "10": 0.4314,
+            "20": 0.3367
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.005,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.14859,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        }
+      }
+    },
+    "F3_longwindow_ols": {
+      "admissible": false,
+      "P_pass": false,
+      "N_pass": false,
+      "M_pass": false,
+      "gate_flags": {
+        "P": false,
+        "N_Z1_martingale": false,
+        "M_Z1_martingale": false,
+        "N_Z2_stress_null": false,
+        "M_Z2_stress_null": false,
+        "N_Z3_independent": false,
+        "M_Z3_independent": false
+      },
+      "per_control": {
+        "P_positive_control": {
+          "vr20": 2.6458,
+          "real_vr": {
+            "2": 1.1321,
+            "5": 1.4613,
+            "10": 1.9349,
+            "20": 2.6458
+          },
+          "p_rw": 1.0,
+          "p_garch": 1.0,
+          "p_ma1": 1.0,
+          "p_ou": 1.0,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.15611,
+          "vr20_in_band": null,
+          "f_below_tau": false
+        },
+        "Z1_martingale": {
+          "vr20": 7.6018,
+          "real_vr": {
+            "2": 1.4264,
+            "5": 2.6406,
+            "10": 4.4504,
+            "20": 7.6018
+          },
+          "p_rw": 1.0,
+          "p_garch": 1.0,
+          "p_ma1": 1.0,
+          "p_ou": 1.0,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.4848,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        },
+        "Z2_stress_null": {
+          "vr20": 11.3635,
+          "real_vr": {
+            "2": 1.5608,
+            "5": 3.248,
+            "10": 6.0208,
+            "20": 11.3635
+          },
+          "p_rw": 1.0,
+          "p_garch": 1.0,
+          "p_ma1": 1.0,
+          "p_ou": 1.0,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.63517,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        },
+        "Z3_independent": {
+          "vr20": 3.7916,
+          "real_vr": {
+            "2": 1.1606,
+            "5": 1.629,
+            "10": 2.3872,
+            "20": 3.7916
+          },
+          "p_rw": 1.0,
+          "p_garch": 1.0,
+          "p_ma1": 1.0,
+          "p_ou": 1.0,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.18073,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        }
+      }
+    },
+    "F2_ridge": {
+      "admissible": false,
+      "P_pass": true,
+      "N_pass": false,
+      "M_pass": false,
+      "gate_flags": {
+        "P": true,
+        "N_Z1_martingale": true,
+        "M_Z1_martingale": true,
+        "N_Z2_stress_null": false,
+        "M_Z2_stress_null": false,
+        "N_Z3_independent": true,
+        "M_Z3_independent": true
+      },
+      "per_control": {
+        "P_positive_control": {
+          "vr20": 0.6443,
+          "real_vr": {
+            "2": 0.9943,
+            "5": 0.9262,
+            "10": 0.8194,
+            "20": 0.6443
+          },
+          "p_rw": 0.005,
+          "p_garch": 0.005,
+          "p_ma1": 0.005,
+          "p_ou": 0.209,
+          "confirmed_rw_garch_ma1": true,
+          "f_betaupdate": 0.00069,
+          "vr20_in_band": null,
+          "f_below_tau": true
+        },
+        "Z1_martingale": {
+          "vr20": 1.0272,
+          "real_vr": {
+            "2": 1.003,
+            "5": 1.0149,
+            "10": 0.9932,
+            "20": 1.0272
+          },
+          "p_rw": 0.6766,
+          "p_garch": 0.6766,
+          "p_ma1": 0.6667,
+          "p_ou": 0.9453,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.00113,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        },
+        "Z2_stress_null": {
+          "vr20": 11.6772,
+          "real_vr": {
+            "2": 1.7172,
+            "5": 3.6581,
+            "10": 6.6341,
+            "20": 11.6772
+          },
+          "p_rw": 1.0,
+          "p_garch": 1.0,
+          "p_ma1": 1.0,
+          "p_ou": 1.0,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.74515,
+          "vr20_in_band": false,
+          "f_below_tau": false
+        },
+        "Z3_independent": {
+          "vr20": 1.0894,
+          "real_vr": {
+            "2": 0.9697,
+            "5": 0.9845,
+            "10": 1.0271,
+            "20": 1.0894
+          },
+          "p_rw": 0.4577,
+          "p_garch": 0.4577,
+          "p_ma1": 0.4677,
+          "p_ou": 0.4826,
+          "confirmed_rw_garch_ma1": false,
+          "f_betaupdate": 0.00017,
+          "vr20_in_band": true,
+          "f_below_tau": true
+        }
+      }
+    }
+  }
+}

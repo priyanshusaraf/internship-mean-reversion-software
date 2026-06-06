@@ -1,0 +1,551 @@
+{
+  "meta": {
+    "W_primary": 60,
+    "W_robust": 120,
+    "H_forward": 40,
+    "N_perm": 2000,
+    "effect_floor": 0.1,
+    "p_hit": 0.05,
+    "p_programme": 0.0125
+  },
+  "hit_summary": {
+    "CL": {
+      "hit_both": false,
+      "hit_p": false,
+      "hit_effect": false,
+      "delta_vr": 0.0021,
+      "p_perm": 0.375,
+      "n_fire": 1287,
+      "fire_mvr": 0.321,
+      "unc_mvr": 0.3232
+    },
+    "SPX": {
+      "hit_both": false,
+      "hit_p": true,
+      "hit_effect": false,
+      "delta_vr": 0.0156,
+      "p_perm": 0.003,
+      "n_fire": 1130,
+      "fire_mvr": 0.2778,
+      "unc_mvr": 0.2934
+    },
+    "ADANIENT": {
+      "hit_both": false,
+      "hit_p": false,
+      "hit_effect": false,
+      "delta_vr": -0.0089,
+      "p_perm": 0.7205,
+      "n_fire": 330,
+      "fire_mvr": 0.3862,
+      "unc_mvr": 0.3773
+    },
+    "AAPL": {
+      "hit_both": false,
+      "hit_p": false,
+      "hit_effect": false,
+      "delta_vr": -0.0427,
+      "p_perm": 1.0,
+      "n_fire": 404,
+      "fire_mvr": 0.3783,
+      "unc_mvr": 0.3356
+    }
+  },
+  "verdict": "NO_CONTENT",
+  "verdict_criteria": {
+    "n_hits": 0,
+    "majority_needed": 3,
+    "sign_consistent": false,
+    "pooled_bonferroni_significant": true,
+    "min_p": 0.003
+  },
+  "detailed": {
+    "CL": {
+      "W60_primary": {
+        "IS": {
+          "n_fire": 1287,
+          "n_eligible": 6790,
+          "fire_rate": 0.1895,
+          "fire_mean_mvr": 0.321,
+          "unc_mean_mvr": 0.3232,
+          "delta_vr": 0.0021,
+          "p_perm": 0.375,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 51.82,
+          "n_fire_hab_scored": 1287
+        },
+        "OOS": {
+          "n_fire": 671,
+          "n_eligible": 2866,
+          "fire_rate": 0.2341,
+          "fire_mean_mvr": 0.293,
+          "unc_mean_mvr": 0.3072,
+          "delta_vr": 0.0142,
+          "p_perm": 0.0505,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 55.23,
+          "n_fire_hab_scored": 671
+        }
+      },
+      "W60_ablation": {
+        "IS": {
+          "n_fire": 2650,
+          "n_eligible": 6790,
+          "fire_rate": 0.3903,
+          "fire_mean_mvr": 0.3296,
+          "unc_mean_mvr": 0.3232,
+          "delta_vr": -0.0064,
+          "p_perm": 0.9655,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 49.41,
+          "n_fire_hab_scored": 2650
+        },
+        "OOS": {
+          "n_fire": 1170,
+          "n_eligible": 2866,
+          "fire_rate": 0.4082,
+          "fire_mean_mvr": 0.2673,
+          "unc_mean_mvr": 0.3072,
+          "delta_vr": 0.04,
+          "p_perm": 0.0,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 57.02,
+          "n_fire_hab_scored": 1155
+        }
+      },
+      "W120_primary": {
+        "IS": {
+          "n_fire": 1068,
+          "n_eligible": 6730,
+          "fire_rate": 0.1587,
+          "fire_mean_mvr": 0.3218,
+          "unc_mean_mvr": 0.3231,
+          "delta_vr": 0.0013,
+          "p_perm": 0.419,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 49.22,
+          "n_fire_hab_scored": 1068
+        },
+        "OOS": {
+          "n_fire": 396,
+          "n_eligible": 2866,
+          "fire_rate": 0.1382,
+          "fire_mean_mvr": 0.3252,
+          "unc_mean_mvr": 0.3072,
+          "delta_vr": -0.0179,
+          "p_perm": 0.936,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 54.91,
+          "n_fire_hab_scored": 396
+        }
+      },
+      "W120_ablation": {
+        "IS": {
+          "n_fire": 2946,
+          "n_eligible": 6730,
+          "fire_rate": 0.4377,
+          "fire_mean_mvr": 0.3138,
+          "unc_mean_mvr": 0.3231,
+          "delta_vr": 0.0093,
+          "p_perm": 0.0035,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 50.47,
+          "n_fire_hab_scored": 2946
+        },
+        "OOS": {
+          "n_fire": 1141,
+          "n_eligible": 2866,
+          "fire_rate": 0.3981,
+          "fire_mean_mvr": 0.3058,
+          "unc_mean_mvr": 0.3072,
+          "delta_vr": 0.0014,
+          "p_perm": 0.3965,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 51.89,
+          "n_fire_hab_scored": 1141
+        }
+      }
+    },
+    "SPX": {
+      "W60_primary": {
+        "IS": {
+          "n_fire": 1130,
+          "n_eligible": 5754,
+          "fire_rate": 0.1964,
+          "fire_mean_mvr": 0.2778,
+          "unc_mean_mvr": 0.2934,
+          "delta_vr": 0.0156,
+          "p_perm": 0.003,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 54.06,
+          "n_fire_hab_scored": 1130
+        },
+        "OOS": {
+          "n_fire": 464,
+          "n_eligible": 2469,
+          "fire_rate": 0.1879,
+          "fire_mean_mvr": 0.2759,
+          "unc_mean_mvr": 0.2828,
+          "delta_vr": 0.0069,
+          "p_perm": 0.221,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 54.37,
+          "n_fire_hab_scored": 464
+        }
+      },
+      "W60_ablation": {
+        "IS": {
+          "n_fire": 2032,
+          "n_eligible": 5754,
+          "fire_rate": 0.3531,
+          "fire_mean_mvr": 0.2754,
+          "unc_mean_mvr": 0.2934,
+          "delta_vr": 0.018,
+          "p_perm": 0.0,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 54.35,
+          "n_fire_hab_scored": 2032
+        },
+        "OOS": {
+          "n_fire": 787,
+          "n_eligible": 2469,
+          "fire_rate": 0.3188,
+          "fire_mean_mvr": 0.2829,
+          "unc_mean_mvr": 0.2828,
+          "delta_vr": -0.0,
+          "p_perm": 0.499,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 52.98,
+          "n_fire_hab_scored": 787
+        }
+      },
+      "W120_primary": {
+        "IS": {
+          "n_fire": 760,
+          "n_eligible": 5694,
+          "fire_rate": 0.1335,
+          "fire_mean_mvr": 0.2806,
+          "unc_mean_mvr": 0.2938,
+          "delta_vr": 0.0132,
+          "p_perm": 0.0395,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 53.4,
+          "n_fire_hab_scored": 760
+        },
+        "OOS": {
+          "n_fire": 243,
+          "n_eligible": 2469,
+          "fire_rate": 0.0984,
+          "fire_mean_mvr": 0.2218,
+          "unc_mean_mvr": 0.2828,
+          "delta_vr": 0.0611,
+          "p_perm": 0.0,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 63.39,
+          "n_fire_hab_scored": 243
+        }
+      },
+      "W120_ablation": {
+        "IS": {
+          "n_fire": 1843,
+          "n_eligible": 5694,
+          "fire_rate": 0.3237,
+          "fire_mean_mvr": 0.2893,
+          "unc_mean_mvr": 0.2938,
+          "delta_vr": 0.0045,
+          "p_perm": 0.1455,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 52.72,
+          "n_fire_hab_scored": 1843
+        },
+        "OOS": {
+          "n_fire": 781,
+          "n_eligible": 2469,
+          "fire_rate": 0.3163,
+          "fire_mean_mvr": 0.2632,
+          "unc_mean_mvr": 0.2828,
+          "delta_vr": 0.0196,
+          "p_perm": 0.0005,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 55.18,
+          "n_fire_hab_scored": 781
+        }
+      }
+    },
+    "ADANIENT": {
+      "W60_primary": {
+        "IS": {
+          "n_fire": 330,
+          "n_eligible": 1624,
+          "fire_rate": 0.2032,
+          "fire_mean_mvr": 0.3862,
+          "unc_mean_mvr": 0.3773,
+          "delta_vr": -0.0089,
+          "p_perm": 0.7205,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 47.34,
+          "n_fire_hab_scored": 330
+        },
+        "OOS": {
+          "n_fire": 86,
+          "n_eligible": 699,
+          "fire_rate": 0.123,
+          "fire_mean_mvr": 0.374,
+          "unc_mean_mvr": 0.3284,
+          "delta_vr": -0.0456,
+          "p_perm": 0.8925,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 41.58,
+          "n_fire_hab_scored": 86
+        }
+      },
+      "W60_ablation": {
+        "IS": {
+          "n_fire": 788,
+          "n_eligible": 1624,
+          "fire_rate": 0.4852,
+          "fire_mean_mvr": 0.3747,
+          "unc_mean_mvr": 0.3773,
+          "delta_vr": 0.0026,
+          "p_perm": 0.3765,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 45.49,
+          "n_fire_hab_scored": 788
+        },
+        "OOS": {
+          "n_fire": 202,
+          "n_eligible": 699,
+          "fire_rate": 0.289,
+          "fire_mean_mvr": 0.2822,
+          "unc_mean_mvr": 0.3284,
+          "delta_vr": 0.0462,
+          "p_perm": 0.0065,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 53.99,
+          "n_fire_hab_scored": 202
+        }
+      },
+      "W120_primary": {
+        "IS": {
+          "n_fire": 149,
+          "n_eligible": 1564,
+          "fire_rate": 0.0953,
+          "fire_mean_mvr": 0.4833,
+          "unc_mean_mvr": 0.3793,
+          "delta_vr": -0.1041,
+          "p_perm": 1.0,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 42.07,
+          "n_fire_hab_scored": 149
+        },
+        "OOS": {
+          "n_fire": 51,
+          "n_eligible": 699,
+          "fire_rate": 0.073,
+          "fire_mean_mvr": 0.2307,
+          "unc_mean_mvr": 0.3284,
+          "delta_vr": 0.0976,
+          "p_perm": 0.011,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 68.14,
+          "n_fire_hab_scored": 51
+        }
+      },
+      "W120_ablation": {
+        "IS": {
+          "n_fire": 592,
+          "n_eligible": 1564,
+          "fire_rate": 0.3785,
+          "fire_mean_mvr": 0.3792,
+          "unc_mean_mvr": 0.3793,
+          "delta_vr": 0.0001,
+          "p_perm": 0.488,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 49.64,
+          "n_fire_hab_scored": 592
+        },
+        "OOS": {
+          "n_fire": 210,
+          "n_eligible": 699,
+          "fire_rate": 0.3004,
+          "fire_mean_mvr": 0.3395,
+          "unc_mean_mvr": 0.3284,
+          "delta_vr": -0.0112,
+          "p_perm": 0.724,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 53.22,
+          "n_fire_hab_scored": 210
+        }
+      }
+    },
+    "AAPL": {
+      "W60_primary": {
+        "IS": {
+          "n_fire": 404,
+          "n_eligible": 1908,
+          "fire_rate": 0.2117,
+          "fire_mean_mvr": 0.3783,
+          "unc_mean_mvr": 0.3356,
+          "delta_vr": -0.0427,
+          "p_perm": 1.0,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 43.85,
+          "n_fire_hab_scored": 404
+        },
+        "OOS": {
+          "n_fire": 263,
+          "n_eligible": 821,
+          "fire_rate": 0.3203,
+          "fire_mean_mvr": 0.2965,
+          "unc_mean_mvr": 0.3516,
+          "delta_vr": 0.0551,
+          "p_perm": 0.0,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 54.15,
+          "n_fire_hab_scored": 263
+        }
+      },
+      "W60_ablation": {
+        "IS": {
+          "n_fire": 806,
+          "n_eligible": 1908,
+          "fire_rate": 0.4224,
+          "fire_mean_mvr": 0.3659,
+          "unc_mean_mvr": 0.3356,
+          "delta_vr": -0.0303,
+          "p_perm": 1.0,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 48.13,
+          "n_fire_hab_scored": 806
+        },
+        "OOS": {
+          "n_fire": 430,
+          "n_eligible": 821,
+          "fire_rate": 0.5238,
+          "fire_mean_mvr": 0.2932,
+          "unc_mean_mvr": 0.3516,
+          "delta_vr": 0.0583,
+          "p_perm": 0.0,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 53.87,
+          "n_fire_hab_scored": 430
+        }
+      },
+      "W120_primary": {
+        "IS": {
+          "n_fire": 140,
+          "n_eligible": 1848,
+          "fire_rate": 0.0758,
+          "fire_mean_mvr": 0.3378,
+          "unc_mean_mvr": 0.3405,
+          "delta_vr": 0.0027,
+          "p_perm": 0.454,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 50.42,
+          "n_fire_hab_scored": 140
+        },
+        "OOS": {
+          "n_fire": 121,
+          "n_eligible": 821,
+          "fire_rate": 0.1474,
+          "fire_mean_mvr": 0.4525,
+          "unc_mean_mvr": 0.3516,
+          "delta_vr": -0.1009,
+          "p_perm": 1.0,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 37.96,
+          "n_fire_hab_scored": 121
+        }
+      },
+      "W120_ablation": {
+        "IS": {
+          "n_fire": 482,
+          "n_eligible": 1848,
+          "fire_rate": 0.2608,
+          "fire_mean_mvr": 0.2996,
+          "unc_mean_mvr": 0.3405,
+          "delta_vr": 0.0409,
+          "p_perm": 0.0,
+          "hit_p": true,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 53.74,
+          "n_fire_hab_scored": 482
+        },
+        "OOS": {
+          "n_fire": 369,
+          "n_eligible": 821,
+          "fire_rate": 0.4495,
+          "fire_mean_mvr": 0.4233,
+          "unc_mean_mvr": 0.3516,
+          "delta_vr": -0.0717,
+          "p_perm": 1.0,
+          "hit_p": false,
+          "hit_effect": false,
+          "hit_both": false,
+          "fire_mean_habitat": 40.97,
+          "n_fire_hab_scored": 369
+        }
+      }
+    }
+  }
+}

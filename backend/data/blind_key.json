@@ -1,0 +1,26 @@
+{
+  "_DO_NOT_OPEN_UNTIL": "you have classified every BLIND_* instrument as reverting / non-reverting / uncertain using ONLY REP, RES, CMP.",
+  "protocol": "Hardened blind protocol, #11 F4 (replay seduction). Record classifications first; then open to score. 'Residual reverts on a random walk' is EXPECTED mechanics \u2014 NOT a kill. The test is DISCRIMINATION.",
+  "window": {
+    "ref": "ADANIENT",
+    "start": 650,
+    "len": 600,
+    "dates": "2015-06-08..2017-11-09"
+  },
+  "positivity_filter": "null seeds chosen as lowest >= base with min price >= 0.5 (realism constraint, orthogonal to reversion).",
+  "mapping": {
+    "BLIND_1": "A0_ou_seed103",
+    "BLIND_2": "N2_drift_seed102",
+    "BLIND_3": "N1b_rw_seed104",
+    "BLIND_4": "N1_rw_seed101",
+    "BLIND_5": "real_ADANIENT_seg"
+  },
+  "ground_truth": {
+    "A0_ou_seed103": "OU anchor \u2014 genuinely reverting",
+    "N2_drift_seed102": "drifted random walk \u2014 non-reverting (trend-lag)",
+    "N1b_rw_seed104": "pure random walk (duplicate null; defeats one-of-each)",
+    "N1_rw_seed101": "pure random walk \u2014 non-reverting (mechanical residual only)",
+    "real_ADANIENT_seg": "real instrument segment (ground truth UNKNOWN \u2014 the open question)"
+  },
+  "master_seed": 20260601
+}

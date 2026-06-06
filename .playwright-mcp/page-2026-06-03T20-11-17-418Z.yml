@@ -1,0 +1,65 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+    - button "⚙" [ref=e6] [cursor=pointer]
+  - generic [ref=e8]:
+    - complementary [ref=e9]:
+      - generic [ref=e11]: Instruments
+      - generic [ref=e12]:
+        - generic [ref=e13]: drag & drop · multi-file ok
+        - textbox "INSTRUMENT_ID" [ref=e14]
+        - textbox "/path/to/data.csv or .parquet" [ref=e16]
+        - button "Load File" [disabled] [ref=e17]
+      - generic [ref=e19]: No instruments loaded
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - button "1M" [disabled] [ref=e24]
+          - button "3M" [disabled] [ref=e25]
+          - button "6M" [disabled] [ref=e26]
+          - button "1Y" [disabled] [ref=e27]
+          - button "2Y" [disabled] [ref=e28]
+          - button "ALL" [disabled] [ref=e29]
+        - generic [ref=e31]:
+          - textbox [ref=e32]
+          - generic [ref=e33]: —
+          - textbox [ref=e34]
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e38]:
+            - generic:
+              - generic:
+                - img
+              - generic: Select an instrument to begin
+            - table [ref=e41]:
+              - row [ref=e42]:
+                - cell
+                - cell [ref=e43]:
+                  - link "Charting by TradingView" [ref=e47] [cursor=pointer]:
+                    - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/
+                    - img [ref=e48]
+                - cell [ref=e52]
+              - row [ref=e56]:
+                - cell
+                - cell [ref=e57]
+                - cell [ref=e61]
+          - generic [ref=e65]:
+            - generic [ref=e67]: Research
+            - generic [ref=e69]: Select an instrument to begin
+        - complementary [ref=e71]:
+          - generic [ref=e73]: Estimators
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - generic [ref=e77]: μ* EMA
+              - button "Toggle EMA estimator" [ref=e78] [cursor=pointer]
+            - generic [ref=e80]:
+              - generic [ref=e81]: window
+              - spinbutton [disabled] [ref=e82]: "20"
+          - generic [ref=e85]: Rolling Mean
+          - generic [ref=e88]: Kalman
+          - generic [ref=e91]: VWAP
+  - alert [ref=e93]

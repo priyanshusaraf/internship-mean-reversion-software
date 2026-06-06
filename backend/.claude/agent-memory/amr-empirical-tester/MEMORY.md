@@ -1,0 +1,1 @@
+- [MRScore v1 Empirical Baselines](mrscore_baselines.md) — verified temporal-honesty, RW/OU DRC baselines, the log-price negative-spread killer, tie-rank bug

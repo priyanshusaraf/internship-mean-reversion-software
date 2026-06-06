@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "instrument": "LE-GF F5",
+    "n_total": 5890,
+    "n_is": 4123,
+    "n_oos": 1767,
+    "is_start": "2002-08-14",
+    "is_end": "2019-05-23",
+    "oos_start": "2019-05-24",
+    "oos_end": "2026-06-03",
+    "beta_val": 0.56498
+  },
+  "is_vr_primary": {
+    "rw": {
+      "vr": 0.822,
+      "p": 0.024
+    },
+    "garch": {
+      "vr": 0.822,
+      "p": 0.0259
+    },
+    "ma1": {
+      "vr": 0.822,
+      "p": 0.02
+    },
+    "ou": {
+      "vr": 0.822,
+      "p": 0.0439
+    }
+  },
+  "is_vr_profile": {
+    "q5": {
+      "vr": 1.021,
+      "p_rw": 0.7206
+    },
+    "q10": {
+      "vr": 0.9449,
+      "p_rw": 0.2156
+    },
+    "q20": {
+      "vr": 0.822,
+      "p_rw": 0.0259
+    },
+    "q40": {
+      "vr": 0.793,
+      "p_rw": 0.0539
+    }
+  },
+  "comparison": {
+    "full_period": {
+      "n": 5890,
+      "vr20": 0.7664,
+      "p_rw": 0.002
+    },
+    "is_only": {
+      "n": 4123,
+      "vr20": 0.822,
+      "p_rw": 0.024
+    }
+  },
+  "power_analysis": {
+    "n_valid_is": 2651,
+    "se": 0.12284,
+    "z_stat": -1.449,
+    "power_at_alpha005": 0.578
+  },
+  "is_economics": {
+    "n_trades": 102,
+    "n_years": 16.4,
+    "trades_per_year": 6.2,
+    "mean_gross": 1.02955,
+    "mean_net": 0.82955,
+    "median_net": 1.29883,
+    "std_net": 2.2056,
+    "annualized_sharpe": 0.939,
+    "max_drawdown_units": -16.8093,
+    "hit_rate": 0.775
+  },
+  "is_economics_raw": {
+    "n_trades": 98,
+    "n_years": 16.4,
+    "trades_per_year": 6.0,
+    "mean_gross": 0.18602,
+    "mean_net": -0.01398,
+    "median_net": 0.91491,
+    "std_net": 2.3743,
+    "annualized_sharpe": -0.014,
+    "max_drawdown_units": -26.529,
+    "hit_rate": 0.714
+  },
+  "gate_verdict": {
+    "pass": true,
+    "p_rw_is": 0.024,
+    "threshold": 0.05,
+    "action": "PROCEED"
+  }
+}

@@ -1,0 +1,107 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]: instrument
+        - generic [ref=e11]: —
+      - generic [ref=e13]:
+        - generic [ref=e14]: estimator
+        - generic [ref=e15]: EMA-20
+      - generic [ref=e17]:
+        - generic [ref=e18]: mode
+        - generic [ref=e19]: causal
+      - generic [ref=e21]:
+        - generic [ref=e22]: from
+        - generic [ref=e23]: —
+      - generic [ref=e24]: →
+      - generic [ref=e25]:
+        - generic [ref=e26]: to
+        - generic [ref=e27]: —
+      - generic [ref=e28]: Select an instrument on the Workstation to begin
+    - generic [ref=e29]:
+      - navigation [ref=e30]:
+        - generic [ref=e31]: Modules
+        - button "Estimator Can we trust the…" [ref=e32] [cursor=pointer]:
+          - generic [ref=e33]: Estimator
+          - generic [ref=e34]: Can we trust the…
+        - button "Residual Is residual behavior consistent…" [ref=e35] [cursor=pointer]:
+          - generic [ref=e36]: Residual
+          - generic [ref=e37]: Is residual behavior consistent…
+        - button "Replay What would the researcher…" [ref=e38] [cursor=pointer]:
+          - generic [ref=e39]: Replay
+          - generic [ref=e40]: What would the researcher…
+        - button "Compare Does Kalman μ* stay…" [ref=e41] [cursor=pointer]:
+          - generic [ref=e42]: Compare
+          - generic [ref=e43]: Does Kalman μ* stay…
+        - button "Absorption Did the Kalman velocity…" [ref=e44] [cursor=pointer]:
+          - generic [ref=e45]: Absorption
+          - generic [ref=e46]: Did the Kalman velocity…
+        - button "MRScore How favourable are conditions…" [ref=e47] [cursor=pointer]:
+          - generic [ref=e48]: MRScore
+          - generic [ref=e49]: How favourable are conditions…
+        - button "Substrate What kind of market…" [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]: Substrate
+          - generic [ref=e52]: What kind of market…
+        - button "Assumptions Are our model assumptions…" [ref=e53] [cursor=pointer]:
+          - generic [ref=e54]: Assumptions
+          - generic [ref=e55]: Are our model assumptions…
+        - button "Causal Diff How much does hindsight…" [ref=e56] [cursor=pointer]:
+          - generic [ref=e57]: Causal Diff
+          - generic [ref=e58]: How much does hindsight…
+        - button "Event Log What changed, and when…" [ref=e59] [cursor=pointer]:
+          - generic [ref=e60]: Event Log
+          - generic [ref=e61]: What changed, and when…
+      - generic [ref=e63]:
+        - generic [ref=e64]: No instrument selected
+        - generic [ref=e65]: Load and select an instrument on the Workstation page first
+      - complementary [ref=e66]:
+        - generic [ref=e68]: Controls
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]: Mode
+            - generic [ref=e72]:
+              - button "causal" [ref=e73] [cursor=pointer]
+              - button "full-info" [ref=e74] [cursor=pointer]
+            - generic [ref=e75]: Only data ≤ t used. Temporally valid.
+          - generic [ref=e76]:
+            - generic [ref=e77]: EMA Window
+            - spinbutton [ref=e78]: "20"
+            - generic [ref=e79]: bars (5–200)
+          - generic [ref=e81]:
+            - generic [ref=e82]: Reading guide
+            - generic [ref=e83]:
+              - generic [ref=e84]: ACF(1) > 0.3
+              - generic [ref=e85]: ε has memory — but EMA artifact can inflate ACF even on RW
+            - generic [ref=e86]:
+              - generic [ref=e87]: Δμ* ≈ 0
+              - generic [ref=e88]: EMA variants have converged — expected after ~3× span bars
+            - generic [ref=e89]:
+              - generic [ref=e90]: Δμ* large
+              - generic [ref=e91]: short series or warmup period — not a modeling failure
+            - generic [ref=e92]:
+              - generic [ref=e93]: Half-life
+              - generic [ref=e94]: bars to 50% reversion (OLS with intercept — reliable)
+            - generic [ref=e95]:
+              - generic [ref=e96]: Skew ≠ 0
+              - generic [ref=e97]: asymmetric residuals
+            - generic [ref=e98]:
+              - generic [ref=e99]: Kurt > 3
+              - generic [ref=e100]: fat tails — z-score understates risk
+    - generic [ref=e101]:
+      - generic [ref=e102]: Timeline
+      - button "‹" [disabled] [ref=e103]
+      - textbox [disabled] [ref=e104]
+      - generic [ref=e105]: —
+      - textbox [disabled] [ref=e106]
+      - button "›" [disabled] [ref=e107]
+      - button "ALL" [disabled] [ref=e108]
+      - generic [ref=e109]: No instrument selected
+  - button "Open Next.js Dev Tools" [ref=e115] [cursor=pointer]:
+    - img [ref=e116]
+  - alert [ref=e119]

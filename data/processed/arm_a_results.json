@@ -1,0 +1,536 @@
+{
+  "frozen_refs": [
+    "doc 18",
+    "doc 18a"
+  ],
+  "seed": 20260603,
+  "decision_rule": "martingale-null (RW & GARCH), multiplicity-corrected min-VR, 5th pct, robust roll-clean+flat-trim",
+  "n_spreads": 7,
+  "n_robust_confirmed": 1,
+  "robust_confirmed_names": [
+    "USDINR-calendar"
+  ],
+  "decisive_confirmed": {
+    "HDFC-ICICI": false,
+    "Gold-Silver": false
+  },
+  "KILL_triggered": false,
+  "decisive_both_fail": true,
+  "all_causal_proofs_pass": true,
+  "results": [
+    {
+      "name": "HDFC-ICICI",
+      "role": "DECISIVE",
+      "beta_mode": "rolling",
+      "legs": [
+        "BSE_DLY_HDFCBANK",
+        "BSE_DLY_ICICIBANK"
+      ],
+      "n_joined": 5543,
+      "date_start": "2003-10-29",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 0,
+      "n_flat": 6,
+      "beta_median": 0.3622959677443919,
+      "beta_iqr": 0.35935559759691776,
+      "spread_dir_eff": 0.001605693307404879,
+      "real_vr": {
+        "2": 1.7082,
+        "5": 3.4096,
+        "10": 5.0828,
+        "20": 6.2491
+      },
+      "real_min_vr": 1.7082,
+      "real_z": {
+        "2": 10.34,
+        "5": 17.54,
+        "10": 21.48,
+        "20": 21.94
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.9783,
+          "5": 0.9548,
+          "10": 0.9324,
+          "20": 0.8916
+        },
+        "garch": {
+          "2": 0.9169,
+          "5": 0.809,
+          "10": 0.7232,
+          "20": 0.5994
+        },
+        "ou": {
+          "2": 0.9768,
+          "5": 0.9451,
+          "10": 0.911,
+          "20": 0.8503
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 1.0,
+        "garch": 1.0,
+        "ou": 1.0
+      },
+      "separated_corrected": {
+        "rw": false,
+        "garch": false,
+        "ou": false
+      },
+      "HEADLINE_confirmed_martingale": false,
+      "confirmed_all_three": false,
+      "naive_martingale_horizons": [],
+      "flat_trim_confirmed": false,
+      "robust_confirmed": false,
+      "W120_real_vr": {
+        "2": 1.6201,
+        "5": 3.3244,
+        "10": 5.6093,
+        "20": 8.2398
+      },
+      "W120_confirmed": false,
+      "timestamp_proof_causal": true
+    },
+    {
+      "name": "Gold-Silver",
+      "role": "DECISIVE",
+      "beta_mode": "rolling",
+      "legs": [
+        "COMEX_DL_GC2!",
+        "COMEX_DL_SI2!"
+      ],
+      "n_joined": 8784,
+      "date_start": "1991-06-26",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 19,
+      "n_flat": 1811,
+      "beta_median": 27.523293894691896,
+      "beta_iqr": 23.651433853397066,
+      "spread_dir_eff": 0.01693643296020521,
+      "real_vr": {
+        "2": 1.6242,
+        "5": 3.1299,
+        "10": 4.7092,
+        "20": 5.9272
+      },
+      "real_min_vr": 1.6242,
+      "real_z": {
+        "2": 11.58,
+        "5": 19.86,
+        "10": 25.27,
+        "20": 26.25
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.9846,
+          "5": 0.9654,
+          "10": 0.9497,
+          "20": 0.9142
+        },
+        "garch": {
+          "2": 0.9846,
+          "5": 0.9654,
+          "10": 0.9497,
+          "20": 0.9142
+        },
+        "ou": {
+          "2": 0.9827,
+          "5": 0.9607,
+          "10": 0.9432,
+          "20": 0.9006
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 1.0,
+        "garch": 1.0,
+        "ou": 1.0
+      },
+      "separated_corrected": {
+        "rw": false,
+        "garch": false,
+        "ou": false
+      },
+      "HEADLINE_confirmed_martingale": false,
+      "confirmed_all_three": false,
+      "naive_martingale_horizons": [],
+      "flat_trim_confirmed": false,
+      "robust_confirmed": false,
+      "W120_real_vr": {
+        "2": 1.3464,
+        "5": 2.2952,
+        "10": 3.5051,
+        "20": 4.8718
+      },
+      "W120_confirmed": false,
+      "timestamp_proof_causal": true
+    },
+    {
+      "name": "USDINR-calendar",
+      "role": "reference",
+      "beta_mode": "one",
+      "legs": [
+        "CME_MINI_DL_MIR1!",
+        "CME_MINI_DL_MIR2!"
+      ],
+      "n_joined": 3342,
+      "date_start": "2013-01-28",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 0,
+      "n_flat": 2527,
+      "beta_median": 1.0,
+      "beta_iqr": 0.0,
+      "spread_dir_eff": 0.0018303555613286924,
+      "real_vr": {
+        "2": 0.602,
+        "5": 0.306,
+        "10": 0.1974,
+        "20": 0.1384
+      },
+      "real_min_vr": 0.1384,
+      "real_z": {
+        "2": -6.83,
+        "5": -6.53,
+        "10": -5.58,
+        "20": -4.57
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.9717,
+          "5": 0.9355,
+          "10": 0.9135,
+          "20": 0.8648
+        },
+        "garch": {
+          "2": 0.8834,
+          "5": 0.7394,
+          "10": 0.6565,
+          "20": 0.5462
+        },
+        "ou": {
+          "2": 0.8977,
+          "5": 0.7052,
+          "10": 0.4982,
+          "20": 0.2948
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 0.005,
+        "garch": 0.005,
+        "ou": 0.005
+      },
+      "separated_corrected": {
+        "rw": true,
+        "garch": true,
+        "ou": true
+      },
+      "HEADLINE_confirmed_martingale": true,
+      "confirmed_all_three": true,
+      "naive_martingale_horizons": [
+        2,
+        5,
+        10,
+        20
+      ],
+      "flat_trim_confirmed": true,
+      "robust_confirmed": true,
+      "W120_real_vr": null,
+      "W120_confirmed": null,
+      "timestamp_proof_causal": true
+    },
+    {
+      "name": "Gold-Copper",
+      "role": "cohort",
+      "beta_mode": "rolling",
+      "legs": [
+        "COMEX_DL_GC2!",
+        "COMEX_DL_HG1!"
+      ],
+      "n_joined": 8783,
+      "date_start": "1991-06-26",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 19,
+      "n_flat": 1806,
+      "beta_median": 72.55957942200422,
+      "beta_iqr": 211.53848296110965,
+      "spread_dir_eff": 0.019483543751353374,
+      "real_vr": {
+        "2": 1.6825,
+        "5": 3.2207,
+        "10": 4.6926,
+        "20": 5.7453
+      },
+      "real_min_vr": 1.6825,
+      "real_z": {
+        "2": 7.12,
+        "5": 11.64,
+        "10": 14.79,
+        "20": 16.14
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.9852,
+          "5": 0.9632,
+          "10": 0.947,
+          "20": 0.9123
+        },
+        "garch": {
+          "2": 0.9101,
+          "5": 0.8099,
+          "10": 0.7202,
+          "20": 0.6709
+        },
+        "ou": {
+          "2": 0.9817,
+          "5": 0.9564,
+          "10": 0.936,
+          "20": 0.8813
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 1.0,
+        "garch": 1.0,
+        "ou": 1.0
+      },
+      "separated_corrected": {
+        "rw": false,
+        "garch": false,
+        "ou": false
+      },
+      "HEADLINE_confirmed_martingale": false,
+      "confirmed_all_three": false,
+      "naive_martingale_horizons": [],
+      "flat_trim_confirmed": false,
+      "robust_confirmed": false,
+      "W120_real_vr": {
+        "2": 1.5317,
+        "5": 2.986,
+        "10": 4.8186,
+        "20": 6.6575
+      },
+      "W120_confirmed": false,
+      "timestamp_proof_causal": true
+    },
+    {
+      "name": "Platinum-Palladium",
+      "role": "cohort",
+      "beta_mode": "rolling",
+      "legs": [
+        "TVC_PLATINUM",
+        "NYMEX_DL_PA1!"
+      ],
+      "n_joined": 6805,
+      "date_start": "1998-11-09",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 7,
+      "n_flat": 29,
+      "beta_median": 0.5025897752928722,
+      "beta_iqr": 1.087859774832696,
+      "spread_dir_eff": 0.003000723164158743,
+      "real_vr": {
+        "2": 1.5429,
+        "5": 2.9147,
+        "10": 4.2377,
+        "20": 5.2307
+      },
+      "real_min_vr": 1.5429,
+      "real_z": {
+        "2": 10.02,
+        "5": 19.51,
+        "10": 26.06,
+        "20": 27.82
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.981,
+          "5": 0.9587,
+          "10": 0.9367,
+          "20": 0.9078
+        },
+        "garch": {
+          "2": 0.8888,
+          "5": 0.8224,
+          "10": 0.7288,
+          "20": 0.6523
+        },
+        "ou": {
+          "2": 0.9795,
+          "5": 0.9526,
+          "10": 0.9209,
+          "20": 0.865
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 1.0,
+        "garch": 1.0,
+        "ou": 1.0
+      },
+      "separated_corrected": {
+        "rw": false,
+        "garch": false,
+        "ou": false
+      },
+      "HEADLINE_confirmed_martingale": false,
+      "confirmed_all_three": false,
+      "naive_martingale_horizons": [],
+      "flat_trim_confirmed": false,
+      "robust_confirmed": false,
+      "W120_real_vr": {
+        "2": 1.2442,
+        "5": 2.1033,
+        "10": 3.1939,
+        "20": 4.3752
+      },
+      "W120_confirmed": false,
+      "timestamp_proof_causal": true
+    },
+    {
+      "name": "WTI-Brent",
+      "role": "cohort",
+      "beta_mode": "rolling",
+      "legs": [
+        "CFI_WTI",
+        "ICEEUR_DLY_BRN1!"
+      ],
+      "n_joined": 2626,
+      "date_start": "2014-02-26",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 4,
+      "n_flat": 1,
+      "beta_median": 0.9409855014671586,
+      "beta_iqr": 0.17858182272390388,
+      "spread_dir_eff": 0.000840472386475297,
+      "real_vr": {
+        "2": 0.6993,
+        "5": 0.6741,
+        "10": 0.8168,
+        "20": 0.9405
+      },
+      "real_min_vr": 0.6741,
+      "real_z": {
+        "2": -6.03,
+        "5": -3.21,
+        "10": -1.26,
+        "20": -0.3
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.9684,
+          "5": 0.938,
+          "10": 0.8904,
+          "20": 0.838
+        },
+        "garch": {
+          "2": 0.9302,
+          "5": 0.8088,
+          "10": 0.7502,
+          "20": 0.6368
+        },
+        "ou": {
+          "2": 0.962,
+          "5": 0.9139,
+          "10": 0.8425,
+          "20": 0.732
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 0.005,
+        "garch": 0.0945,
+        "ou": 0.01
+      },
+      "separated_corrected": {
+        "rw": true,
+        "garch": false,
+        "ou": true
+      },
+      "HEADLINE_confirmed_martingale": false,
+      "confirmed_all_three": false,
+      "naive_martingale_horizons": [
+        2,
+        5
+      ],
+      "flat_trim_confirmed": false,
+      "robust_confirmed": false,
+      "W120_real_vr": {
+        "2": 0.5821,
+        "5": 0.3611,
+        "10": 0.3355,
+        "20": 0.372
+      },
+      "W120_confirmed": true,
+      "timestamp_proof_causal": true
+    },
+    {
+      "name": "TCS-INFY",
+      "role": "cohort",
+      "beta_mode": "rolling",
+      "legs": [
+        "BSE_DLY_TCS",
+        "NSE_DLY_INFY"
+      ],
+      "n_joined": 5369,
+      "date_start": "2004-08-31",
+      "date_end": "2026-06-03",
+      "n_roll_masked": 0,
+      "n_flat": 5,
+      "beta_median": 1.1639786867931272,
+      "beta_iqr": 1.0129199270802924,
+      "spread_dir_eff": 0.0034620333084182213,
+      "real_vr": {
+        "2": 1.7069,
+        "5": 3.3118,
+        "10": 4.9737,
+        "20": 6.212
+      },
+      "real_min_vr": 1.7069,
+      "real_z": {
+        "2": 11.23,
+        "5": 18.04,
+        "10": 21.91,
+        "20": 21.95
+      },
+      "surr_p5": {
+        "rw": {
+          "2": 0.98,
+          "5": 0.9536,
+          "10": 0.9283,
+          "20": 0.8975
+        },
+        "garch": {
+          "2": 0.98,
+          "5": 0.9536,
+          "10": 0.9283,
+          "20": 0.8975
+        },
+        "ou": {
+          "2": 0.9781,
+          "5": 0.9474,
+          "10": 0.9108,
+          "20": 0.8533
+        }
+      },
+      "min_vr_p_value": {
+        "rw": 1.0,
+        "garch": 1.0,
+        "ou": 1.0
+      },
+      "separated_corrected": {
+        "rw": false,
+        "garch": false,
+        "ou": false
+      },
+      "HEADLINE_confirmed_martingale": false,
+      "confirmed_all_three": false,
+      "naive_martingale_horizons": [],
+      "flat_trim_confirmed": false,
+      "robust_confirmed": false,
+      "W120_real_vr": {
+        "2": 1.4364,
+        "5": 2.6038,
+        "10": 4.1099,
+        "20": 5.8826
+      },
+      "W120_confirmed": false,
+      "timestamp_proof_causal": true
+    }
+  ]
+}

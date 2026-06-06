@@ -1,0 +1,157 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [active] [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+  - generic [ref=e315]:
+    - generic [ref=e316]:
+      - generic [ref=e317]:
+        - generic [ref=e318]: instrument
+        - generic [ref=e319]: ADANIENT
+      - generic [ref=e321]:
+        - generic [ref=e322]: estimator
+        - generic [ref=e323]: EMA-20
+      - generic [ref=e325]:
+        - generic [ref=e326]: mode
+        - generic [ref=e327]: causal
+      - generic [ref=e329]:
+        - generic [ref=e330]: from
+        - generic [ref=e331]: 2012-10-10
+      - generic [ref=e332]: →
+      - generic [ref=e333]:
+        - generic [ref=e334]: to
+        - generic [ref=e335]: 2022-10-07
+      - generic [ref=e337]:
+        - generic [ref=e338]: bars
+        - generic [ref=e339]: 2,463
+    - generic [ref=e340]:
+      - navigation [ref=e341]:
+        - generic [ref=e342]: Modules
+        - button "Estimator Can we trust the…" [ref=e343] [cursor=pointer]:
+          - generic [ref=e344]: Estimator
+          - generic [ref=e345]: Can we trust the…
+        - button "Residual Is residual behavior consistent…" [ref=e346] [cursor=pointer]:
+          - generic [ref=e347]: Residual
+          - generic [ref=e348]: Is residual behavior consistent…
+        - button "Replay What would the researcher…" [ref=e349] [cursor=pointer]:
+          - generic [ref=e350]: Replay
+          - generic [ref=e351]: What would the researcher…
+        - button "Compare Does Kalman μ* stay…" [ref=e352] [cursor=pointer]:
+          - generic [ref=e353]: Compare
+          - generic [ref=e354]: Does Kalman μ* stay…
+        - button "Absorption Did the Kalman velocity…" [ref=e355] [cursor=pointer]:
+          - generic [ref=e356]: Absorption
+          - generic [ref=e357]: Did the Kalman velocity…
+        - button "MRScore How favourable are conditions…" [ref=e358] [cursor=pointer]:
+          - generic [ref=e359]: MRScore
+          - generic [ref=e360]: How favourable are conditions…
+        - button "Substrate What kind of market…" [ref=e361] [cursor=pointer]:
+          - generic [ref=e362]: Substrate
+          - generic [ref=e363]: What kind of market…
+        - button "Assumptions Are our model assumptions…" [ref=e364] [cursor=pointer]:
+          - generic [ref=e365]: Assumptions
+          - generic [ref=e366]: Are our model assumptions…
+        - button "Causal Diff How much does hindsight…" [ref=e367] [cursor=pointer]:
+          - generic [ref=e368]: Causal Diff
+          - generic [ref=e369]: How much does hindsight…
+        - button "Event Log What changed, and when…" [ref=e370] [cursor=pointer]:
+          - generic [ref=e371]: Event Log
+          - generic [ref=e372]: What changed, and when…
+      - generic [ref=e374]:
+        - generic [ref=e375]:
+          - generic [ref=e376]:
+            - generic [ref=e377]: Descriptors (left) vs Price (right)
+            - generic [ref=e378]: DE
+            - generic [ref=e379]: VR
+            - generic [ref=e380]: — VR=1 (RW)
+          - table [ref=e383]:
+            - row [ref=e384]:
+              - cell [ref=e385]
+              - cell [ref=e389]:
+                - link "Charting by TradingView" [ref=e393] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/workbench
+                  - img [ref=e394]
+              - cell [ref=e398]
+            - row [ref=e402]:
+              - cell [ref=e403]
+              - cell [ref=e406]
+              - cell [ref=e410]
+          - generic [ref=e414]: ⚠ Observatory diagnostic — what kind of market this RESEMBLES over the window, NOT a signal and NOT a claim that a regime is changing now (that is State T detection, deferred). ADANIENT is trend-heavy (opposite of the deployment regime), so a Trend-like read there is expected and is not global evidence about mean-reverting targets.
+        - generic [ref=e415]:
+          - generic [ref=e416]:
+            - generic [ref=e417]: Character (as-of bar)
+            - generic [ref=e418]: 2022-10-07 (latest)
+          - generic [ref=e419]:
+            - generic [ref=e420]:
+              - generic [ref=e421]:
+                - generic [ref=e422]: DE
+                - generic [ref=e423]: "0.19"
+                - generic [ref=e424]: "|net|/path · 1=straight, ~0=chop"
+              - generic [ref=e425]:
+                - generic [ref=e426]: VR
+                - generic [ref=e427]: "0.92"
+                - generic [ref=e428]: <1 MR · ≈1 RW · >1 momentum
+              - generic [ref=e429]:
+                - generic [ref=e430]: VolPct
+                - generic [ref=e431]: "84"
+                - generic [ref=e432]: vol rank (context only)
+            - generic [ref=e433]: directional efficiency carries the trend↔chop axis; the variance ratio splits OU vs RW within the chop. Vol percentile is context, never a character driver (doc 10 §map).
+          - generic [ref=e434]:
+            - button "▸ Resemblance RW-Null · clear" [ref=e435] [cursor=pointer]:
+              - generic [ref=e436]: ▸
+              - text: Resemblance
+              - generic [ref=e437]:
+                - text: RW-Null
+                - generic [ref=e438]: · clear
+            - generic [ref=e439]:
+              - text: mode = causal (full-information deferred)
+              - text: window = 120 bars (trailing) · characterized 2344/2463
+              - text: map frozen & transparent — monotone in (DE, VR), never fit (doc 10)
+              - text: exhaustion / etiology excluded — episode timing belongs to State T
+      - complementary [ref=e440]:
+        - generic [ref=e442]: Controls
+        - generic [ref=e443]:
+          - generic [ref=e444]:
+            - generic [ref=e445]: Mode
+            - generic [ref=e446]:
+              - button "causal" [ref=e447] [cursor=pointer]
+              - button "full-info" [ref=e448] [cursor=pointer]
+            - generic [ref=e449]: Only data ≤ t used. Temporally valid.
+          - generic [ref=e450]:
+            - generic [ref=e451]: EMA Window
+            - spinbutton [ref=e452]: "20"
+            - generic [ref=e453]: bars (5–200)
+          - generic [ref=e455]:
+            - generic [ref=e456]: Reading guide
+            - generic [ref=e457]:
+              - generic [ref=e458]: ACF(1) > 0.3
+              - generic [ref=e459]: ε has memory — but EMA artifact can inflate ACF even on RW
+            - generic [ref=e460]:
+              - generic [ref=e461]: Δμ* ≈ 0
+              - generic [ref=e462]: EMA variants have converged — expected after ~3× span bars
+            - generic [ref=e463]:
+              - generic [ref=e464]: Δμ* large
+              - generic [ref=e465]: short series or warmup period — not a modeling failure
+            - generic [ref=e466]:
+              - generic [ref=e467]: Half-life
+              - generic [ref=e468]: bars to 50% reversion (OLS with intercept — reliable)
+            - generic [ref=e469]:
+              - generic [ref=e470]: Skew ≠ 0
+              - generic [ref=e471]: asymmetric residuals
+            - generic [ref=e472]:
+              - generic [ref=e473]: Kurt > 3
+              - generic [ref=e474]: fat tails — z-score understates risk
+    - generic [ref=e475]:
+      - generic [ref=e476]: Timeline
+      - button "‹" [ref=e477] [cursor=pointer]
+      - textbox [ref=e478]: 2012-10-10
+      - generic [ref=e479]: —
+      - textbox [ref=e480]: 2022-10-07
+      - button "›" [ref=e481] [cursor=pointer]
+      - button "ALL" [ref=e482] [cursor=pointer]
+      - generic [ref=e483]: 2012-10-10 – 2022-10-07 · 2,463 bars
+  - button "Open Next.js Dev Tools" [ref=e116] [cursor=pointer]:
+    - img [ref=e117]
+  - alert [ref=e110]

@@ -1,0 +1,164 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [active] [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+  - generic [ref=e213]:
+    - generic [ref=e214]:
+      - generic [ref=e215]:
+        - generic [ref=e216]: instrument
+        - generic [ref=e217]: A0 OU positive anchor - genuine reversion (seed 13)
+      - generic [ref=e219]:
+        - generic [ref=e220]: estimator
+        - generic [ref=e221]: EMA-20
+      - generic [ref=e223]:
+        - generic [ref=e224]: mode
+        - generic [ref=e225]: causal
+      - generic [ref=e227]:
+        - generic [ref=e228]: from
+        - generic [ref=e229]: 2015-06-08
+      - generic [ref=e230]: →
+      - generic [ref=e231]:
+        - generic [ref=e232]: to
+        - generic [ref=e233]: 2017-11-09
+      - generic [ref=e235]:
+        - generic [ref=e236]: bars
+        - generic [ref=e237]: "600"
+    - generic [ref=e238]:
+      - navigation [ref=e239]:
+        - generic [ref=e240]: Modules
+        - button "Estimator Can we trust the…" [ref=e241] [cursor=pointer]:
+          - generic [ref=e242]: Estimator
+          - generic [ref=e243]: Can we trust the…
+        - button "Residual Is residual behavior consistent…" [ref=e244] [cursor=pointer]:
+          - generic [ref=e245]: Residual
+          - generic [ref=e246]: Is residual behavior consistent…
+        - button "Replay What would the researcher…" [ref=e247] [cursor=pointer]:
+          - generic [ref=e248]: Replay
+          - generic [ref=e249]: What would the researcher…
+        - button "Compare Does Kalman μ* stay…" [ref=e250] [cursor=pointer]:
+          - generic [ref=e251]: Compare
+          - generic [ref=e252]: Does Kalman μ* stay…
+        - button "Absorption Did the Kalman velocity…" [ref=e253] [cursor=pointer]:
+          - generic [ref=e254]: Absorption
+          - generic [ref=e255]: Did the Kalman velocity…
+        - button "MRScore How favourable are conditions…" [ref=e256] [cursor=pointer]:
+          - generic [ref=e257]: MRScore
+          - generic [ref=e258]: How favourable are conditions…
+        - button "Assumptions Are our model assumptions…" [ref=e259] [cursor=pointer]:
+          - generic [ref=e260]: Assumptions
+          - generic [ref=e261]: Are our model assumptions…
+        - button "Causal Diff How much does hindsight…" [ref=e262] [cursor=pointer]:
+          - generic [ref=e263]: Causal Diff
+          - generic [ref=e264]: How much does hindsight…
+        - button "Event Log What changed, and when…" [ref=e265] [cursor=pointer]:
+          - generic [ref=e266]: Event Log
+          - generic [ref=e267]: What changed, and when…
+      - generic [ref=e269]:
+        - generic [ref=e270]:
+          - generic [ref=e271]:
+            - generic [ref=e272]: Estimator Inspector
+            - generic [ref=e273]: price (dim) · μ* causal/adjust=False (blue) · μ* adjusted/adjust=True (dashed) · Δ init gap (amber)
+          - table [ref=e277]:
+            - row [ref=e278]:
+              - cell
+              - cell [ref=e279]:
+                - link "Charting by TradingView" [ref=e283] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/workbench
+                  - img [ref=e284]
+              - cell [ref=e288]
+            - row [ref=e292]:
+              - cell
+              - cell [ref=e293]
+              - cell [ref=e297]
+          - generic [ref=e300]:
+            - generic [ref=e302]: Δ = μ*_adj − μ*_causal (EMA initialization gap — nonzero only in warmup period)
+            - table [ref=e305]:
+              - row [ref=e306]:
+                - cell
+                - cell [ref=e307]:
+                  - link "Charting by TradingView" [ref=e311] [cursor=pointer]:
+                    - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/workbench
+                    - img [ref=e312]
+                - cell [ref=e316]
+        - generic [ref=e320]:
+          - generic [ref=e321]: Stats
+          - generic [ref=e322]:
+            - generic [ref=e323]: "n"
+            - generic [ref=e324]: "600"
+          - generic [ref=e325]:
+            - generic [ref=e326]: Δ mean
+            - generic [ref=e327]: "0.00"
+          - generic [ref=e328]:
+            - generic [ref=e329]: Δ max
+            - generic [ref=e330]: "2.23"
+          - generic [ref=e331]: Residual ε
+          - generic [ref=e332]:
+            - generic [ref=e333]: mean
+            - generic [ref=e334]: "0.10"
+          - generic [ref=e335]:
+            - generic [ref=e336]: std
+            - generic [ref=e337]: "2.92"
+          - generic [ref=e338]:
+            - generic [ref=e339]: skew
+            - generic [ref=e340]: "-0.120"
+          - generic [ref=e341]:
+            - generic [ref=e342]: kurt
+            - generic [ref=e343]: "-0.269"
+          - generic [ref=e344]: Persistence
+          - generic [ref=e345]:
+            - generic [ref=e346]: ACF lag1
+            - generic [ref=e347]: "0.835"
+          - generic [ref=e348]:
+            - generic [ref=e349]: ACF lag5
+            - generic [ref=e350]: "0.346"
+          - generic [ref=e351]:
+            - generic [ref=e352]: half-life
+            - generic [ref=e353]: 4.2 bars
+      - complementary [ref=e354]:
+        - generic [ref=e356]: Controls
+        - generic [ref=e357]:
+          - generic [ref=e358]:
+            - generic [ref=e359]: Mode
+            - generic [ref=e360]:
+              - button "causal" [ref=e361] [cursor=pointer]
+              - button "full-info" [ref=e362] [cursor=pointer]
+            - generic [ref=e363]: Only data ≤ t used. Temporally valid.
+          - generic [ref=e364]:
+            - generic [ref=e365]: EMA Window
+            - spinbutton [ref=e366]: "20"
+            - generic [ref=e367]: bars (5–200)
+          - generic [ref=e369]:
+            - generic [ref=e370]: Reading guide
+            - generic [ref=e371]:
+              - generic [ref=e372]: ACF(1) > 0.3
+              - generic [ref=e373]: ε has memory — but EMA artifact can inflate ACF even on RW
+            - generic [ref=e374]:
+              - generic [ref=e375]: Δμ* ≈ 0
+              - generic [ref=e376]: EMA variants have converged — expected after ~3× span bars
+            - generic [ref=e377]:
+              - generic [ref=e378]: Δμ* large
+              - generic [ref=e379]: short series or warmup period — not a modeling failure
+            - generic [ref=e380]:
+              - generic [ref=e381]: Half-life
+              - generic [ref=e382]: bars to 50% reversion (OLS with intercept — reliable)
+            - generic [ref=e383]:
+              - generic [ref=e384]: Skew ≠ 0
+              - generic [ref=e385]: asymmetric residuals
+            - generic [ref=e386]:
+              - generic [ref=e387]: Kurt > 3
+              - generic [ref=e388]: fat tails — z-score understates risk
+    - generic [ref=e389]:
+      - generic [ref=e390]: Timeline
+      - button "‹" [ref=e391] [cursor=pointer]
+      - textbox [ref=e392]: 2015-06-08
+      - generic [ref=e393]: —
+      - textbox [ref=e394]: 2017-11-09
+      - button "›" [ref=e395] [cursor=pointer]
+      - button "ALL" [ref=e396] [cursor=pointer]
+      - generic [ref=e397]: 2015-06-08 – 2017-11-09 · 600 bars
+  - button "Open Next.js Dev Tools" [ref=e93] [cursor=pointer]:
+    - img [ref=e94]
+  - alert [ref=e97]

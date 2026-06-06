@@ -1,0 +1,200 @@
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: AMR
+    - link "Workstation" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "Workbench" [ref=e5] [cursor=pointer]:
+      - /url: /workbench
+  - generic [ref=e213]:
+    - generic [ref=e214]:
+      - generic [ref=e215]:
+        - generic [ref=e216]: instrument
+        - generic [ref=e217]: A0 OU positive anchor - genuine reversion (seed 13)
+      - generic [ref=e219]:
+        - generic [ref=e220]: estimator
+        - generic [ref=e221]: EMA-20
+      - generic [ref=e223]:
+        - generic [ref=e224]: mode
+        - generic [ref=e225]: causal
+      - generic [ref=e227]:
+        - generic [ref=e228]: from
+        - generic [ref=e229]: 2015-06-08
+      - generic [ref=e230]: →
+      - generic [ref=e231]:
+        - generic [ref=e232]: to
+        - generic [ref=e233]: 2017-11-09
+      - generic [ref=e235]:
+        - generic [ref=e236]: bars
+        - generic [ref=e237]: "600"
+    - generic [ref=e238]:
+      - navigation [ref=e239]:
+        - generic [ref=e240]: Modules
+        - button "Estimator Can we trust the…" [ref=e241] [cursor=pointer]:
+          - generic [ref=e242]: Estimator
+          - generic [ref=e243]: Can we trust the…
+        - button "Residual Is residual behavior consistent…" [ref=e244] [cursor=pointer]:
+          - generic [ref=e245]: Residual
+          - generic [ref=e246]: Is residual behavior consistent…
+        - button "Replay What would the researcher…" [ref=e247] [cursor=pointer]:
+          - generic [ref=e248]: Replay
+          - generic [ref=e249]: What would the researcher…
+        - button "Compare Does Kalman μ* stay…" [ref=e250] [cursor=pointer]:
+          - generic [ref=e251]: Compare
+          - generic [ref=e252]: Does Kalman μ* stay…
+        - button "Absorption Did the Kalman velocity…" [ref=e253] [cursor=pointer]:
+          - generic [ref=e254]: Absorption
+          - generic [ref=e255]: Did the Kalman velocity…
+        - button "MRScore How favourable are conditions…" [active] [ref=e256] [cursor=pointer]:
+          - generic [ref=e257]: MRScore
+          - generic [ref=e258]: How favourable are conditions…
+        - button "Assumptions Are our model assumptions…" [ref=e259] [cursor=pointer]:
+          - generic [ref=e260]: Assumptions
+          - generic [ref=e261]: Are our model assumptions…
+        - button "Causal Diff How much does hindsight…" [ref=e262] [cursor=pointer]:
+          - generic [ref=e263]: Causal Diff
+          - generic [ref=e264]: How much does hindsight…
+        - button "Event Log What changed, and when…" [ref=e265] [cursor=pointer]:
+          - generic [ref=e266]: Event Log
+          - generic [ref=e267]: What changed, and when…
+      - generic [ref=e398]:
+        - generic [ref=e399]:
+          - generic [ref=e400]:
+            - generic [ref=e401]: MRScore (left, 0–100) vs Price (right)
+            - generic [ref=e402]: MRScore
+            - generic [ref=e403]: B2
+          - table [ref=e406]:
+            - row [ref=e407]:
+              - cell [ref=e408]
+              - cell [ref=e412]:
+                - link "Charting by TradingView" [ref=e416] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/workbench
+                  - img [ref=e417]
+              - cell [ref=e421]
+            - row [ref=e425]:
+              - cell [ref=e426]
+              - cell [ref=e429]
+              - cell [ref=e433]
+          - generic [ref=e437]: ⚠ Observatory diagnostic — observe/falsify, NOT a signal. The self-ranked score is within-instrument relative; raw DRC/hit-rate are the cross-instrument discriminators. ADANIENT is trend-heavy (opposite of the deployment regime) — a low score there is expected and is not global evidence.
+        - generic [ref=e438]:
+          - generic [ref=e439]:
+            - generic [ref=e440]: Decomposition
+            - generic [ref=e441]: 2017-11-09 (latest)
+          - generic [ref=e442]:
+            - generic [ref=e443]:
+              - generic [ref=e444]: "62.9"
+              - generic [ref=e445]: MRScore = 0.20·B1 + 0.60·B2 + 0.20·B3
+            - generic [ref=e446]:
+              - generic [ref=e447]:
+                - generic [ref=e448]: B1 ·0.20
+                - generic [ref=e451]: "5"
+              - generic [ref=e452]:
+                - generic [ref=e453]: B2 ·0.60
+                - generic [ref=e456]: "51"
+              - generic [ref=e457]:
+                - generic [ref=e458]: B3 ·0.20
+                - generic [ref=e461]: "7"
+              - generic [ref=e462]: weighted contributions (sum = MRScore)
+            - generic [ref=e463]:
+              - generic [ref=e464]: B1 25
+              - generic [ref=e465]: B2 85
+              - generic [ref=e466]: B3 34
+          - generic [ref=e467]:
+            - generic [ref=e468]: Feature ranks (0–100)
+            - generic [ref=e469]: B1 — Mean Reliability
+            - generic [ref=e470]:
+              - generic [ref=e471]: ADF
+              - generic [ref=e474]: "24"
+            - generic [ref=e475]:
+              - generic [ref=e476]: KPSS
+              - generic [ref=e478]: "0"
+            - generic [ref=e479]:
+              - generic [ref=e480]: MSI
+              - generic [ref=e483]: "18"
+            - generic [ref=e484]:
+              - generic [ref=e485]: VSI
+              - generic [ref=e488]: "62"
+            - generic [ref=e489]: B2 — Reversion Strength
+            - generic [ref=e490]:
+              - generic [ref=e491]: DRC
+              - generic [ref=e494]: "77"
+            - generic [ref=e495]:
+              - generic [ref=e496]: HitRate
+              - generic [ref=e499]: "90"
+            - generic [ref=e500]:
+              - generic [ref=e501]: VR
+              - generic [ref=e504]: "99"
+            - generic [ref=e505]: B3 — Tradability
+            - generic [ref=e506]:
+              - generic [ref=e507]: HL prox
+              - generic [ref=e510]: "32"
+            - generic [ref=e511]:
+              - generic [ref=e512]: VolComp
+              - generic [ref=e515]: "46"
+            - generic [ref=e516]:
+              - generic [ref=e517]: TxCost
+              - generic [ref=e520]: "24"
+          - generic [ref=e521]:
+            - generic [ref=e522]: Raw Block-2 (cross-instrument discriminators)
+            - generic [ref=e523]: the self-ranked score is within-instrument relative; these raw values are what separate genuine reverters from nulls
+            - generic [ref=e524]:
+              - generic [ref=e525]:
+                - generic [ref=e526]: DRC
+                - generic [ref=e527]: "-2.56"
+                - generic [ref=e528]: min_h NW-t · ≪0 = reversion
+              - generic [ref=e529]:
+                - generic [ref=e530]: HitRate
+                - generic [ref=e531]: "0.579"
+                - generic [ref=e532]: P(revert | |z|>1)
+              - generic [ref=e533]:
+                - generic [ref=e534]: VR_agg
+                - generic [ref=e535]: "0.474"
+                - generic [ref=e536]: <1 = MR · ≈1 = RW
+            - generic [ref=e537]:
+              - text: mode = causal (full-information deferred — no genuine future-using μ* exists yet)
+              - text: μ* = causal EMA span 20 · scored 329/600 bars (warmup = est + rank window)
+              - text: weights frozen 20/60/20 — economic priors, never fit (doc 01 §3.2)
+      - complementary [ref=e354]:
+        - generic [ref=e356]: Controls
+        - generic [ref=e357]:
+          - generic [ref=e358]:
+            - generic [ref=e359]: Mode
+            - generic [ref=e360]:
+              - button "causal" [ref=e361] [cursor=pointer]
+              - button "full-info" [ref=e362] [cursor=pointer]
+            - generic [ref=e363]: Only data ≤ t used. Temporally valid.
+          - generic [ref=e364]:
+            - generic [ref=e365]: EMA Window
+            - spinbutton [ref=e366]: "20"
+            - generic [ref=e367]: bars (5–200)
+          - generic [ref=e369]:
+            - generic [ref=e370]: Reading guide
+            - generic [ref=e371]:
+              - generic [ref=e372]: ACF(1) > 0.3
+              - generic [ref=e373]: ε has memory — but EMA artifact can inflate ACF even on RW
+            - generic [ref=e374]:
+              - generic [ref=e375]: Δμ* ≈ 0
+              - generic [ref=e376]: EMA variants have converged — expected after ~3× span bars
+            - generic [ref=e377]:
+              - generic [ref=e378]: Δμ* large
+              - generic [ref=e379]: short series or warmup period — not a modeling failure
+            - generic [ref=e380]:
+              - generic [ref=e381]: Half-life
+              - generic [ref=e382]: bars to 50% reversion (OLS with intercept — reliable)
+            - generic [ref=e383]:
+              - generic [ref=e384]: Skew ≠ 0
+              - generic [ref=e385]: asymmetric residuals
+            - generic [ref=e386]:
+              - generic [ref=e387]: Kurt > 3
+              - generic [ref=e388]: fat tails — z-score understates risk
+    - generic [ref=e389]:
+      - generic [ref=e390]: Timeline
+      - button "‹" [ref=e391] [cursor=pointer]
+      - textbox [ref=e392]: 2015-06-08
+      - generic [ref=e393]: —
+      - textbox [ref=e394]: 2017-11-09
+      - button "›" [ref=e395] [cursor=pointer]
+      - button "ALL" [ref=e396] [cursor=pointer]
+      - generic [ref=e397]: 2015-06-08 – 2017-11-09 · 600 bars
+  - button "Open Next.js Dev Tools" [ref=e93] [cursor=pointer]:
+    - img [ref=e94]
+  - alert [ref=e97]

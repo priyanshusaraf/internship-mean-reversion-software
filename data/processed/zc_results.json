@@ -1,0 +1,1698 @@
+{
+  "meta": {
+    "instrument": "ZC_M1M2",
+    "prereg_doc": "zc_calendar_prereg.md",
+    "date_min": "1991-05-28",
+    "date_max": "2026-06-04",
+    "n_bars": 8698,
+    "seed": 20260604,
+    "jump_k": 8.0,
+    "q_grid": [
+      5,
+      10,
+      20,
+      40,
+      60
+    ],
+    "cost_grid": [
+      0.003,
+      0.005,
+      0.008
+    ],
+    "primary_cost": 0.005,
+    "half_life_band": [
+      5.0,
+      60.0
+    ],
+    "crisis_years": [
+      2012,
+      2020,
+      2022
+    ],
+    "speed_gate_n": 200,
+    "full_n": 500,
+    "execution_date": "2026-06-05"
+  },
+  "spread_stats": {
+    "mean": 202.5401,
+    "std": 232.9213,
+    "min": -188.25,
+    "max": 616.75,
+    "n_roll_masked": 176,
+    "n_flat": 0
+  },
+  "global_half_life_bars": 315.58,
+  "half_life_in_band": false,
+  "oos_split": {
+    "vr20_train": 0.17642,
+    "vr20_oos": 0.92002,
+    "sign_flip": true,
+    "train_n": 6088,
+    "oos_n": 2610
+  },
+  "speed_gate_N200": {
+    "real_vr": {
+      "5": 0.37501,
+      "10": 0.27271,
+      "20": 0.1583,
+      "40": 0.1578,
+      "60": 0.17453
+    },
+    "real_min_vr": 0.1578,
+    "p_rw": 0.005,
+    "p_garch": 0.005,
+    "p_ma1": 0.005,
+    "p_ou": 0.005,
+    "confirmed_rw_garch_ma1": true,
+    "sep": {
+      "rw": true,
+      "garch": true,
+      "ma1": true,
+      "ou": true
+    },
+    "per_family_detail": {
+      "rw": {
+        "min_vr_p_value": 0.005,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.95797,
+            "real_below_p5": true,
+            "surr_median": 0.99498
+          },
+          "10": {
+            "p5": 0.93136,
+            "real_below_p5": true,
+            "surr_median": 0.99123
+          },
+          "20": {
+            "p5": 0.90202,
+            "real_below_p5": true,
+            "surr_median": 0.99075
+          },
+          "40": {
+            "p5": 0.81169,
+            "real_below_p5": true,
+            "surr_median": 0.98026
+          },
+          "60": {
+            "p5": 0.73155,
+            "real_below_p5": true,
+            "surr_median": 0.96212
+          }
+        }
+      },
+      "garch": {
+        "min_vr_p_value": 0.005,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.95085,
+            "real_below_p5": true,
+            "surr_median": 0.99422
+          },
+          "10": {
+            "p5": 0.92559,
+            "real_below_p5": true,
+            "surr_median": 0.98609
+          },
+          "20": {
+            "p5": 0.89272,
+            "real_below_p5": true,
+            "surr_median": 0.99571
+          },
+          "40": {
+            "p5": 0.79832,
+            "real_below_p5": true,
+            "surr_median": 0.98978
+          },
+          "60": {
+            "p5": 0.72128,
+            "real_below_p5": true,
+            "surr_median": 0.9606
+          }
+        }
+      },
+      "ma1": {
+        "min_vr_p_value": 0.005,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.95949,
+            "real_below_p5": true,
+            "surr_median": 0.99657
+          },
+          "10": {
+            "p5": 0.93627,
+            "real_below_p5": true,
+            "surr_median": 0.99325
+          },
+          "20": {
+            "p5": 0.90586,
+            "real_below_p5": true,
+            "surr_median": 0.99441
+          },
+          "40": {
+            "p5": 0.82397,
+            "real_below_p5": true,
+            "surr_median": 0.97951
+          },
+          "60": {
+            "p5": 0.70035,
+            "real_below_p5": true,
+            "surr_median": 0.95439
+          }
+        }
+      },
+      "ou": {
+        "min_vr_p_value": 0.005,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.92859,
+            "real_below_p5": true,
+            "surr_median": 0.96652
+          },
+          "10": {
+            "p5": 0.8748,
+            "real_below_p5": true,
+            "surr_median": 0.93121
+          },
+          "20": {
+            "p5": 0.79508,
+            "real_below_p5": true,
+            "surr_median": 0.87405
+          },
+          "40": {
+            "p5": 0.68828,
+            "real_below_p5": true,
+            "surr_median": 0.80643
+          },
+          "60": {
+            "p5": 0.64007,
+            "real_below_p5": true,
+            "surr_median": 0.80682
+          }
+        }
+      }
+    },
+    "ma1_fit": {
+      "sigma_w": 6.498958,
+      "sigma_eta": 0.0,
+      "rho": 0.0
+    },
+    "n_draws": 200,
+    "seed": 20260604
+  },
+  "speed_gate_killed": false,
+  "speed_gate_kill_reason": null,
+  "full_N500": {
+    "real_vr": {
+      "5": 0.37501,
+      "10": 0.27271,
+      "20": 0.1583,
+      "40": 0.1578,
+      "60": 0.17453
+    },
+    "real_min_vr": 0.1578,
+    "p_rw": 0.002,
+    "p_garch": 0.002,
+    "p_ma1": 0.002,
+    "p_ou": 0.002,
+    "confirmed_rw_garch_ma1": true,
+    "sep": {
+      "rw": true,
+      "garch": true,
+      "ma1": true,
+      "ou": true
+    },
+    "per_family_detail": {
+      "rw": {
+        "min_vr_p_value": 0.002,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.96086,
+            "real_below_p5": true,
+            "surr_median": 0.99717
+          },
+          "10": {
+            "p5": 0.93216,
+            "real_below_p5": true,
+            "surr_median": 0.99585
+          },
+          "20": {
+            "p5": 0.90214,
+            "real_below_p5": true,
+            "surr_median": 0.99359
+          },
+          "40": {
+            "p5": 0.81247,
+            "real_below_p5": true,
+            "surr_median": 0.97952
+          },
+          "60": {
+            "p5": 0.7234,
+            "real_below_p5": true,
+            "surr_median": 0.95973
+          }
+        }
+      },
+      "garch": {
+        "min_vr_p_value": 0.002,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.95232,
+            "real_below_p5": true,
+            "surr_median": 0.99804
+          },
+          "10": {
+            "p5": 0.9263,
+            "real_below_p5": true,
+            "surr_median": 0.99464
+          },
+          "20": {
+            "p5": 0.89302,
+            "real_below_p5": true,
+            "surr_median": 0.9937
+          },
+          "40": {
+            "p5": 0.81668,
+            "real_below_p5": true,
+            "surr_median": 0.98506
+          },
+          "60": {
+            "p5": 0.71085,
+            "real_below_p5": true,
+            "surr_median": 0.94882
+          }
+        }
+      },
+      "ma1": {
+        "min_vr_p_value": 0.002,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.95949,
+            "real_below_p5": true,
+            "surr_median": 0.99776
+          },
+          "10": {
+            "p5": 0.93488,
+            "real_below_p5": true,
+            "surr_median": 0.99507
+          },
+          "20": {
+            "p5": 0.89539,
+            "real_below_p5": true,
+            "surr_median": 0.99541
+          },
+          "40": {
+            "p5": 0.81886,
+            "real_below_p5": true,
+            "surr_median": 0.98726
+          },
+          "60": {
+            "p5": 0.71089,
+            "real_below_p5": true,
+            "surr_median": 0.95694
+          }
+        }
+      },
+      "ou": {
+        "min_vr_p_value": 0.002,
+        "separated": true,
+        "per_horizon": {
+          "5": {
+            "p5": 0.92902,
+            "real_below_p5": true,
+            "surr_median": 0.96802
+          },
+          "10": {
+            "p5": 0.87779,
+            "real_below_p5": true,
+            "surr_median": 0.93273
+          },
+          "20": {
+            "p5": 0.79797,
+            "real_below_p5": true,
+            "surr_median": 0.87939
+          },
+          "40": {
+            "p5": 0.69326,
+            "real_below_p5": true,
+            "surr_median": 0.8181
+          },
+          "60": {
+            "p5": 0.64524,
+            "real_below_p5": true,
+            "surr_median": 0.81852
+          }
+        }
+      }
+    },
+    "ma1_fit": {
+      "sigma_w": 6.498958,
+      "sigma_eta": 0.0,
+      "rho": 0.0
+    },
+    "n_draws": 500,
+    "seed": 20260604
+  },
+  "rolling_book_sim": {
+    "full_sample": {
+      "mean_z": -1.4127,
+      "n_windows": 36,
+      "n_below_rwmed": 28,
+      "avg_gross_by_cost": {
+        "0.003": 4.419723,
+        "0.005": 4.419723,
+        "0.008": 4.419723
+      },
+      "avg_net_by_cost": {
+        "0.003": 4.416723,
+        "0.005": 4.414723,
+        "0.008": 4.411723
+      },
+      "z_trajectory": [
+        -2.282,
+        -2.434,
+        -2.319,
+        -2.394,
+        -2.326,
+        -0.969,
+        -2.348,
+        -1.797,
+        -1.084,
+        -1.66,
+        -1.599,
+        0.264,
+        -2.184,
+        -1.917,
+        -2.054,
+        -2.029,
+        -2.101,
+        -2.168,
+        -2.369,
+        -2.437,
+        -2.107,
+        0.012,
+        0.102,
+        -1.865,
+        -1.477,
+        -1.703,
+        -1.387,
+        -1.548,
+        -1.656,
+        -1.744,
+        1.08,
+        0.577,
+        0.478,
+        0.412,
+        -1.762,
+        -0.063
+      ],
+      "vr20_trajectory": [
+        0.057,
+        0.145,
+        0.182,
+        0.158,
+        0.18,
+        0.632,
+        0.179,
+        0.352,
+        0.578,
+        0.286,
+        0.366,
+        1.02,
+        0.198,
+        0.317,
+        0.274,
+        0.276,
+        0.253,
+        0.237,
+        0.166,
+        0.144,
+        0.251,
+        0.939,
+        0.968,
+        0.329,
+        0.455,
+        0.382,
+        0.485,
+        0.432,
+        0.397,
+        0.373,
+        1.285,
+        1.09,
+        1.071,
+        1.068,
+        0.369,
+        0.767
+      ],
+      "year_list": [
+        1991,
+        1992,
+        1993,
+        1994,
+        1995,
+        1996,
+        1997,
+        1998,
+        1999,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ]
+    },
+    "ex_crisis": {
+      "mean_z": -1.5062,
+      "n_windows": 33,
+      "n_below_rwmed": 27,
+      "avg_gross_by_cost": {
+        "0.003": 4.448689,
+        "0.005": 4.448689,
+        "0.008": 4.448689
+      },
+      "avg_net_by_cost": {
+        "0.003": 4.445689,
+        "0.005": 4.443689,
+        "0.008": 4.440689
+      },
+      "z_trajectory": [
+        -2.282,
+        -2.434,
+        -2.319,
+        -2.394,
+        -2.326,
+        -0.969,
+        -2.348,
+        -1.797,
+        -1.084,
+        -1.66,
+        -1.599,
+        0.264,
+        -2.184,
+        -1.917,
+        -2.054,
+        -2.029,
+        -2.101,
+        -2.168,
+        -2.369,
+        -2.437,
+        -2.107,
+        0.102,
+        -1.865,
+        -1.477,
+        -1.703,
+        -1.387,
+        -1.548,
+        -1.656,
+        1.08,
+        0.478,
+        0.412,
+        -1.762,
+        -0.063
+      ],
+      "vr20_trajectory": [
+        0.057,
+        0.145,
+        0.182,
+        0.158,
+        0.18,
+        0.632,
+        0.179,
+        0.352,
+        0.578,
+        0.286,
+        0.366,
+        1.02,
+        0.198,
+        0.317,
+        0.274,
+        0.276,
+        0.253,
+        0.237,
+        0.166,
+        0.144,
+        0.251,
+        0.968,
+        0.329,
+        0.455,
+        0.382,
+        0.485,
+        0.432,
+        0.397,
+        1.285,
+        1.071,
+        1.068,
+        0.369,
+        0.767
+      ],
+      "year_list": [
+        1991,
+        1992,
+        1993,
+        1994,
+        1995,
+        1996,
+        1997,
+        1998,
+        1999,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2021,
+        2023,
+        2024,
+        2025,
+        2026
+      ]
+    },
+    "crisis_only": {
+      "mean_z": -0.385,
+      "n_windows": 3,
+      "n_below_rwmed": 1,
+      "avg_gross_by_cost": {
+        "0.003": 4.101091,
+        "0.005": 4.101091,
+        "0.008": 4.101091
+      },
+      "avg_net_by_cost": {
+        "0.003": 4.098091,
+        "0.005": 4.096091,
+        "0.008": 4.093091
+      },
+      "z_trajectory": [
+        0.012,
+        -1.744,
+        0.577
+      ],
+      "vr20_trajectory": [
+        0.939,
+        0.373,
+        1.09
+      ],
+      "year_list": [
+        2012,
+        2020,
+        2022
+      ]
+    },
+    "yearly_detail": [
+      {
+        "year": 1991,
+        "is_crisis": false,
+        "vr20": 0.0572,
+        "z": -2.282,
+        "below_rwmed": true,
+        "n": 152,
+        "half_life": 0.1,
+        "trade_proxy": {
+          "n_trades": 5,
+          "avg_net": 5.710153,
+          "avg_gross": 5.715153,
+          "hit_rate": 1.0,
+          "total_net": 28.550763,
+          "jackknife_avg_gross": 5.104374,
+          "jackknife_avg_net": 5.099374,
+          "jackknife_retention_pct": 89.3
+        },
+        "cost_grid_gross": {
+          "0.003": 5.715153,
+          "0.005": 5.715153,
+          "0.008": 5.715153
+        },
+        "cost_grid_net": {
+          "0.003": 5.712153,
+          "0.005": 5.710153,
+          "0.008": 5.707153
+        }
+      },
+      {
+        "year": 1992,
+        "is_crisis": false,
+        "vr20": 0.1448,
+        "z": -2.434,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 8.4,
+        "trade_proxy": {
+          "n_trades": 11,
+          "avg_net": 7.596168,
+          "avg_gross": 7.601168,
+          "hit_rate": 0.9091,
+          "total_net": 83.557852,
+          "jackknife_avg_gross": 5.473331,
+          "jackknife_avg_net": 5.468331,
+          "jackknife_retention_pct": 72.0
+        },
+        "cost_grid_gross": {
+          "0.003": 7.601168,
+          "0.005": 7.601168,
+          "0.008": 7.601168
+        },
+        "cost_grid_net": {
+          "0.003": 7.598168,
+          "0.005": 7.596168,
+          "0.008": 7.593168
+        }
+      },
+      {
+        "year": 1993,
+        "is_crisis": false,
+        "vr20": 0.182,
+        "z": -2.319,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 18.4,
+        "trade_proxy": {
+          "n_trades": 13,
+          "avg_net": 7.845143,
+          "avg_gross": 7.850143,
+          "hit_rate": 1.0,
+          "total_net": 101.986864,
+          "jackknife_avg_gross": 6.474162,
+          "jackknife_avg_net": 6.469162,
+          "jackknife_retention_pct": 82.5
+        },
+        "cost_grid_gross": {
+          "0.003": 7.850143,
+          "0.005": 7.850143,
+          "0.008": 7.850143
+        },
+        "cost_grid_net": {
+          "0.003": 7.847143,
+          "0.005": 7.845143,
+          "0.008": 7.842143
+        }
+      },
+      {
+        "year": 1994,
+        "is_crisis": false,
+        "vr20": 0.1575,
+        "z": -2.394,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 3.2,
+        "trade_proxy": {
+          "n_trades": 15,
+          "avg_net": 8.29192,
+          "avg_gross": 8.29692,
+          "hit_rate": 1.0,
+          "total_net": 124.378797,
+          "jackknife_avg_gross": 7.291818,
+          "jackknife_avg_net": 7.286818,
+          "jackknife_retention_pct": 87.9
+        },
+        "cost_grid_gross": {
+          "0.003": 8.29692,
+          "0.005": 8.29692,
+          "0.008": 8.29692
+        },
+        "cost_grid_net": {
+          "0.003": 8.29392,
+          "0.005": 8.29192,
+          "0.008": 8.28892
+        }
+      },
+      {
+        "year": 1995,
+        "is_crisis": false,
+        "vr20": 0.1797,
+        "z": -2.326,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 12.0,
+        "trade_proxy": {
+          "n_trades": 13,
+          "avg_net": 8.339568,
+          "avg_gross": 8.344568,
+          "hit_rate": 1.0,
+          "total_net": 108.414378,
+          "jackknife_avg_gross": 7.282232,
+          "jackknife_avg_net": 7.277232,
+          "jackknife_retention_pct": 87.3
+        },
+        "cost_grid_gross": {
+          "0.003": 8.344568,
+          "0.005": 8.344568,
+          "0.008": 8.344568
+        },
+        "cost_grid_net": {
+          "0.003": 8.341568,
+          "0.005": 8.339568,
+          "0.008": 8.336568
+        }
+      },
+      {
+        "year": 1996,
+        "is_crisis": false,
+        "vr20": 0.6322,
+        "z": -0.969,
+        "below_rwmed": true,
+        "n": 254,
+        "half_life": 71.8,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": -4.719162,
+          "avg_gross": -4.714162,
+          "hit_rate": 0.5556,
+          "total_net": -42.472458,
+          "jackknife_avg_gross": 8.02416,
+          "jackknife_avg_net": 8.01916,
+          "jackknife_retention_pct": 170.2
+        },
+        "cost_grid_gross": {
+          "0.003": -4.714162,
+          "0.005": -4.714162,
+          "0.008": -4.714162
+        },
+        "cost_grid_net": {
+          "0.003": -4.717162,
+          "0.005": -4.719162,
+          "0.008": -4.722162
+        }
+      },
+      {
+        "year": 1997,
+        "is_crisis": false,
+        "vr20": 0.1795,
+        "z": -2.348,
+        "below_rwmed": true,
+        "n": 253,
+        "half_life": 10.8,
+        "trade_proxy": {
+          "n_trades": 16,
+          "avg_net": 10.803894,
+          "avg_gross": 10.808894,
+          "hit_rate": 0.9375,
+          "total_net": 172.862304,
+          "jackknife_avg_gross": 8.629891,
+          "jackknife_avg_net": 8.624891,
+          "jackknife_retention_pct": 79.8
+        },
+        "cost_grid_gross": {
+          "0.003": 10.808894,
+          "0.005": 10.808894,
+          "0.008": 10.808894
+        },
+        "cost_grid_net": {
+          "0.003": 10.805894,
+          "0.005": 10.803894,
+          "0.008": 10.800894
+        }
+      },
+      {
+        "year": 1998,
+        "is_crisis": false,
+        "vr20": 0.3516,
+        "z": -1.797,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 69.2,
+        "trade_proxy": {
+          "n_trades": 8,
+          "avg_net": -1.464756,
+          "avg_gross": -1.459756,
+          "hit_rate": 0.625,
+          "total_net": -11.718044,
+          "jackknife_avg_gross": 1.770851,
+          "jackknife_avg_net": 1.765851,
+          "jackknife_retention_pct": 121.3
+        },
+        "cost_grid_gross": {
+          "0.003": -1.459756,
+          "0.005": -1.459756,
+          "0.008": -1.459756
+        },
+        "cost_grid_net": {
+          "0.003": -1.462756,
+          "0.005": -1.464756,
+          "0.008": -1.467756
+        }
+      },
+      {
+        "year": 1999,
+        "is_crisis": false,
+        "vr20": 0.578,
+        "z": -1.084,
+        "below_rwmed": true,
+        "n": 251,
+        "half_life": 92.3,
+        "trade_proxy": {
+          "n_trades": 8,
+          "avg_net": 0.608193,
+          "avg_gross": 0.613193,
+          "hit_rate": 0.5,
+          "total_net": 4.865544,
+          "jackknife_avg_gross": -1.369712,
+          "jackknife_avg_net": -1.374712,
+          "jackknife_retention_pct": -223.4
+        },
+        "cost_grid_gross": {
+          "0.003": 0.613193,
+          "0.005": 0.613193,
+          "0.008": 0.613193
+        },
+        "cost_grid_net": {
+          "0.003": 0.610193,
+          "0.005": 0.608193,
+          "0.008": 0.605193
+        }
+      },
+      {
+        "year": 2000,
+        "is_crisis": false,
+        "vr20": 0.286,
+        "z": -1.66,
+        "below_rwmed": true,
+        "n": 179,
+        "half_life": 561.9,
+        "trade_proxy": {
+          "n_trades": 4,
+          "avg_net": -1.417068,
+          "avg_gross": -1.412068,
+          "hit_rate": 0.25,
+          "total_net": -5.668271,
+          "jackknife_avg_gross": -2.366694,
+          "jackknife_avg_net": -2.371694,
+          "jackknife_retention_pct": -167.6
+        },
+        "cost_grid_gross": {
+          "0.003": -1.412068,
+          "0.005": -1.412068,
+          "0.008": -1.412068
+        },
+        "cost_grid_net": {
+          "0.003": -1.415068,
+          "0.005": -1.417068,
+          "0.008": -1.420068
+        }
+      },
+      {
+        "year": 2001,
+        "is_crisis": false,
+        "vr20": 0.3657,
+        "z": -1.599,
+        "below_rwmed": true,
+        "n": 218,
+        "half_life": 52.0,
+        "trade_proxy": {
+          "n_trades": 7,
+          "avg_net": 0.224361,
+          "avg_gross": 0.229361,
+          "hit_rate": 0.5714,
+          "total_net": 1.57053,
+          "jackknife_avg_gross": 0.379578,
+          "jackknife_avg_net": 0.374578,
+          "jackknife_retention_pct": 165.5
+        },
+        "cost_grid_gross": {
+          "0.003": 0.229361,
+          "0.005": 0.229361,
+          "0.008": 0.229361
+        },
+        "cost_grid_net": {
+          "0.003": 0.226361,
+          "0.005": 0.224361,
+          "0.008": 0.221361
+        }
+      },
+      {
+        "year": 2002,
+        "is_crisis": false,
+        "vr20": 1.0204,
+        "z": 0.264,
+        "below_rwmed": false,
+        "n": 252,
+        "half_life": 20.7,
+        "trade_proxy": {
+          "n_trades": 7,
+          "avg_net": 3.668435,
+          "avg_gross": 3.673435,
+          "hit_rate": 0.7143,
+          "total_net": 25.679045,
+          "jackknife_avg_gross": 4.692808,
+          "jackknife_avg_net": 4.687808,
+          "jackknife_retention_pct": 127.7
+        },
+        "cost_grid_gross": {
+          "0.003": 3.673435,
+          "0.005": 3.673435,
+          "0.008": 3.673435
+        },
+        "cost_grid_net": {
+          "0.003": 3.670435,
+          "0.005": 3.668435,
+          "0.008": 3.665435
+        }
+      },
+      {
+        "year": 2003,
+        "is_crisis": false,
+        "vr20": 0.1975,
+        "z": -2.184,
+        "below_rwmed": true,
+        "n": 230,
+        "half_life": 13.8,
+        "trade_proxy": {
+          "n_trades": 11,
+          "avg_net": 6.333786,
+          "avg_gross": 6.338786,
+          "hit_rate": 1.0,
+          "total_net": 69.671641,
+          "jackknife_avg_gross": 4.892054,
+          "jackknife_avg_net": 4.887054,
+          "jackknife_retention_pct": 77.2
+        },
+        "cost_grid_gross": {
+          "0.003": 6.338786,
+          "0.005": 6.338786,
+          "0.008": 6.338786
+        },
+        "cost_grid_net": {
+          "0.003": 6.335786,
+          "0.005": 6.333786,
+          "0.008": 6.330786
+        }
+      },
+      {
+        "year": 2004,
+        "is_crisis": false,
+        "vr20": 0.3174,
+        "z": -1.917,
+        "below_rwmed": true,
+        "n": 253,
+        "half_life": 58.3,
+        "trade_proxy": {
+          "n_trades": 12,
+          "avg_net": 6.440319,
+          "avg_gross": 6.445319,
+          "hit_rate": 0.8333,
+          "total_net": 77.283831,
+          "jackknife_avg_gross": 4.703485,
+          "jackknife_avg_net": 4.698485,
+          "jackknife_retention_pct": 73.0
+        },
+        "cost_grid_gross": {
+          "0.003": 6.445319,
+          "0.005": 6.445319,
+          "0.008": 6.445319
+        },
+        "cost_grid_net": {
+          "0.003": 6.442319,
+          "0.005": 6.440319,
+          "0.008": 6.437319
+        }
+      },
+      {
+        "year": 2005,
+        "is_crisis": false,
+        "vr20": 0.2735,
+        "z": -2.054,
+        "below_rwmed": true,
+        "n": 253,
+        "half_life": 59.8,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 6.412984,
+          "avg_gross": 6.417984,
+          "hit_rate": 0.6667,
+          "total_net": 57.716855,
+          "jackknife_avg_gross": 2.523726,
+          "jackknife_avg_net": 2.518726,
+          "jackknife_retention_pct": 39.3
+        },
+        "cost_grid_gross": {
+          "0.003": 6.417984,
+          "0.005": 6.417984,
+          "0.008": 6.417984
+        },
+        "cost_grid_net": {
+          "0.003": 6.414984,
+          "0.005": 6.412984,
+          "0.008": 6.409984
+        }
+      },
+      {
+        "year": 2006,
+        "is_crisis": false,
+        "vr20": 0.2762,
+        "z": -2.029,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 42.3,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 8.424874,
+          "avg_gross": 8.429874,
+          "hit_rate": 0.7778,
+          "total_net": 75.82387,
+          "jackknife_avg_gross": 5.009084,
+          "jackknife_avg_net": 5.004084,
+          "jackknife_retention_pct": 59.4
+        },
+        "cost_grid_gross": {
+          "0.003": 8.429874,
+          "0.005": 8.429874,
+          "0.008": 8.429874
+        },
+        "cost_grid_net": {
+          "0.003": 8.426874,
+          "0.005": 8.424874,
+          "0.008": 8.421874
+        }
+      },
+      {
+        "year": 2007,
+        "is_crisis": false,
+        "vr20": 0.2528,
+        "z": -2.101,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 38.6,
+        "trade_proxy": {
+          "n_trades": 11,
+          "avg_net": 9.497774,
+          "avg_gross": 9.502774,
+          "hit_rate": 0.8182,
+          "total_net": 104.475515,
+          "jackknife_avg_gross": 4.956464,
+          "jackknife_avg_net": 4.951464,
+          "jackknife_retention_pct": 52.2
+        },
+        "cost_grid_gross": {
+          "0.003": 9.502774,
+          "0.005": 9.502774,
+          "0.008": 9.502774
+        },
+        "cost_grid_net": {
+          "0.003": 9.499774,
+          "0.005": 9.497774,
+          "0.008": 9.494774
+        }
+      },
+      {
+        "year": 2008,
+        "is_crisis": false,
+        "vr20": 0.2369,
+        "z": -2.168,
+        "below_rwmed": true,
+        "n": 253,
+        "half_life": 33.1,
+        "trade_proxy": {
+          "n_trades": 10,
+          "avg_net": 15.578445,
+          "avg_gross": 15.583445,
+          "hit_rate": 0.9,
+          "total_net": 155.784451,
+          "jackknife_avg_gross": 12.779406,
+          "jackknife_avg_net": 12.774406,
+          "jackknife_retention_pct": 82.0
+        },
+        "cost_grid_gross": {
+          "0.003": 15.583445,
+          "0.005": 15.583445,
+          "0.008": 15.583445
+        },
+        "cost_grid_net": {
+          "0.003": 15.580445,
+          "0.005": 15.578445,
+          "0.008": 15.575445
+        }
+      },
+      {
+        "year": 2009,
+        "is_crisis": false,
+        "vr20": 0.1656,
+        "z": -2.369,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 9.2,
+        "trade_proxy": {
+          "n_trades": 14,
+          "avg_net": 15.394619,
+          "avg_gross": 15.399619,
+          "hit_rate": 1.0,
+          "total_net": 215.52466,
+          "jackknife_avg_gross": 13.40709,
+          "jackknife_avg_net": 13.40209,
+          "jackknife_retention_pct": 87.1
+        },
+        "cost_grid_gross": {
+          "0.003": 15.399619,
+          "0.005": 15.399619,
+          "0.008": 15.399619
+        },
+        "cost_grid_net": {
+          "0.003": 15.396619,
+          "0.005": 15.394619,
+          "0.008": 15.391619
+        }
+      },
+      {
+        "year": 2010,
+        "is_crisis": false,
+        "vr20": 0.1437,
+        "z": -2.437,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 14.0,
+        "trade_proxy": {
+          "n_trades": 13,
+          "avg_net": 15.310017,
+          "avg_gross": 15.315017,
+          "hit_rate": 1.0,
+          "total_net": 199.030219,
+          "jackknife_avg_gross": 13.365061,
+          "jackknife_avg_net": 13.360061,
+          "jackknife_retention_pct": 87.3
+        },
+        "cost_grid_gross": {
+          "0.003": 15.315017,
+          "0.005": 15.315017,
+          "0.008": 15.315017
+        },
+        "cost_grid_net": {
+          "0.003": 15.312017,
+          "0.005": 15.310017,
+          "0.008": 15.307017
+        }
+      },
+      {
+        "year": 2011,
+        "is_crisis": false,
+        "vr20": 0.2509,
+        "z": -2.107,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 5.8,
+        "trade_proxy": {
+          "n_trades": 10,
+          "avg_net": 9.710069,
+          "avg_gross": 9.715069,
+          "hit_rate": 0.8,
+          "total_net": 97.100694,
+          "jackknife_avg_gross": 10.90204,
+          "jackknife_avg_net": 10.89704,
+          "jackknife_retention_pct": 112.2
+        },
+        "cost_grid_gross": {
+          "0.003": 9.715069,
+          "0.005": 9.715069,
+          "0.008": 9.715069
+        },
+        "cost_grid_net": {
+          "0.003": 9.712069,
+          "0.005": 9.710069,
+          "0.008": 9.707069
+        }
+      },
+      {
+        "year": 2012,
+        "is_crisis": true,
+        "vr20": 0.9387,
+        "z": 0.012,
+        "below_rwmed": false,
+        "n": 252,
+        "half_life": 24.1,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 4.587518,
+          "avg_gross": 4.592518,
+          "hit_rate": 0.8889,
+          "total_net": 41.28766,
+          "jackknife_avg_gross": 10.246067,
+          "jackknife_avg_net": 10.241067,
+          "jackknife_retention_pct": 223.1
+        },
+        "cost_grid_gross": {
+          "0.003": 4.592518,
+          "0.005": 4.592518,
+          "0.008": 4.592518
+        },
+        "cost_grid_net": {
+          "0.003": 4.589518,
+          "0.005": 4.587518,
+          "0.008": 4.584518
+        }
+      },
+      {
+        "year": 2013,
+        "is_crisis": false,
+        "vr20": 0.968,
+        "z": 0.102,
+        "below_rwmed": false,
+        "n": 252,
+        "half_life": 58.7,
+        "trade_proxy": {
+          "n_trades": 7,
+          "avg_net": -8.625531,
+          "avg_gross": -8.620531,
+          "hit_rate": 0.7143,
+          "total_net": -60.378718,
+          "jackknife_avg_gross": 9.735684,
+          "jackknife_avg_net": 9.730684,
+          "jackknife_retention_pct": 112.9
+        },
+        "cost_grid_gross": {
+          "0.003": -8.620531,
+          "0.005": -8.620531,
+          "0.008": -8.620531
+        },
+        "cost_grid_net": {
+          "0.003": -8.623531,
+          "0.005": -8.625531,
+          "0.008": -8.628531
+        }
+      },
+      {
+        "year": 2014,
+        "is_crisis": false,
+        "vr20": 0.3293,
+        "z": -1.865,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 17.3,
+        "trade_proxy": {
+          "n_trades": 10,
+          "avg_net": 6.798742,
+          "avg_gross": 6.803742,
+          "hit_rate": 0.8,
+          "total_net": 67.987423,
+          "jackknife_avg_gross": 4.559745,
+          "jackknife_avg_net": 4.554745,
+          "jackknife_retention_pct": 67.0
+        },
+        "cost_grid_gross": {
+          "0.003": 6.803742,
+          "0.005": 6.803742,
+          "0.008": 6.803742
+        },
+        "cost_grid_net": {
+          "0.003": 6.800742,
+          "0.005": 6.798742,
+          "0.008": 6.795742
+        }
+      },
+      {
+        "year": 2015,
+        "is_crisis": false,
+        "vr20": 0.4554,
+        "z": -1.477,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 28.6,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 5.030531,
+          "avg_gross": 5.035531,
+          "hit_rate": 0.5556,
+          "total_net": 45.274781,
+          "jackknife_avg_gross": 0.36214,
+          "jackknife_avg_net": 0.35714,
+          "jackknife_retention_pct": 7.2
+        },
+        "cost_grid_gross": {
+          "0.003": 5.035531,
+          "0.005": 5.035531,
+          "0.008": 5.035531
+        },
+        "cost_grid_net": {
+          "0.003": 5.032531,
+          "0.005": 5.030531,
+          "0.008": 5.027531
+        }
+      },
+      {
+        "year": 2016,
+        "is_crisis": false,
+        "vr20": 0.3819,
+        "z": -1.703,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 23.5,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 7.396923,
+          "avg_gross": 7.401923,
+          "hit_rate": 0.7778,
+          "total_net": 66.572306,
+          "jackknife_avg_gross": 4.25108,
+          "jackknife_avg_net": 4.24608,
+          "jackknife_retention_pct": 57.4
+        },
+        "cost_grid_gross": {
+          "0.003": 7.401923,
+          "0.005": 7.401923,
+          "0.008": 7.401923
+        },
+        "cost_grid_net": {
+          "0.003": 7.398923,
+          "0.005": 7.396923,
+          "0.008": 7.393923
+        }
+      },
+      {
+        "year": 2017,
+        "is_crisis": false,
+        "vr20": 0.4847,
+        "z": -1.387,
+        "below_rwmed": true,
+        "n": 251,
+        "half_life": 44.9,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 7.118876,
+          "avg_gross": 7.123876,
+          "hit_rate": 0.8889,
+          "total_net": 64.069885,
+          "jackknife_avg_gross": 5.372063,
+          "jackknife_avg_net": 5.367063,
+          "jackknife_retention_pct": 75.4
+        },
+        "cost_grid_gross": {
+          "0.003": 7.123876,
+          "0.005": 7.123876,
+          "0.008": 7.123876
+        },
+        "cost_grid_net": {
+          "0.003": 7.120876,
+          "0.005": 7.118876,
+          "0.008": 7.115876
+        }
+      },
+      {
+        "year": 2018,
+        "is_crisis": false,
+        "vr20": 0.4323,
+        "z": -1.548,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 38.4,
+        "trade_proxy": {
+          "n_trades": 8,
+          "avg_net": 7.096597,
+          "avg_gross": 7.101597,
+          "hit_rate": 0.875,
+          "total_net": 56.772776,
+          "jackknife_avg_gross": 5.107996,
+          "jackknife_avg_net": 5.102996,
+          "jackknife_retention_pct": 71.9
+        },
+        "cost_grid_gross": {
+          "0.003": 7.101597,
+          "0.005": 7.101597,
+          "0.008": 7.101597
+        },
+        "cost_grid_net": {
+          "0.003": 7.098597,
+          "0.005": 7.096597,
+          "0.008": 7.093597
+        }
+      },
+      {
+        "year": 2019,
+        "is_crisis": false,
+        "vr20": 0.3973,
+        "z": -1.656,
+        "below_rwmed": true,
+        "n": 252,
+        "half_life": 19.5,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 6.247876,
+          "avg_gross": 6.252876,
+          "hit_rate": 0.8889,
+          "total_net": 56.230885,
+          "jackknife_avg_gross": 4.004656,
+          "jackknife_avg_net": 3.999656,
+          "jackknife_retention_pct": 64.0
+        },
+        "cost_grid_gross": {
+          "0.003": 6.252876,
+          "0.005": 6.252876,
+          "0.008": 6.252876
+        },
+        "cost_grid_net": {
+          "0.003": 6.249876,
+          "0.005": 6.247876,
+          "0.008": 6.244876
+        }
+      },
+      {
+        "year": 2020,
+        "is_crisis": true,
+        "vr20": 0.3728,
+        "z": -1.744,
+        "below_rwmed": true,
+        "n": 253,
+        "half_life": 19.8,
+        "trade_proxy": {
+          "n_trades": 11,
+          "avg_net": 6.529773,
+          "avg_gross": 6.534773,
+          "hit_rate": 0.8182,
+          "total_net": 71.827507,
+          "jackknife_avg_gross": 4.33183,
+          "jackknife_avg_net": 4.32683,
+          "jackknife_retention_pct": 66.3
+        },
+        "cost_grid_gross": {
+          "0.003": 6.534773,
+          "0.005": 6.534773,
+          "0.008": 6.534773
+        },
+        "cost_grid_net": {
+          "0.003": 6.531773,
+          "0.005": 6.529773,
+          "0.008": 6.526773
+        }
+      },
+      {
+        "year": 2021,
+        "is_crisis": false,
+        "vr20": 1.2854,
+        "z": 1.08,
+        "below_rwmed": false,
+        "n": 252,
+        "half_life": 94.6,
+        "trade_proxy": {
+          "n_trades": 7,
+          "avg_net": -11.361977,
+          "avg_gross": -11.356977,
+          "hit_rate": 0.4286,
+          "total_net": -79.533838,
+          "jackknife_avg_gross": 2.010717,
+          "jackknife_avg_net": 2.005717,
+          "jackknife_retention_pct": 17.7
+        },
+        "cost_grid_gross": {
+          "0.003": -11.356977,
+          "0.005": -11.356977,
+          "0.008": -11.356977
+        },
+        "cost_grid_net": {
+          "0.003": -11.359977,
+          "0.005": -11.361977,
+          "0.008": -11.364977
+        }
+      },
+      {
+        "year": 2022,
+        "is_crisis": true,
+        "vr20": 1.09,
+        "z": 0.577,
+        "below_rwmed": false,
+        "n": 251,
+        "half_life": 74.8,
+        "trade_proxy": {
+          "n_trades": 7,
+          "avg_net": 1.170983,
+          "avg_gross": 1.175983,
+          "hit_rate": 0.5714,
+          "total_net": 8.196882,
+          "jackknife_avg_gross": 1.66461,
+          "jackknife_avg_net": 1.65961,
+          "jackknife_retention_pct": 141.6
+        },
+        "cost_grid_gross": {
+          "0.003": 1.175983,
+          "0.005": 1.175983,
+          "0.008": 1.175983
+        },
+        "cost_grid_net": {
+          "0.003": 1.172983,
+          "0.005": 1.170983,
+          "0.008": 1.167983
+        }
+      },
+      {
+        "year": 2023,
+        "is_crisis": false,
+        "vr20": 1.0715,
+        "z": 0.478,
+        "below_rwmed": false,
+        "n": 250,
+        "half_life": 41.2,
+        "trade_proxy": {
+          "n_trades": 6,
+          "avg_net": -9.410729,
+          "avg_gross": -9.405729,
+          "hit_rate": 0.5,
+          "total_net": -56.464376,
+          "jackknife_avg_gross": -0.759363,
+          "jackknife_avg_net": -0.764363,
+          "jackknife_retention_pct": -8.1
+        },
+        "cost_grid_gross": {
+          "0.003": -9.405729,
+          "0.005": -9.405729,
+          "0.008": -9.405729
+        },
+        "cost_grid_net": {
+          "0.003": -9.408729,
+          "0.005": -9.410729,
+          "0.008": -9.413729
+        }
+      },
+      {
+        "year": 2024,
+        "is_crisis": false,
+        "vr20": 1.0684,
+        "z": 0.412,
+        "below_rwmed": false,
+        "n": 252,
+        "half_life": 85.2,
+        "trade_proxy": {
+          "n_trades": 8,
+          "avg_net": -3.46632,
+          "avg_gross": -3.46132,
+          "hit_rate": 0.5,
+          "total_net": -27.730558,
+          "jackknife_avg_gross": -0.026048,
+          "jackknife_avg_net": -0.031048,
+          "jackknife_retention_pct": -0.8
+        },
+        "cost_grid_gross": {
+          "0.003": -3.46132,
+          "0.005": -3.46132,
+          "0.008": -3.46132
+        },
+        "cost_grid_net": {
+          "0.003": -3.46432,
+          "0.005": -3.46632,
+          "0.008": -3.46932
+        }
+      },
+      {
+        "year": 2025,
+        "is_crisis": false,
+        "vr20": 0.369,
+        "z": -1.762,
+        "below_rwmed": true,
+        "n": 251,
+        "half_life": 32.7,
+        "trade_proxy": {
+          "n_trades": 9,
+          "avg_net": 7.285643,
+          "avg_gross": 7.290643,
+          "hit_rate": 0.7778,
+          "total_net": 65.570785,
+          "jackknife_avg_gross": 4.338531,
+          "jackknife_avg_net": 4.333531,
+          "jackknife_retention_pct": 59.5
+        },
+        "cost_grid_gross": {
+          "0.003": 7.290643,
+          "0.005": 7.290643,
+          "0.008": 7.290643
+        },
+        "cost_grid_net": {
+          "0.003": 7.287643,
+          "0.005": 7.285643,
+          "0.008": 7.282643
+        }
+      },
+      {
+        "year": 2026,
+        "is_crisis": false,
+        "vr20": 0.7671,
+        "z": -0.063,
+        "below_rwmed": false,
+        "n": 106,
+        "half_life": Infinity,
+        "trade_proxy": {
+          "n_trades": 2,
+          "avg_net": -6.058628,
+          "avg_gross": -6.053628,
+          "hit_rate": 0.5,
+          "total_net": -12.117256,
+          "jackknife_avg_gross": NaN,
+          "jackknife_avg_net": NaN,
+          "jackknife_retention_pct": NaN
+        },
+        "cost_grid_gross": {
+          "0.003": -6.053628,
+          "0.005": -6.053628,
+          "0.008": -6.053628
+        },
+        "cost_grid_net": {
+          "0.003": -6.056628,
+          "0.005": -6.058628,
+          "0.008": -6.061628
+        }
+      }
+    ]
+  },
+  "trader_gate": {
+    "verdict": "MERELY_TRUE",
+    "ex_crisis_gross_at_primary_cost": 4.448689,
+    "ex_crisis_net_at_primary_cost": 4.443689,
+    "half_life_in_band": false
+  },
+  "final_verdict": "MERELY_TRUE",
+  "verdict_reason": "MR confirmed but sub-cost or non-deployable"
+}
