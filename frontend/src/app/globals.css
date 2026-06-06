@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+:root {
+  --amr-scale: 1;
+}
+
+/* Monospace numerics — used on all data values */
+.font-data {
+  font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scaled data text — multiply by --amr-scale for font-size-aware components */
+.font-data-scaled {
+  font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: calc(var(--amr-scale) * 11px);
+}
+
+/* Range slider accent */
+input[type='range'] {
+  accent-color: #388bfd;
+  cursor: pointer;
+}
+
+/* Date picker chrome */
+input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.25);
+  cursor: pointer;
+  opacity: 0.6;
+}
+input[type='date']::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Number input — hide arrows */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e2630;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3548;
+}
