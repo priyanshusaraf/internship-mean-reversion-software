@@ -18,7 +18,6 @@ import { C, mono } from '@/components/observatory/ui';
 import type { OHLCVBar } from '@/lib/types';
 
 const UP = '#3fb950', DOWN = '#f85149';
-const UP_DIM = 'rgba(63,185,80,0.22)', DOWN_DIM = 'rgba(248,81,73,0.22)';
 const MU_WINDOW = 20; // EMA/Kalman diagnostics window (μ* overlay only — display)
 
 interface Props {
@@ -39,6 +38,7 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
   const startLineRef = useRef<HTMLDivElement>(null);
   const endLineRef = useRef<HTMLDivElement>(null);
   const bandRef = useRef<HTMLDivElement>(null);
+  const dimRef = useRef<HTMLDivElement>(null); // post-window shade (right of END)
   const winRef = useRef<{ start: string | null; end: string | null }>({ start: null, end: null });
   winRef.current = { start, end };
 
@@ -52,7 +52,11 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
       grid: { vertLines: { color: C.borderSoft }, horzLines: { color: C.borderSoft } },
       crosshair: { mode: CrosshairMode.Normal },
       rightPriceScale: { borderColor: C.border },
-      timeScale: { borderColor: C.border },
+      // minBarSpacing default (0.5px) is ABOVE what a long series needs to fit in the pane
+      // (e.g. 2463 bars / ~879px ≈ 0.36px/bar) — at the default, fitContent silently clamps to the
+      // most-recent subset and scrolls the selected window off-screen left. Lower it so the FULL
+      // series always fits and the post-window dim overlay covers only the tail.
+      timeScale: { borderColor: C.border, minBarSpacing: 0.02 },
       handleScroll: false, handleScale: false,   // chart is driven by the scrubber, not interactive
       width: hostRef.current.clientWidth, height: hostRef.current.clientHeight,
     });
@@ -68,31 +72,27 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
 
     const ro = new ResizeObserver(() => {
       if (hostRef.current) chart.applyOptions({ width: hostRef.current.clientWidth, height: hostRef.current.clientHeight });
+      // Re-fit on every resize: the chart is non-interactive (handleScroll/handleScale=false) so there
+      // is no user zoom/pan to preserve, and the initial fitContent often runs while the flex host is
+      // still 0-width — leaving barSpacing locked to a subset of bars (the window scrolls off-screen).
+      // Re-fitting here guarantees the FULL series is shown, so the post-window dim covers only the tail.
+      chart.timeScale().fitContent();
       draw();
     });
     ro.observe(hostRef.current);
     return () => { ro.disconnect(); chart.remove(); chartRef.current = null; candleRef.current = null; muRef.current = null; };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── candle data + per-bar dim after END ──
+  // ── candle data (uniform colours; post-window dimming is done by the div overlay) ──
   useEffect(() => {
     if (!candleRef.current) return;
-    const endT = end;
     const data: CandlestickData[] = bars
       .filter(b => Number.isFinite(b.close))
-      .map(b => {
-        const isUp = b.close >= b.open;
-        const dim = endT != null && b.time > endT;
-        const col = dim ? (isUp ? UP_DIM : DOWN_DIM) : (isUp ? UP : DOWN);
-        return {
-          time: b.time as Time, open: b.open, high: b.high, low: b.low, close: b.close,
-          color: col, wickColor: col, borderColor: col,
-        };
-      });
+      .map(b => ({ time: b.time as Time, open: b.open, high: b.high, low: b.low, close: b.close }));
     candleRef.current.setData(data);
     if (data.length) chartRef.current?.timeScale().fitContent();
     drawOverlay();
-  }, [bars, end]);
+  }, [bars]);
 
   // ── Kalman μ* overlay (display-only; no JS math) ──
   useEffect(() => {
@@ -147,6 +147,15 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
         band.style.display = 'none';
       }
     }
+
+    // post-window shade: a semi-transparent rectangle from the END x to the right edge.
+    // Width follows the END date through zoom/pan/resize (drawOverlay is the single update
+    // path — subscribed to visible-range change + ResizeObserver + the [start,end] effect).
+    const dim = dimRef.current;
+    if (dim) {
+      const shade = xe != null ? Math.max(0, w - xe) : 0;
+      dim.style.width = `${shade}px`;
+    }
   }
 
   // NOTE: the chart host is ALWAYS rendered (never early-returned) so the one-shot init effect can
@@ -158,8 +167,10 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
 
       {!instrumentId && <div style={empty}>Select an instrument to begin</div>}
 
-      {/* overlay layer — vertical lines + highlight band (pointer-events off so chart stays clean) */}
+      {/* overlay layer — vertical lines + highlight band + post-window shade (pointer-events off) */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        {/* post-window shade: covers everything to the RIGHT of the END date (width set in drawOverlay) */}
+        <div ref={dimRef} style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '0px', background: 'rgba(0,0,0,0.55)', pointerEvents: 'none', zIndex: 2, transition: 'width 0.15s ease' }} />
         <div ref={bandRef} style={{ position: 'absolute', top: 0, bottom: 0, display: 'none', background: 'rgba(56,139,253,0.06)' }} />
         <div ref={startLineRef} style={{ position: 'absolute', top: 0, bottom: 0, width: 0, display: 'none', borderLeft: `1px solid ${C.text}` }} />
         <div ref={endLineRef} style={{ position: 'absolute', top: 0, bottom: 0, width: 0, display: 'none', borderLeft: `1px solid ${C.accent}` }} />
