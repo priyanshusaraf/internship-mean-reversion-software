@@ -376,10 +376,16 @@ def analysis_habitat(req: HabitatRequest, conn: duckdb.DuckDBPyConnection = Depe
     x_raw = _window_levels(causal, req.window, deseason=False)
     full_raw = habitat_score_full(x_raw, seed)
 
-    # non-positive series → log-VR undefined warning
+    # Non-positive series (spreads cross or sit below zero): the habitat null engine already
+    # uses LEVEL-difference VR (analytics_habitat.vr_q; surrogates built from ΔS, never log),
+    # so the score is computed normally and is NOT null. Emit an INFORMATIONAL note (ℹ), not a
+    # warning — there is no degeneracy here; level-difference math is the correct path. (CHANGE 4)
     data_warning = None
     if np.any(x_raw <= 0):
-        data_warning = "non-positive prices in window — log/VR may be undefined; score may be null."
+        data_warning = (
+            "ℹ spread/level instrument detected — using level-difference VR "
+            "(log undefined on negative prices; this is expected for spread instruments)."
+        )
 
     # deseason path (toggle field always present)
     raw_vs_deseason = None

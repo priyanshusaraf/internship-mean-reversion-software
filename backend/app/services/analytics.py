@@ -2,6 +2,58 @@ import numpy as np
 import pandas as pd
 
 
+# ── Level-series (spread) safety ────────────────────────────────────────────────
+# Level-series instruments (any bar close <= 0): use level_variance_ratio() and
+# level_difference_returns(). Log operations are FORBIDDEN on these instruments —
+# spreads (coffee−cocoa, NG calendars, crack spreads) legitimately cross or sit below
+# zero, where log(price) is undefined. The Kalman μ* (compute_kalman_mu_star) and the
+# z-score (compute_zscore, and observatory_quality / observatory._causal_z) are ALREADY
+# level-safe: they use subtraction (close − μ*) and differences only, never log. The
+# habitat null engine (analytics_habitat.vr_q) is likewise already a LEVEL variance ratio
+# (np.diff on levels) whose surrogates are built from level differences — so it returns a
+# finite score on negative series with no change required. See docs/research/13.
+
+
+def is_level_series(closes: pd.Series) -> bool:
+    """True if the series must use level-difference math (not log-returns).
+
+    Trigger: any bar has close <= 0. Spreads legitimately cross zero, where log is
+    undefined. Callers must route to level_variance_ratio() / level_difference_returns()
+    when this returns True. Called at the start of any computation that would take a log.
+    Never modifies the series.
+    """
+    return bool((closes <= 0).any())
+
+
+def level_difference_returns(closes: pd.Series) -> pd.Series:
+    """First differences of price LEVELS: ΔS_t = S_t − S_{t-1} (leading NaN dropped).
+
+    Valid for spreads and any series that crosses zero; used in place of log-returns.
+    """
+    return closes.diff().dropna()
+
+
+def level_variance_ratio(closes: pd.Series, q: int) -> float:
+    """Lo–MacKinlay variance ratio on LEVELS (not log-levels):
+
+        VR(q) = Var(S_t − S_{t-q}) / (q · Var(S_t − S_{t-1}))
+
+    Valid for spread series with non-positive prices. Returns np.nan on insufficient data
+    or a degenerate (zero) 1-step variance. This is the SAME estimator as the frozen habitat
+    null path (analytics_habitat.vr_q: np.diff levels, overlapping q-differences, ddof=1);
+    kept here for the general/diagnostics path and tests. The two must not diverge.
+    """
+    if len(closes) < q + 2:
+        return float("nan")
+    diffs_1 = closes.diff().dropna()
+    diffs_q = closes.diff(q).dropna()
+    var_1 = diffs_1.var(ddof=1)
+    var_q = diffs_q.var(ddof=1)
+    if not np.isfinite(var_1) or var_1 == 0:
+        return float("nan")
+    return float(var_q / (q * var_1))
+
+
 # ── Estimator layer ───────────────────────────────────────────────────────────
 
 def compute_ema(closes: pd.Series, span: int) -> pd.Series:
