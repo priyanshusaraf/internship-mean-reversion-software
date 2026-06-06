@@ -226,3 +226,59 @@ export interface SubstrateResponse {
   rows: SubstrateRow[];
   stats: SubstrateStats;
 }
+
+// ── Backtest (P&L Cockpit) — MIRRORS backend/app/services/backtest_engine.py 1:1 ─────
+// Source of truth is the pydantic models there. Do NOT invent or rename fields. The engine
+// is a FROZEN PLACEHOLDER (MR_PLACEHOLDER_V1, slippage=0) — execution/measurement only.
+export interface BacktestConfig {
+  instrument_id: string;
+  start: string;                  // ISO date
+  end: string;                    // ISO date — hard firewall upper bound
+  strategy_id?: string;           // default "MR_PLACEHOLDER_V1" (server-side)
+  round_trip_cost?: number;       // default 0.003 (server-side)
+  mode?: string;                  // "research" | "verification" — defaults research, never surfaced
+  prereg_params?: Record<string, unknown>;
+}
+
+export interface BacktestTrade {
+  trade_id: number;
+  direction: string;              // "LONG" | "SHORT"
+  entry_bar: string;              // ISO date of signal bar
+  entry_price: number;
+  exit_bar: string;               // ISO date of signal bar
+  exit_price: number;
+  exit_reason: string;            // "Z_CROSS" | "TIME_STOP"
+  gross_pnl: number;
+  cost: number;
+  net_pnl: number;
+  bars_held: number;
+  entry_z: number;
+  exit_z: number;
+}
+
+export interface EquityPoint {
+  date: string;
+  cumulative_pnl: number;
+}
+
+export interface BacktestResult {
+  instrument_id: string;
+  strategy_id: string;
+  start: string;
+  end: string;
+  n_bars: number;
+  n_trades: number;
+  win_rate: number;               // fraction ∈ [0,1]
+  avg_net_pnl: number;
+  total_net_pnl: number;
+  sharpe_ratio: number;
+  max_drawdown: number;           // ≤ 0 (loss magnitude)
+  profit_factor: number;
+  avg_bars_held: number;
+  pct_time_stop: number;
+  trades: BacktestTrade[];
+  equity_curve: EquityPoint[];    // one per bar
+  slippage_note: string;          // "slippage=0, placeholder rule, not deployable"
+  strategy_params: Record<string, unknown>;
+  verification_watermark: boolean;
+}

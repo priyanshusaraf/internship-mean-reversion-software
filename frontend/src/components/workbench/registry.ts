@@ -9,6 +9,7 @@ import { VelocityAbsorption } from './modules/VelocityAbsorption';
 import { MRScore } from './modules/MRScore';
 import { SubstrateCharacter } from './modules/SubstrateCharacter';
 import { Replay } from './modules/Replay';
+import { PnLCockpit } from './modules/PnLCockpit';
 // NOTE: LagIllusion (#12 LAG) intentionally NOT imported/registered — research verdict C-KILLED
 // (see docs/research/07_lag_illusion.md). Module file retained inert for the documented revisit
 // trigger (range-bound real data). Do not re-register without re-running the K1–K5 adjudication.
@@ -93,5 +94,13 @@ export const WORKBENCH_MODULES: WorkbenchModule[] = [
     description: 'What changed, and when did the model notice?',
     component: EventLog,
     requiredEndpoints: ['diagnostics'],
+  },
+  {
+    id: 'pnl-cockpit',
+    label: 'P&L Cockpit',
+    shortLabel: 'PNL',
+    description: 'What would the frozen placeholder rule have done? (execution/measurement — not a deployable strategy)',
+    component: PnLCockpit,
+    requiredEndpoints: ['backtest'],
   },
 ];

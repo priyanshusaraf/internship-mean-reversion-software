@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { InstrumentMeta } from './types';
+import type { InstrumentMeta, BacktestResult } from './types';
 
 // ── Workstation store ──────────────────────────────────────────────────────────
 
@@ -80,3 +80,40 @@ export const useUIStore = create<UIStore>()(
     { name: 'amr-ui-v1' }
   )
 );
+
+// ── Backtest store (P&L Cockpit) ──────────────────────────────────────────────
+// Isolated slice: only the start/end date window is user-editable (the strategy is FROZEN).
+// instrument_id is NOT held here — it is read from useWorkstationStore.selectedInstrumentId at
+// run time so the cockpit always targets the instrument loaded on the Workstation.
+
+type BacktestStatus = 'idle' | 'loading' | 'error';
+
+interface BacktestState {
+  start: string;                 // ISO date (config window lower bound)
+  end: string;                   // ISO date (config window upper bound — hard firewall)
+  status: BacktestStatus;
+  result: BacktestResult | null;
+  error: string | null;
+  lastRunAt: string | null;      // ISO timestamp of the last successful fetch
+
+  setStart: (d: string) => void;
+  setEnd: (d: string) => void;
+  runStart: () => void;          // status → loading, clears prior error
+  runSuccess: (result: BacktestResult, at: string) => void;
+  runError: (message: string) => void;
+}
+
+export const useBacktestStore = create<BacktestState>((set) => ({
+  start: '',
+  end: '',
+  status: 'idle',
+  result: null,
+  error: null,
+  lastRunAt: null,
+
+  setStart: (d) => set({ start: d }),
+  setEnd: (d) => set({ end: d }),
+  runStart: () => set({ status: 'loading', error: null }),
+  runSuccess: (result, at) => set({ status: 'idle', result, error: null, lastRunAt: at }),
+  runError: (message) => set({ status: 'error', error: message, result: null }),
+}));

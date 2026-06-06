@@ -1,4 +1,4 @@
-import type { LoadRequest, LoadResponse, SpreadRequest, InstrumentMeta, OHLCVResponse, EstimatorResponse, ResearchResponse, DiagnosticsResponse, VelocityAbsorptionResponse, MRScoreResponse, SubstrateResponse } from './types';
+import type { LoadRequest, LoadResponse, SpreadRequest, InstrumentMeta, OHLCVResponse, EstimatorResponse, ResearchResponse, DiagnosticsResponse, VelocityAbsorptionResponse, MRScoreResponse, SubstrateResponse, BacktestConfig, BacktestResult } from './types';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
@@ -110,4 +110,12 @@ export const api = {
       `/api/v1/market/${instrumentId}/substrate?${params.toString()}`
     );
   },
+
+  // P&L Cockpit — runs the frozen placeholder backtest engine. Body is the BacktestConfig;
+  // on non-200 `request` throws Error(detail). Engine returns the full BacktestResult.
+  runBacktest: (config: BacktestConfig) =>
+    request<BacktestResult>('/api/v2/backtest/run', {
+      method: 'POST',
+      body: JSON.stringify(config),
+    }),
 };
