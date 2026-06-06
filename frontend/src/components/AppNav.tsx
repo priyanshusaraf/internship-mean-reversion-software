@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useUIStore } from '@/lib/store';
+import { useUIStore, useWorkstationStore } from '@/lib/store';
+import { api } from '@/lib/api';
 import { SettingsModal } from './SettingsModal';
 
 const mono: React.CSSProperties = {
@@ -20,6 +21,18 @@ export function AppNav() {
   useEffect(() => {
     document.documentElement.style.setProperty('--amr-scale', String(fontScale));
   }, [fontScale]);
+
+  // App-wide instrument list fetch. The Workstation panel also fetches, but Workbench/Observatory
+  // do not — so a reload that lands directly on those pages (now possible because
+  // selectedInstrumentId is persisted) would leave the instruments[] empty and the restored
+  // instrument's display name unresolved (chip shows "—"). Fetching once here keeps the persisted
+  // selection coherent on every page. Only fills when empty so it never clobbers a fresh list.
+  useEffect(() => {
+    if (useWorkstationStore.getState().instruments.length === 0) {
+      api.listInstruments().then(useWorkstationStore.getState().setInstruments).catch(() => {});
+    }
+  }, []);
+
 
   return (
     <>
@@ -44,6 +57,7 @@ export function AppNav() {
           { href: '/', label: 'Workstation' },
           { href: '/workbench', label: 'Workbench' },
           { href: '/observatory', label: 'Observatory' },
+          { href: '/backtest', label: 'Backtest' },
         ].map(({ href, label }) => {
           const active = pathname === href;
           return (

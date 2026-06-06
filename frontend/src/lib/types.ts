@@ -1,3 +1,9 @@
+// ── Habitat (Trade Cockpit Q4) — mirrors POST /api/v2/analysis/habitat exactly.
+// The canonical shape lives in src/lib/observatory.ts (HabitatResponse, typed against the
+// FROZEN api_contract.md). We re-export it here under the spec name so stores/components that
+// only import from ./types get it without duplicating the interface. DO NOT redefine the fields.
+export type { HabitatResponse as HabitatResult } from './observatory';
+
 export interface OHLCVBar {
   time: string;
   open: number;

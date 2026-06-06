@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { InstrumentMeta, BacktestResult } from './types';
+import type { InstrumentMeta, BacktestResult, HabitatResult } from './types';
 
 // ── Workstation store ──────────────────────────────────────────────────────────
 
@@ -29,23 +29,34 @@ interface WorkstationState {
   setActiveWorkbenchModule: (id: string) => void;
 }
 
-export const useWorkstationStore = create<WorkstationState>((set) => ({
-  instruments: [],
-  selectedInstrumentId: null,
-  dateRange: { start: null, end: null },
-  estimatorEnabled: false,
-  estimatorWindow: 20,
-  estimatorMode: 'causal',
-  activeWorkbenchModule: 'estimator-inspector',
+export const useWorkstationStore = create<WorkstationState>()(
+  persist(
+    (set) => ({
+      instruments: [],
+      selectedInstrumentId: null,
+      dateRange: { start: null, end: null },
+      estimatorEnabled: false,
+      estimatorWindow: 20,
+      estimatorMode: 'causal',
+      activeWorkbenchModule: 'estimator-inspector',
 
-  setInstruments: (instruments) => set({ instruments }),
-  selectInstrument: (id) => set({ selectedInstrumentId: id, dateRange: { start: null, end: null } }),
-  setDateRange: (range) => set({ dateRange: range }),
-  toggleEstimator: () => set((s) => ({ estimatorEnabled: !s.estimatorEnabled })),
-  setEstimatorWindow: (n) => set({ estimatorWindow: n }),
-  setEstimatorMode: (mode) => set({ estimatorMode: mode }),
-  setActiveWorkbenchModule: (id) => set({ activeWorkbenchModule: id }),
-}));
+      setInstruments: (instruments) => set({ instruments }),
+      selectInstrument: (id) => set({ selectedInstrumentId: id, dateRange: { start: null, end: null } }),
+      setDateRange: (range) => set({ dateRange: range }),
+      toggleEstimator: () => set((s) => ({ estimatorEnabled: !s.estimatorEnabled })),
+      setEstimatorWindow: (n) => set({ estimatorWindow: n }),
+      setEstimatorMode: (mode) => set({ estimatorMode: mode }),
+      setActiveWorkbenchModule: (id) => set({ activeWorkbenchModule: id }),
+    }),
+    {
+      // Persist ONLY the selected instrument id — not the server-owned `instruments` list
+      // (refetched on load) nor transient estimator/module UI state. A stale id that no longer
+      // exists simply 404s on the next API call; the user reselects.
+      name: 'amr-workstation-v1',
+      partialize: (s) => ({ selectedInstrumentId: s.selectedInstrumentId }),
+    }
+  )
+);
 
 // ── UI settings store (persisted to localStorage) ─────────────────────────────
 
@@ -87,6 +98,7 @@ export const useUIStore = create<UIStore>()(
 // run time so the cockpit always targets the instrument loaded on the Workstation.
 
 type BacktestStatus = 'idle' | 'loading' | 'error';
+type HabitatStatus = 'idle' | 'loading' | 'error';
 
 interface BacktestState {
   start: string;                 // ISO date (config window lower bound)
@@ -96,11 +108,20 @@ interface BacktestState {
   error: string | null;
   lastRunAt: string | null;      // ISO timestamp of the last successful fetch
 
+  // ── habitat slice (Trade Cockpit Q4) — scored on scrubber RELEASE, never during drag ──
+  habitatResult: HabitatResult | null;
+  habitatStatus: HabitatStatus;
+  habitatError: string | null;
+
   setStart: (d: string) => void;
   setEnd: (d: string) => void;
   runStart: () => void;          // status → loading, clears prior error
   runSuccess: (result: BacktestResult, at: string) => void;
   runError: (message: string) => void;
+
+  setHabitatResult: (r: HabitatResult) => void;
+  setHabitatStatus: (s: HabitatStatus) => void;
+  setHabitatError: (e: string | null) => void;
 }
 
 export const useBacktestStore = create<BacktestState>((set) => ({
@@ -111,9 +132,17 @@ export const useBacktestStore = create<BacktestState>((set) => ({
   error: null,
   lastRunAt: null,
 
+  habitatResult: null,
+  habitatStatus: 'idle',
+  habitatError: null,
+
   setStart: (d) => set({ start: d }),
   setEnd: (d) => set({ end: d }),
   runStart: () => set({ status: 'loading', error: null }),
   runSuccess: (result, at) => set({ status: 'idle', result, error: null, lastRunAt: at }),
   runError: (message) => set({ status: 'error', error: message, result: null }),
+
+  setHabitatResult: (r) => set({ habitatResult: r, habitatStatus: 'idle', habitatError: null }),
+  setHabitatStatus: (s) => set({ habitatStatus: s, ...(s === 'loading' ? { habitatError: null } : {}) }),
+  setHabitatError: (e) => set({ habitatError: e, habitatStatus: e ? 'error' : 'idle' }),
 }));

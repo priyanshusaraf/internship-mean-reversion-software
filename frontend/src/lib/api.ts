@@ -1,4 +1,5 @@
 import type { LoadRequest, LoadResponse, SpreadRequest, InstrumentMeta, OHLCVResponse, EstimatorResponse, ResearchResponse, DiagnosticsResponse, VelocityAbsorptionResponse, MRScoreResponse, SubstrateResponse, BacktestConfig, BacktestResult } from './types';
+import { observatory, type HabitatRequest, type HabitatResponse } from './observatory';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
@@ -118,4 +119,9 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(config),
     }),
+
+  // Trade Cockpit Q4 — surrogate-relative MR habitat score for the scrubber window.
+  // Delegates to the existing observatory client (POST /api/v2/analysis/habitat) so the
+  // request/parse logic is NOT duplicated. as_of MUST equal the scrubber END (never future).
+  getHabitatScore: (body: HabitatRequest): Promise<HabitatResponse> => observatory.habitat(body),
 };
