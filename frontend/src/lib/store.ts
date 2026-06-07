@@ -9,10 +9,18 @@ interface DateRange {
   end: string | null;
 }
 
+// Views that participate in global instrument sync. The Workstation is the canonical picker and is
+// always live; these three can each be PINNED to hold their own instrument independent of the global.
+export type SyncView = 'backtest' | 'workbench' | 'observatory';
+
 interface WorkstationState {
   instruments: InstrumentMeta[];
   selectedInstrumentId: string | null;
   dateRange: DateRange;
+
+  // per-view pins: a present entry means that view is locked to that instrument and IGNORES the
+  // global selection. effective(view) = pinned[view] ?? selectedInstrumentId.
+  pinned: Partial<Record<SyncView, string>>;
 
   estimatorEnabled: boolean;
   estimatorWindow: number;
@@ -22,6 +30,8 @@ interface WorkstationState {
 
   setInstruments: (instruments: InstrumentMeta[]) => void;
   selectInstrument: (id: string) => void;
+  pinView: (view: SyncView, id: string) => void;
+  unpinView: (view: SyncView) => void;
   setDateRange: (range: DateRange) => void;
   toggleEstimator: () => void;
   setEstimatorWindow: (n: number) => void;
@@ -35,6 +45,7 @@ export const useWorkstationStore = create<WorkstationState>()(
       instruments: [],
       selectedInstrumentId: null,
       dateRange: { start: null, end: null },
+      pinned: {},
       estimatorEnabled: false,
       estimatorWindow: 20,
       estimatorMode: 'causal',
@@ -42,6 +53,8 @@ export const useWorkstationStore = create<WorkstationState>()(
 
       setInstruments: (instruments) => set({ instruments }),
       selectInstrument: (id) => set({ selectedInstrumentId: id, dateRange: { start: null, end: null } }),
+      pinView: (view, id) => set((s) => ({ pinned: { ...s.pinned, [view]: id } })),
+      unpinView: (view) => set((s) => { const p = { ...s.pinned }; delete p[view]; return { pinned: p }; }),
       setDateRange: (range) => set({ dateRange: range }),
       toggleEstimator: () => set((s) => ({ estimatorEnabled: !s.estimatorEnabled })),
       setEstimatorWindow: (n) => set({ estimatorWindow: n }),
@@ -53,7 +66,7 @@ export const useWorkstationStore = create<WorkstationState>()(
       // (refetched on load) nor transient estimator/module UI state. A stale id that no longer
       // exists simply 404s on the next API call; the user reselects.
       name: 'amr-workstation-v1',
-      partialize: (s) => ({ selectedInstrumentId: s.selectedInstrumentId }),
+      partialize: (s) => ({ selectedInstrumentId: s.selectedInstrumentId, pinned: s.pinned }),
     }
   )
 );

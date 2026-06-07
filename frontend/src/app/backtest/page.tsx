@@ -14,11 +14,11 @@
 // useBacktestStore (window, backtest result, habitat slice). No new store.
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import Link from 'next/link';
 import { PanelGroup, Panel as RPanel } from 'react-resizable-panels';
 import { ResizeHandle } from '@/components/layout/ResizeHandle';
 import { api } from '@/lib/api';
 import { useWorkstationStore, useBacktestStore } from '@/lib/store';
+import { InstrumentSyncBar } from '@/components/InstrumentSyncBar';
 import { C, mono } from '@/components/observatory/ui';
 import { PricePane, type Viewport } from '@/components/backtest/PricePane';
 import { TimelineScrubber } from '@/components/backtest/TimelineScrubber';
@@ -29,7 +29,9 @@ import type { OHLCVBar } from '@/lib/types';
 const MIN_BARS = 60;
 
 export default function BacktestPage() {
-  const { instruments, selectedInstrumentId, selectInstrument, setInstruments } = useWorkstationStore();
+  const { selectedInstrumentId, pinned, setInstruments } = useWorkstationStore();
+  // effective instrument for THIS view (respects a backtest pin; otherwise follows global sync)
+  const effective = pinned.backtest ?? selectedInstrumentId;
   const {
     start, end, setStart, setEnd,
     runStart, runSuccess, runError, status,
@@ -46,17 +48,17 @@ export default function BacktestPage() {
     api.listInstruments().then(setInstruments).catch(() => {});
   }, [setInstruments]);
 
-  // full-range OHLC for the selected instrument (candles + scrubber date axis)
+  // full-range OHLC for the effective instrument (candles + scrubber date axis)
   useEffect(() => {
-    if (!selectedInstrumentId) { setBars([]); return; }
+    if (!effective) { setBars([]); return; }
     let cancelled = false;
     setOhlcLoading(true);
-    api.getOHLCV(selectedInstrumentId)
+    api.getOHLCV(effective)
       .then(r => { if (!cancelled) setBars(r.bars); })
       .catch(() => { if (!cancelled) setBars([]); })
       .finally(() => { if (!cancelled) setOhlcLoading(false); });
     return () => { cancelled = true; };
-  }, [selectedInstrumentId]);
+  }, [effective]);
 
   const dates = useMemo(() => bars.map(b => b.time), [bars]);
   const dateIdx = useMemo(() => {
@@ -67,15 +69,15 @@ export default function BacktestPage() {
 
   const windowBars = (start && end && dateIdx.has(start) && dateIdx.has(end))
     ? (dateIdx.get(end)! - dateIdx.get(start)! + 1) : 0;
-  const canRun = !!selectedInstrumentId && windowBars >= MIN_BARS && status !== 'loading';
+  const canRun = !!effective && windowBars >= MIN_BARS && status !== 'loading';
 
   // ── habitat score (Q4) — as_of MUST equal the window END (never a future date) ──
   const scoreHabitat = useCallback(async (s: string, e: string) => {
-    if (!selectedInstrumentId) return;
+    if (!effective) return;
     setHabitatStatus('loading');
     try {
       const res = await api.getHabitatScore({
-        dataset_id: selectedInstrumentId,
+        dataset_id: effective,
         window: { start: s, end: e },
         as_of: e,                          // firewall: as_of = window end
         deseason: false,
@@ -85,7 +87,7 @@ export default function BacktestPage() {
     } catch (err) {
       setHabitatError(err instanceof Error ? err.message : 'habitat scoring failed');
     }
-  }, [selectedInstrumentId, setHabitatStatus, setHabitatResult, setHabitatError]);
+  }, [effective, setHabitatStatus, setHabitatResult, setHabitatError]);
 
   // scrubber commit: always update the store window; fetch habitat ONLY on release.
   const onCommit = useCallback((s: string, e: string, released: boolean) => {
@@ -96,11 +98,11 @@ export default function BacktestPage() {
 
   // ── run the frozen placeholder backtest (Play button AND Space share this) ──
   const runBacktest = useCallback(async () => {
-    if (!canRun || !selectedInstrumentId) return;   // QA (d): gated on instrument + ≥60 bars
+    if (!canRun || !effective) return;   // QA (d): gated on instrument + ≥60 bars
     runStart();
     try {
       const res = await api.runBacktest({
-        instrument_id: selectedInstrumentId,
+        instrument_id: effective,
         start, end,
         strategy_id: 'MR_PLACEHOLDER_V1',
         mode: 'research',
@@ -109,7 +111,7 @@ export default function BacktestPage() {
     } catch (err) {
       runError(err instanceof Error ? err.message : 'Backtest failed');
     }
-  }, [canRun, selectedInstrumentId, start, end, runStart, runSuccess, runError]);
+  }, [canRun, effective, start, end, runStart, runSuccess, runError]);
 
   // ── Space → run (ignored when focus is in a text input / select) ──
   useEffect(() => {
@@ -125,39 +127,14 @@ export default function BacktestPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [runBacktest]);
 
-  const noInstruments = instruments.length === 0;
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden', background: C.bg, color: '#c9d1d9' }}>
 
       {/* ── instrument bar ── */}
       <div style={{ height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, padding: '0 14px', background: C.bgPanel, borderBottom: `1px solid ${C.border}` }}>
         <span style={{ ...mono, fontSize: 10, color: C.textDim, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Instrument</span>
-        {noInstruments ? (
-          <span style={{ ...mono, fontSize: 11, color: C.textDim }}>
-            No instruments loaded — <Link href="/" style={{ color: C.accent, textDecoration: 'none' }}>go to Workstation first</Link>
-          </span>
-        ) : (
-          <div style={{ position: 'relative' }}>
-            <select
-              data-testid="instrument-select"
-              value={selectedInstrumentId ?? ''}
-              onChange={e => e.target.value && selectInstrument(e.target.value)}
-              style={{
-                ...mono, fontSize: 12, background: C.bgRaised, color: '#c9d1d9',
-                border: `1px solid ${C.border}`, borderRadius: 3, padding: '4px 26px 4px 10px',
-                outline: 'none', cursor: 'pointer', appearance: 'none', WebkitAppearance: 'none', minWidth: 160,
-              }}
-            >
-              <option value="">— select —</option>
-              {instruments.map(i => (
-                <option key={i.instrument_id} value={i.instrument_id}>{i.instrument_id}</option>
-              ))}
-            </select>
-            <span style={{ position: 'absolute', right: 9, top: '50%', transform: 'translateY(-50%)', color: C.textDim, fontSize: 8, pointerEvents: 'none' }}>▾</span>
-          </div>
-        )}
-        {selectedInstrumentId && (
+        <InstrumentSyncBar view="backtest" />
+        {effective && (
           <span style={{ ...mono, fontSize: 9, color: C.textDim }}>
             {windowBars > 0 ? `${windowBars} bars in window` : 'drag the scrubber to set a window'} · press Space to run
           </span>
@@ -170,13 +147,13 @@ export default function BacktestPage() {
           <PanelGroup direction="vertical" autoSaveId="amr-backtest-left">
             <RPanel defaultSize={62} minSize={20}>
               <div style={{ height: '100%', minHeight: 0, borderRight: `1px solid ${C.border}` }}>
-                <PricePane instrumentId={selectedInstrumentId} bars={bars} loading={ohlcLoading} start={start || null} end={end || null} viewport={viewport} onViewportChange={setViewport} />
+                <PricePane instrumentId={effective} bars={bars} loading={ohlcLoading} start={start || null} end={end || null} viewport={viewport} onViewportChange={setViewport} />
               </div>
             </RPanel>
             <ResizeHandle dir="vertical" />
             <RPanel defaultSize={38} minSize={15}>
               <div style={{ height: '100%', minHeight: 0, borderRight: `1px solid ${C.border}`, borderTop: `1px solid ${C.border}` }}>
-                <TimelineScrubber dates={dates} disabled={!selectedInstrumentId || ohlcLoading} onCommit={onCommit} viewport={viewport} onViewportChange={setViewport} />
+                <TimelineScrubber dates={dates} disabled={!effective || ohlcLoading} onCommit={onCommit} viewport={viewport} onViewportChange={setViewport} />
               </div>
             </RPanel>
           </PanelGroup>

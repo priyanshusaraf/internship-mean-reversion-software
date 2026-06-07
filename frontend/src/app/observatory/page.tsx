@@ -8,9 +8,11 @@
  * Thin client: every number comes from /api/v2. No statistic computed in JS (M5).
  * Additive & isolated: NEW route; does not touch /workbench or src/lib/api.ts.
  */
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { PanelGroup, Panel as RPanel } from 'react-resizable-panels';
 import { ResizeHandle } from '@/components/layout/ResizeHandle';
+import { useWorkstationStore } from '@/lib/store';
+import { InstrumentSyncBar } from '@/components/InstrumentSyncBar';
 import {
   type IngestResponse,
   type EquilibriumResponse,
@@ -34,7 +36,25 @@ export default function ObservatoryPage() {
   const [scoreNonce, setScoreNonce] = useState(0);   // bump → HabitatPanel re-fetches (commit path)
   const [clampNote, setClampNote] = useState<string | null>(null);
 
-  const datasetId = ingest?.dataset.dataset_id ?? '';
+  // Bridge (spec §6): an ingested CSV takes precedence; otherwise the globally-selected instrument
+  // (respecting an observatory pin) drives the same analysis endpoints — instrument id IS a valid
+  // dataset id (shared DuckDB key, verified). No CSV + no instrument → the empty/ingest prompt.
+  const { selectedInstrumentId, pinned } = useWorkstationStore();
+  const effective = pinned.observatory ?? selectedInstrumentId;
+  const datasetId = ingest?.dataset.dataset_id ?? effective ?? '';
+  const displayName = ingest?.dataset.name ?? effective ?? '';
+  const isInstrument = !ingest && !!effective;   // driven by a market instrument, not a CSV
+
+  // Reset causal cursor/window state whenever the active dataset changes (CSV ingest OR instrument
+  // switch) so a new instrument never inherits the previous one's as-of/window/equilibrium.
+  useEffect(() => {
+    setAsOf(null);
+    setEquilibrium(null);
+    setWindowSel({ start: null, end: null });
+    endManualRef.current = false;
+    setClampNote(null);
+    setScoreNonce(0);
+  }, [datasetId]);
 
   // PART 1 — the as-of cursor is a HARD UPPER BOUND on the habitat window end (causal firewall).
   // start is NEVER auto-updated by the cursor. end:
@@ -88,18 +108,14 @@ export default function ObservatoryPage() {
       {/* left column — ingest + quality */}
       <RPanel defaultSize={24} minSize={15} maxSize={42}>
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', gap: 10, minHeight: 0, overflow: 'auto', paddingRight: 6 }}>
+        <Panel title="0 · instrument (synced)">
+          <InstrumentSyncBar view="observatory" />
+          <div style={{ ...mono, fontSize: 9, color: C.textDim, marginTop: 6 }}>
+            {ingest ? 'showing ingested CSV — clear by re-ingesting' : isInstrument ? 'driven by the synced instrument' : 'select an instrument, or ingest a CSV below'}
+          </div>
+        </Panel>
         <Panel title="1 · ingest + column map">
-          <IngestPanel
-            onIngested={(r) => {
-              setIngest(r);
-              setAsOf(null);
-              setEquilibrium(null);
-              setWindowSel({ start: null, end: null });
-              endManualRef.current = false;
-              setClampNote(null);
-              setScoreNonce(0);
-            }}
-          />
+          <IngestPanel onIngested={(r) => setIngest(r)} />
         </Panel>
         {ingest && (
           <Panel
@@ -122,8 +138,9 @@ export default function ObservatoryPage() {
       <RPanel defaultSize={46} minSize={28}>
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, padding: '0 6px' }}>
         {datasetId ? (
-          <Panel title={`2–3 · price · μ* · z — ${ingest?.dataset.name}`} style={{ flex: 1 }}>
+          <Panel title={`2–3 · price · μ* · z — ${displayName}`} style={{ flex: 1 }}>
             <PriceChart
+              key={datasetId}
               datasetId={datasetId}
               asOf={asOf}
               onAsOfChange={handleAsOf}
@@ -148,7 +165,7 @@ export default function ObservatoryPage() {
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, paddingLeft: 6 }}>
         <Panel title="4 · MR habitat — surrogate-relative" style={{ flex: 1 }}>
           {datasetId ? (
-            <HabitatPanel datasetId={datasetId} asOf={asOf} window={windowSel} scoreNonce={scoreNonce} />
+            <HabitatPanel key={datasetId} datasetId={datasetId} asOf={asOf} window={windowSel} scoreNonce={scoreNonce} />
           ) : (
             <span style={{ ...mono, fontSize: 11, color: C.textDim }}>ingest a dataset to score a window.</span>
           )}

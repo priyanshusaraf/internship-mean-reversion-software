@@ -3,6 +3,7 @@
 import { PanelGroup, Panel as RPanel } from 'react-resizable-panels';
 import { ResizeHandle } from '@/components/layout/ResizeHandle';
 import { useWorkstationStore } from '@/lib/store';
+import { InstrumentSyncBar } from '@/components/InstrumentSyncBar';
 import { ContextBar } from '@/components/workbench/ContextBar';
 import { ModuleNav } from '@/components/workbench/ModuleNav';
 import { ResearchControls } from '@/components/workbench/ResearchControls';
@@ -10,13 +11,14 @@ import { TimelineRail } from '@/components/workbench/TimelineRail';
 import { WORKBENCH_MODULES } from '@/components/workbench/registry';
 
 export default function WorkbenchPage() {
-  const { selectedInstrumentId, dateRange, estimatorWindow, activeWorkbenchModule } = useWorkstationStore();
+  const { selectedInstrumentId, pinned, dateRange, estimatorWindow, activeWorkbenchModule } = useWorkstationStore();
+  const effective = pinned.workbench ?? selectedInstrumentId;
 
   const activeModule = WORKBENCH_MODULES.find(m => m.id === activeWorkbenchModule)
     ?? WORKBENCH_MODULES[0];
 
   const moduleProps = {
-    instrumentId: selectedInstrumentId ?? '',
+    instrumentId: effective ?? '',
     dateRange,
     estimator: 'ema',
     window: estimatorWindow,
@@ -30,6 +32,12 @@ export default function WorkbenchPage() {
       {/* Context bar — always visible, shows current research context */}
       <ContextBar />
 
+      {/* Instrument sync + pin */}
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10, padding: '5px 12px', borderBottom: '1px solid #161d27', background: '#090d13' }}>
+        <span style={{ fontSize: 9, color: 'var(--amr-text-dim)', fontFamily: 'ui-monospace,monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Instrument</span>
+        <InstrumentSyncBar view="workbench" />
+      </div>
+
       {/* Main area: nav + module viewport + controls — drag dividers to resize */}
       <PanelGroup direction="horizontal" autoSaveId="amr-workbench-cols" style={{ flex: 1, minHeight: 0 }}>
         <RPanel defaultSize={12} minSize={6} maxSize={24}>
@@ -41,7 +49,7 @@ export default function WorkbenchPage() {
         {/* Module viewport */}
         <RPanel defaultSize={75} minSize={40}>
           <div style={{ height: '100%', minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-            {selectedInstrumentId ? (
+            {effective ? (
               <activeModule.component {...moduleProps} />
             ) : (
               <div style={{
