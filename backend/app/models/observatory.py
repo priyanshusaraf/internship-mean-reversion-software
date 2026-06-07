@@ -211,7 +211,7 @@ class HabitatWindow(BaseModel):
 
 
 class HabitatParams(BaseModel):
-    vr_qs: list[int] = [5, 10, 20]
+    vr_qs: list[int] = [2, 5, 10, 20]   # doc-20 reconciliation (doc 25 §1): q=2 restored
     ns_null: int = 2000
     seed: int = 20260606
 
@@ -276,8 +276,15 @@ class HabitatResponse(BaseModel):
     calibration_badge: CalibrationBadge = CalibrationBadge()
     raw_vs_deseason: Optional[RawVsDeseason] = None
     data_warning: Optional[str] = None
+    # doc-20 reconciliation (doc 25 §1): explicit frozen triple-gate verdict + per-family
+    # lower-tail p-values. ADDITIVE — display `score` above is unchanged in role.
+    confirmed: bool = False                  # real_min_vr<1 ∧ p_rw<.05 ∧ p_garch<.05 ∧ p_ma1<.05
+    p_rw: Optional[float] = None             # fraction of RW surrogates ≤ real_min_vr
+    p_garch: Optional[float] = None          # fraction of GARCH surrogates ≤ real_min_vr (0.5 if defaulted)
+    p_ma1: Optional[float] = None            # fraction of MA(1) surrogates ≤ real_min_vr
+    gate_note: Optional[str] = None          # triple-gate descriptor OR GARCH-defaulted notice
     provenance: Provenance
 
-    @field_serializer("score", "real_min_vr")
+    @field_serializer("score", "real_min_vr", "p_rw", "p_garch", "p_ma1")
     def _s(self, v):
         return _clean_float(v)

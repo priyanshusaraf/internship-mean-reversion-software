@@ -346,16 +346,22 @@ def analysis_equilibrium(req: EquilibriumRequest, conn: duckdb.DuckDBPyConnectio
 
 # ── analysis — habitat ──────────────────────────────────────────────────────────────────
 
-def _window_levels(causal: pd.DataFrame, w: HabitatWindow, deseason: bool):
-    """Slice the scored window from the causal frame; optionally causal-deseasonalize the
-    FULL causal close series first, then window (deseason mean uses only ≤ t-1 — §6.1)."""
+def _window_and_presample(causal: pd.DataFrame, w: HabitatWindow, deseason: bool):
+    """Return (window_levels, pre_sample_levels). Optionally causal-deseasonalize the FULL causal
+    close series first, then window (deseason mean uses only ≤ t-1 — §6.1).
+
+    pre_sample = causal levels STRICTLY before window.start. This is the only data the GARCH null
+    is fit on (§6.1 temporal firewall — never the window under test). `causal` is already capped at
+    ≤ as_of upstream, so the pre-sample is fully causal."""
     if deseason:
         ds = deseasonalize_causal(causal["close"].to_numpy(dtype=float), causal.index)
         s = pd.Series(ds, index=causal.index)
     else:
         s = causal["close"]
-    win = s[(s.index >= pd.Timestamp(w.start)) & (s.index <= pd.Timestamp(w.end))]
-    return win.to_numpy(dtype=float)
+    start = pd.Timestamp(w.start)
+    win = s[(s.index >= start) & (s.index <= pd.Timestamp(w.end))].to_numpy(dtype=float)
+    pre = s[s.index < start].to_numpy(dtype=float)
+    return win, pre
 
 
 @router.post("/analysis/habitat", response_model=HabitatResponse)
@@ -373,8 +379,8 @@ def analysis_habitat(req: HabitatRequest, conn: duckdb.DuckDBPyConnection = Depe
     params = req.params or HabitatParams()
     seed = params.seed
 
-    x_raw = _window_levels(causal, req.window, deseason=False)
-    full_raw = habitat_score_full(x_raw, seed)
+    x_raw, pre_raw = _window_and_presample(causal, req.window, deseason=False)
+    full_raw = habitat_score_full(x_raw, seed, pre_sample=pre_raw)
 
     # Non-positive series (spreads cross or sit below zero): the habitat null engine already
     # uses LEVEL-difference VR (analytics_habitat.vr_q; surrogates built from ΔS, never log),
@@ -391,8 +397,8 @@ def analysis_habitat(req: HabitatRequest, conn: duckdb.DuckDBPyConnection = Depe
     raw_vs_deseason = None
     used = full_raw
     if req.deseason:
-        x_ds = _window_levels(causal, req.window, deseason=True)
-        full_ds = habitat_score_full(x_ds, seed)
+        x_ds, pre_ds = _window_and_presample(causal, req.window, deseason=True)
+        full_ds = habitat_score_full(x_ds, seed, pre_sample=pre_ds)
         used = full_ds
         rs, ds_s = full_raw["score"], full_ds["score"]
         verdict_changed = None
@@ -402,6 +408,12 @@ def analysis_habitat(req: HabitatRequest, conn: duckdb.DuckDBPyConnection = Depe
         raw_vs_deseason = RawVsDeseason(
             raw_score=rs, deseason_score=ds_s, verdict_changed=verdict_changed,
         )
+
+    # GARCH gate defaulted (insufficient pre-sample) → conservative non-confirmatory notice.
+    if used.get("garch_defaulted"):
+        garch_msg = ("insufficient pre-sample for GARCH fit — GARCH gate defaulting to "
+                     "non-confirmatory")
+        data_warning = f"{data_warning} · {garch_msg}" if data_warning else garch_msg
 
     nulls = used["null_min_vr"]
     score = used["score"]
@@ -440,5 +452,10 @@ def analysis_habitat(req: HabitatRequest, conn: duckdb.DuckDBPyConnection = Depe
         calibration_badge=CalibrationBadge(),
         raw_vs_deseason=raw_vs_deseason,
         data_warning=data_warning,
+        confirmed=bool(used.get("confirmed", False)),
+        p_rw=used.get("p_rw"),
+        p_garch=used.get("p_garch"),
+        p_ma1=used.get("p_ma1"),
+        gate_note=used.get("gate_note"),
         provenance=prov,
     )
