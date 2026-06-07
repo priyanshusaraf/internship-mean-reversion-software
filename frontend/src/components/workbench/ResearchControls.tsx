@@ -12,7 +12,7 @@ export function ResearchControls() {
 
   return (
     <aside style={{
-      width: 180, flexShrink: 0,
+      width: '100%', height: '100%',
       background: '#090d13',
       borderLeft: '1px solid #161d27',
       display: 'flex', flexDirection: 'column',

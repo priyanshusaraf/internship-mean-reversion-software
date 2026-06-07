@@ -5,14 +5,15 @@ import { useWorkstationStore, useUIStore } from '@/lib/store';
 export function EstimatorPanel() {
   const { estimatorEnabled, estimatorWindow, toggleEstimator, setEstimatorWindow } =
     useWorkstationStore();
-  const { rightWidth, fontScale } = useUIStore();
+  const { fontScale } = useUIStore();
   const sc = (base: number) => Math.round(base * fontScale);
 
   return (
     <aside
-      className="shrink-0 flex flex-col overflow-hidden"
+      className="flex flex-col overflow-hidden"
       style={{
-        width: rightWidth,
+        width: '100%',
+        height: '100%',
         background: '#090d13',
         borderLeft: '1px solid #161d27',
       }}

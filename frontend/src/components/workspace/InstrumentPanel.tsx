@@ -30,7 +30,7 @@ export function InstrumentPanel() {
 
   const { instruments, selectedInstrumentId, selectInstrument, setInstruments } =
     useWorkstationStore();
-  const { leftWidth, fontScale } = useUIStore();
+  const { fontScale } = useUIStore();
   const sc = (base: number) => Math.round(base * fontScale);
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export function InstrumentPanel() {
   return (
     <aside
       className="flex flex-col overflow-y-auto"
-      style={{ width: leftWidth, flexShrink: 0, background: '#090d13', borderRight: '1px solid #161d27' }}
+      style={{ width: '100%', height: '100%', background: '#090d13', borderRight: '1px solid #161d27' }}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}

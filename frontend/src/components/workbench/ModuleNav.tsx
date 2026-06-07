@@ -12,11 +12,12 @@ export function ModuleNav() {
 
   return (
     <nav style={{
-      width: 110, flexShrink: 0,
+      width: '100%', height: '100%',
       background: '#090d13',
       borderRight: '1px solid #161d27',
       display: 'flex', flexDirection: 'column',
       paddingTop: 8,
+      overflowY: 'auto',
     }}>
       <div style={{ ...mono, fontSize: 8, color: '#1e2833', letterSpacing: '0.14em', textTransform: 'uppercase', paddingLeft: 10, paddingBottom: 6 }}>
         Modules

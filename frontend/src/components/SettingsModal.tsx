@@ -16,7 +16,7 @@ const mono: React.CSSProperties = {
 };
 
 export function SettingsModal({ onClose }: { onClose: () => void }) {
-  const { fontScale, leftWidth, rightWidth, chartSplit, lineWidth, textColor, setUI, resetUI } = useUIStore();
+  const { fontScale, lineWidth, textColor, setUI, resetUI } = useUIStore();
   // The swatch shown in the custom picker: chosen color, or the brightened default when unset.
   const effectiveColor = textColor || '#8b9bb0';
 
@@ -145,27 +145,7 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
             </Field>
           </Section>
 
-          {/* — Layout — */}
-          <Section title="Layout">
-            <Field label={`Instruments panel — ${leftWidth}px`}>
-              <input type="range" min={160} max={380} step={4} value={leftWidth}
-                onChange={e => setUI({ leftWidth: Number(e.target.value) })}
-                style={{ width: '100%' }}
-              />
-            </Field>
-            <Field label={`Estimators panel — ${rightWidth}px`}>
-              <input type="range" min={120} max={300} step={4} value={rightWidth}
-                onChange={e => setUI({ rightWidth: Number(e.target.value) })}
-                style={{ width: '100%' }}
-              />
-            </Field>
-            <Field label={`Chart height — ${chartSplit}% of workspace`}>
-              <input type="range" min={30} max={80} step={2} value={chartSplit}
-                onChange={e => setUI({ chartSplit: Number(e.target.value) })}
-                style={{ width: '100%' }}
-              />
-            </Field>
-          </Section>
+          {/* Panel sizes are now drag-resizable directly (every divider) and persist per page. */}
 
           {/* — Graph — */}
           <Section title="Graph">

@@ -9,6 +9,8 @@
  * Additive & isolated: NEW route; does not touch /workbench or src/lib/api.ts.
  */
 import { useState, useRef, useCallback } from 'react';
+import { PanelGroup, Panel as RPanel } from 'react-resizable-panels';
+import { ResizeHandle } from '@/components/layout/ResizeHandle';
 import {
   type IngestResponse,
   type EquilibriumResponse,
@@ -81,9 +83,11 @@ export default function ObservatoryPage() {
   );
 
   return (
-    <div style={{ display: 'flex', flex: 1, minHeight: 0, background: C.bg, padding: 10, gap: 10 }}>
+    <div style={{ display: 'flex', flex: 1, minHeight: 0, background: C.bg, padding: 10 }}>
+     <PanelGroup direction="horizontal" autoSaveId="amr-observatory-cols" style={{ flex: 1, minHeight: 0 }}>
       {/* left column — ingest + quality */}
-      <div style={{ width: 340, display: 'flex', flexDirection: 'column', gap: 10, minHeight: 0, overflow: 'auto' }}>
+      <RPanel defaultSize={24} minSize={15} maxSize={42}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', gap: 10, minHeight: 0, overflow: 'auto', paddingRight: 6 }}>
         <Panel title="1 · ingest + column map">
           <IngestPanel
             onIngested={(r) => {
@@ -110,9 +114,13 @@ export default function ObservatoryPage() {
           </Panel>
         )}
       </div>
+      </RPanel>
+
+      <ResizeHandle dir="horizontal" />
 
       {/* center — price chart + as-of cursor + μ* + z */}
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      <RPanel defaultSize={46} minSize={28}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, padding: '0 6px' }}>
         {datasetId ? (
           <Panel title={`2–3 · price · μ* · z — ${ingest?.dataset.name}`} style={{ flex: 1 }}>
             <PriceChart
@@ -131,9 +139,13 @@ export default function ObservatoryPage() {
           <Empty />
         )}
       </div>
+      </RPanel>
+
+      <ResizeHandle dir="horizontal" />
 
       {/* right — habitat */}
-      <div style={{ width: 420, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      <RPanel defaultSize={30} minSize={18} maxSize={48}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, paddingLeft: 6 }}>
         <Panel title="4 · MR habitat — surrogate-relative" style={{ flex: 1 }}>
           {datasetId ? (
             <HabitatPanel datasetId={datasetId} asOf={asOf} window={windowSel} scoreNonce={scoreNonce} />
@@ -147,6 +159,8 @@ export default function ObservatoryPage() {
           </div>
         )}
       </div>
+      </RPanel>
+     </PanelGroup>
     </div>
   );
 }

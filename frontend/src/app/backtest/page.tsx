@@ -15,6 +15,8 @@
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { PanelGroup, Panel as RPanel } from 'react-resizable-panels';
+import { ResizeHandle } from '@/components/layout/ResizeHandle';
 import { api } from '@/lib/api';
 import { useWorkstationStore, useBacktestStore } from '@/lib/store';
 import { C, mono } from '@/components/observatory/ui';
@@ -160,27 +162,40 @@ export default function BacktestPage() {
         )}
       </div>
 
-      {/* ── four quadrants ── */}
-      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        {/* top row 62% */}
-        <div style={{ flex: '0 0 62%', minHeight: 0, display: 'flex' }}>
-          <div style={{ flex: '0 0 55%', minWidth: 0, minHeight: 0, borderRight: `1px solid ${C.border}` }}>
-            <PricePane instrumentId={selectedInstrumentId} bars={bars} loading={ohlcLoading} start={start || null} end={end || null} />
-          </div>
-          <div style={{ flex: '0 0 45%', minWidth: 0, minHeight: 0 }}>
-            <PnLPane onRun={runBacktest} canRun={canRun} />
-          </div>
-        </div>
-        {/* bottom row 38% */}
-        <div style={{ flex: '0 0 38%', minHeight: 0, display: 'flex', borderTop: `1px solid ${C.border}` }}>
-          <div style={{ flex: '0 0 55%', minWidth: 0, minHeight: 0, borderRight: `1px solid ${C.border}` }}>
-            <TimelineScrubber dates={dates} disabled={!selectedInstrumentId || ohlcLoading} onCommit={onCommit} />
-          </div>
-          <div style={{ flex: '0 0 45%', minWidth: 0, minHeight: 0 }}>
-            <HabitatPane />
-          </div>
-        </div>
-      </div>
+      {/* ── four quadrants — drag any divider to resize; sizes persist per group ── */}
+      <PanelGroup direction="horizontal" autoSaveId="amr-backtest-cols" style={{ flex: 1, minHeight: 0 }}>
+        <RPanel defaultSize={55} minSize={25}>
+          <PanelGroup direction="vertical" autoSaveId="amr-backtest-left">
+            <RPanel defaultSize={62} minSize={20}>
+              <div style={{ height: '100%', minHeight: 0, borderRight: `1px solid ${C.border}` }}>
+                <PricePane instrumentId={selectedInstrumentId} bars={bars} loading={ohlcLoading} start={start || null} end={end || null} />
+              </div>
+            </RPanel>
+            <ResizeHandle dir="vertical" />
+            <RPanel defaultSize={38} minSize={15}>
+              <div style={{ height: '100%', minHeight: 0, borderRight: `1px solid ${C.border}`, borderTop: `1px solid ${C.border}` }}>
+                <TimelineScrubber dates={dates} disabled={!selectedInstrumentId || ohlcLoading} onCommit={onCommit} />
+              </div>
+            </RPanel>
+          </PanelGroup>
+        </RPanel>
+        <ResizeHandle dir="horizontal" />
+        <RPanel defaultSize={45} minSize={25}>
+          <PanelGroup direction="vertical" autoSaveId="amr-backtest-right">
+            <RPanel defaultSize={62} minSize={20}>
+              <div style={{ height: '100%', minHeight: 0 }}>
+                <PnLPane onRun={runBacktest} canRun={canRun} />
+              </div>
+            </RPanel>
+            <ResizeHandle dir="vertical" />
+            <RPanel defaultSize={38} minSize={15}>
+              <div style={{ height: '100%', minHeight: 0, borderTop: `1px solid ${C.border}` }}>
+                <HabitatPane />
+              </div>
+            </RPanel>
+          </PanelGroup>
+        </RPanel>
+      </PanelGroup>
 
       <style>{`@keyframes cockpit-spin { to { transform: rotate(360deg); } }`}</style>
     </div>

@@ -35,6 +35,18 @@ body {
   font-size: calc(var(--amr-scale) * 11px);
 }
 
+/* Resizable panel dividers (react-resizable-panels) */
+.amr-resize-handle {
+  background: transparent;
+  transition: background 0.12s;
+  z-index: 10;
+}
+.amr-resize-handle:hover,
+.amr-resize-handle[data-resize-handle-state='hover'],
+.amr-resize-handle[data-resize-handle-state='drag'] {
+  background: rgba(56, 139, 253, 0.35);
+}
+
 /* Range slider accent */
 input[type='range'] {
   accent-color: #388bfd;

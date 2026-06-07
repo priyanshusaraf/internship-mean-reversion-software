@@ -1,53 +1,14 @@
 'use client';
 
-import { useRef } from 'react';
+import { PanelGroup, Panel as RPanel } from 'react-resizable-panels';
+import { ResizeHandle } from '@/components/layout/ResizeHandle';
 import { InstrumentPanel } from '@/components/workspace/InstrumentPanel';
 import { ChartWorkspace } from '@/components/workspace/ChartWorkspace';
 import { IntervalBar } from '@/components/workspace/IntervalBar';
 import { EstimatorPanel } from '@/components/workspace/EstimatorPanel';
 import { ResearchSurface } from '@/components/workspace/ResearchSurface';
-import { useUIStore } from '@/lib/store';
-
-function DragHandle({ onDelta }: { onDelta: (dx: number) => void }) {
-  const dragging = useRef(false);
-  const lastX = useRef(0);
-
-  function onMouseDown(e: React.MouseEvent) {
-    e.preventDefault();
-    dragging.current = true;
-    lastX.current = e.clientX;
-
-    function onMove(ev: MouseEvent) {
-      if (!dragging.current) return;
-      onDelta(ev.clientX - lastX.current);
-      lastX.current = ev.clientX;
-    }
-    function onUp() {
-      dragging.current = false;
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    }
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-  }
-
-  return (
-    <div
-      onMouseDown={onMouseDown}
-      style={{ width: 5, flexShrink: 0, cursor: 'col-resize', background: 'transparent', transition: 'background 0.12s', zIndex: 10 }}
-      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(56,139,253,0.35)'; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
-    />
-  );
-}
 
 export default function WorkstationPage() {
-  const { leftWidth, rightWidth, chartSplit, setUI } = useUIStore();
-
   return (
     <div
       style={{
@@ -59,30 +20,46 @@ export default function WorkstationPage() {
         color: '#c9d1d9',
       }}
     >
-      <InstrumentPanel />
+      <PanelGroup direction="horizontal" autoSaveId="amr-workstation-cols" style={{ flex: 1, minHeight: 0 }}>
+        {/* Instruments rail */}
+        <RPanel defaultSize={16} minSize={10} maxSize={32}>
+          <InstrumentPanel />
+        </RPanel>
 
-      {/* Left drag handle */}
-      <DragHandle onDelta={dx => setUI({ leftWidth: Math.max(160, Math.min(380, leftWidth + dx)) })} />
+        <ResizeHandle dir="horizontal" />
 
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-        <IntervalBar />
+        {/* Center + estimator (IntervalBar spans the top of both) */}
+        <RPanel defaultSize={84} minSize={50}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minWidth: 0 }}>
+            <IntervalBar />
+            <PanelGroup direction="horizontal" autoSaveId="amr-workstation-main" style={{ flex: 1, minHeight: 0 }}>
+              {/* Chart over research surface */}
+              <RPanel defaultSize={82} minSize={40}>
+                <PanelGroup direction="vertical" autoSaveId="amr-workstation-center">
+                  <RPanel defaultSize={60} minSize={20}>
+                    <div style={{ height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+                      <ChartWorkspace />
+                    </div>
+                  </RPanel>
+                  <ResizeHandle dir="vertical" />
+                  <RPanel defaultSize={40} minSize={15}>
+                    <div style={{ height: '100%', minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                      <ResearchSurface />
+                    </div>
+                  </RPanel>
+                </PanelGroup>
+              </RPanel>
 
-        <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, minHeight: 0 }}>
-            <div style={{ flex: `0 0 ${chartSplit}%`, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-              <ChartWorkspace />
-            </div>
-            <div style={{ flex: `0 0 ${100 - chartSplit}%`, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <ResearchSurface />
-            </div>
+              <ResizeHandle dir="horizontal" />
+
+              {/* Estimators rail */}
+              <RPanel defaultSize={18} minSize={10} maxSize={36}>
+                <EstimatorPanel />
+              </RPanel>
+            </PanelGroup>
           </div>
-
-          {/* Right drag handle */}
-          <DragHandle onDelta={dx => setUI({ rightWidth: Math.max(120, Math.min(300, rightWidth - dx)) })} />
-
-          <EstimatorPanel />
-        </div>
-      </div>
+        </RPanel>
+      </PanelGroup>
     </div>
   );
 }
