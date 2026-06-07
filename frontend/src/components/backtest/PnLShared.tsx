@@ -51,7 +51,7 @@ export function EquityChart({ data }: { data: EquityPoint[] }) {
     });
     const series = chart.addLineSeries({ lineWidth: 1, lastValueVisible: true, priceLineVisible: false });
     series.createPriceLine({
-      price: 0, color: '#3d4d5e', lineWidth: 1, lineStyle: LineStyle.Dashed,
+      price: 0, color: 'var(--amr-text)', lineWidth: 1, lineStyle: LineStyle.Dashed,
       axisLabelVisible: false, title: '',
     });
     chartRef.current = chart;
@@ -124,7 +124,7 @@ export function EnhancedEquityChart({
     });
     const series = chart.addLineSeries({ lineWidth: 1, lastValueVisible: true, priceLineVisible: false });
     series.createPriceLine({
-      price: 0, color: '#3d4d5e', lineWidth: 1, lineStyle: LineStyle.Dashed,
+      price: 0, color: 'var(--amr-text)', lineWidth: 1, lineStyle: LineStyle.Dashed,
       axisLabelVisible: false, title: '',
     });
     chartRef.current = chart;
@@ -266,7 +266,7 @@ export function MetricCard({ label, value, color, loading }: { label: string; va
       flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 6,
       padding: '0 14px', borderRight: '1px solid #0e1520',
     }}>
-      <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</span>
+      <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</span>
       {loading
         ? <div style={{ height: 18, width: '60%', background: '#0e1520', borderRadius: 2 }} />
         : <span style={{ ...mono, fontSize: 19, color: color ?? '#c9d1d9' }}>{value}</span>}
@@ -291,7 +291,7 @@ export const COLS: { key: string; label: string; w: number }[] = [
 
 export function TradeLog({ trades, fontSize = 9.5 }: { trades: BacktestTrade[]; fontSize?: number }) {
   const cell: React.CSSProperties = { ...mono, fontSize, padding: '3px 6px', textAlign: 'right', whiteSpace: 'nowrap' };
-  const head: React.CSSProperties = { ...cell, color: '#2d3a4a', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: fontSize - 1 };
+  const head: React.CSSProperties = { ...cell, color: 'var(--amr-text-dim)', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: fontSize - 1 };
   return (
     <div style={{ flex: 1, minHeight: 0, overflow: 'auto', background: '#070b10' }}>
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -303,7 +303,7 @@ export function TradeLog({ trades, fontSize = 9.5 }: { trades: BacktestTrade[]; 
         <tbody>
           {trades.map((t, i) => (
             <tr key={t.trade_id} style={{ background: i % 2 ? '#080c12' : 'transparent' }}>
-              <td style={{ ...cell, color: '#3d4d5e' }}>{t.trade_id}</td>
+              <td style={{ ...cell, color: 'var(--amr-text)' }}>{t.trade_id}</td>
               <td style={{ ...cell, color: t.direction === 'LONG' ? GREEN : '#d2993c' }}>{t.direction === 'LONG' ? 'L' : 'S'}</td>
               <td style={{ ...cell, color: '#8b99a8' }}>{t.entry_bar}</td>
               <td style={{ ...cell, color: '#8b99a8' }}>{t.exit_bar}</td>

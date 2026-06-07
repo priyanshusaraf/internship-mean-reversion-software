@@ -66,6 +66,7 @@ export interface UISettings {
   rightWidth: number;    // EstimatorPanel width px
   chartSplit: number;    // % of vertical space for the chart (30–80)
   lineWidth: number;     // chart overlay line width px
+  textColor: string;     // primary text hex; '' = use brightened globals.css default
 }
 
 const UI_DEFAULTS: UISettings = {
@@ -74,7 +75,43 @@ const UI_DEFAULTS: UISettings = {
   rightWidth: 176,
   chartSplit: 60,
   lineWidth: 1.5,
+  textColor: '',
 };
+
+// Default text presets surfaced in Settings. The `value` is the primary text hex;
+// '' means "let globals.css :root defaults apply" (the brightened Normal baseline).
+export const TEXT_COLOR_PRESETS: { label: string; value: string }[] = [
+  { label: 'Dim',    value: '#6b7a8c' },
+  { label: 'Normal', value: '' },
+  { label: 'Bright', value: '#c2d0de' },
+];
+
+// Derive the three text CSS vars from a single chosen primary hex. bright lightens toward
+// near-white, dim darkens toward the panel background — keeps the picker to one decision
+// while preserving the brightness hierarchy the UI relies on.
+export function deriveTextVars(primary: string): { text: string; bright: string; dim: string } {
+  return {
+    text: primary,
+    bright: mixHex(primary, '#e6edf3', 0.4),
+    dim: mixHex(primary, '#0a0f16', 0.45),
+  };
+}
+
+function mixHex(a: string, b: string, t: number): string {
+  const pa = parseHex(a);
+  const pb = parseHex(b);
+  if (!pa || !pb) return a;
+  const m = (x: number, y: number) => Math.round(x + (y - x) * t);
+  const h = (n: number) => n.toString(16).padStart(2, '0');
+  return `#${h(m(pa[0], pb[0]))}${h(m(pa[1], pb[1]))}${h(m(pa[2], pb[2]))}`;
+}
+
+function parseHex(hex: string): [number, number, number] | null {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return null;
+  const n = parseInt(m[1], 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
 
 interface UIStore extends UISettings {
   setUI: (s: Partial<UISettings>) => void;

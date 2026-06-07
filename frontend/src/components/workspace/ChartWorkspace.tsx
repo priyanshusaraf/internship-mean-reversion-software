@@ -172,7 +172,7 @@ export function ChartWorkspace() {
               <path d="M2 9.5L5.5 5.5L8.5 8L12 3.5" stroke="rgba(56,139,253,0.4)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <span style={{ fontSize: 11, color: '#2d3a4a', letterSpacing: '0.03em' }}>
+          <span style={{ fontSize: 11, color: 'var(--amr-text-dim)', letterSpacing: '0.03em' }}>
             Select an instrument to begin
           </span>
         </div>
@@ -204,7 +204,7 @@ export function ChartWorkspace() {
       {isLoading && (
         <div
           className="absolute z-10 select-none font-data"
-          style={{ top: 10, right: 12, fontSize: 10, color: '#2d3a4a' }}
+          style={{ top: 10, right: 12, fontSize: 10, color: 'var(--amr-text-dim)' }}
         >
           loading
         </div>

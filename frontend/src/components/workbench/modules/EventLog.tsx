@@ -123,7 +123,7 @@ export function EventLog({ instrumentId, dateRange, window: win }: ModuleProps) 
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#070b10' }}>
       {/* Header */}
       <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 16, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-        <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Research Event Log</span>
+        <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Research Event Log</span>
         {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
         {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
         <span style={{ ...mono, fontSize: 9, color: '#1e2833', marginLeft: 'auto', marginRight: 12 }}>
@@ -163,7 +163,7 @@ export function EventLog({ instrumentId, dateRange, window: win }: ModuleProps) 
       {/* Column headers */}
       <div style={{ flexShrink: 0, display: 'flex', paddingLeft: 12, paddingRight: 12, height: 22, alignItems: 'center', borderBottom: '1px solid #0e1520', background: '#06090e' }}>
         {[['date', 80], ['type', 140], ['description', undefined], ['value', 70], ['causal', 50]].map(([label, w]) => (
-          <div key={label as string} style={{ ...mono, fontSize: 8, color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase', width: w as number | undefined, flex: w ? undefined : 1 }}>
+          <div key={label as string} style={{ ...mono, fontSize: 8, color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', width: w as number | undefined, flex: w ? undefined : 1 }}>
             {label}
           </div>
         ))}
@@ -194,12 +194,12 @@ export function EventLog({ instrumentId, dateRange, window: win }: ModuleProps) 
             onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.02)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = severityBg[ev.severity]; }}
           >
-            <div style={{ ...mono, fontSize: 9, color: '#3d4d5e', width: 80, flexShrink: 0 }}>{ev.date}</div>
+            <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text)', width: 80, flexShrink: 0 }}>{ev.date}</div>
             <div style={{ ...mono, fontSize: 9, color: severityColor[ev.severity], width: 140, flexShrink: 0, letterSpacing: '0.04em' }}>
               {ev.source === 'manual' ? '● ' : ''}{ev.type}
             </div>
             <div style={{ ...mono, fontSize: 9, color: '#8b99a8', flex: 1, lineHeight: 1.4 }}>{ev.description}</div>
-            <div style={{ ...mono, fontSize: 9, color: '#3d4d5e', width: 70, flexShrink: 0, textAlign: 'right' }}>{ev.value}</div>
+            <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text)', width: 70, flexShrink: 0, textAlign: 'right' }}>{ev.value}</div>
             <div style={{ ...mono, fontSize: 8, color: ev.isCausal ? '#3d4d5e' : '#d99a3c', width: 50, flexShrink: 0, textAlign: 'right' }}>
               {ev.isCausal ? 'causal' : 'full-info'}
             </div>

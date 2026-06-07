@@ -24,7 +24,7 @@ export function EstimatorPanel() {
       >
         <span
           className="font-data"
-          style={{ fontSize: sc(9), fontWeight: 700, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}
+          style={{ fontSize: sc(9), fontWeight: 700, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}
         >
           Estimators
         </span>
@@ -108,7 +108,7 @@ export function EstimatorPanel() {
         >
           <span
             className="font-data"
-            style={{ fontSize: sc(10), color: '#2d3a4a', width: 44, flexShrink: 0 }}
+            style={{ fontSize: sc(10), color: 'var(--amr-text-dim)', width: 44, flexShrink: 0 }}
           >
             window
           </span>

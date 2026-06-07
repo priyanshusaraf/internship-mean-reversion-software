@@ -14,6 +14,12 @@ body {
 
 :root {
   --amr-scale: 1;
+  /* Primary text-color tokens — brightened readable defaults. Overridden live by the
+     Settings ▸ Appearance control (AppNav sets these inline on documentElement when the
+     user picks a color; clearing the override falls back to these defaults). */
+  --amr-text: #8b9bb0;
+  --amr-text-bright: #c2d0de;
+  --amr-text-dim: #5e6f80;
 }
 
 /* Monospace numerics — used on all data values */

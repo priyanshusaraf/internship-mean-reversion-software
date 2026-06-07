@@ -166,7 +166,7 @@ export function InstrumentPanel() {
       {/* Header + tabs */}
       <div className="shrink-0" style={{ borderBottom: '1px solid #161d27' }}>
         <div className="flex items-center px-3" style={{ height: 36 }}>
-          <span className="font-data" style={{ fontSize: sc(9), fontWeight: 700, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+          <span className="font-data" style={{ fontSize: sc(9), fontWeight: 700, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
             Instruments
           </span>
         </div>
@@ -216,12 +216,12 @@ export function InstrumentPanel() {
             }}>
               <span style={{ fontSize: 20, color: '#388bfd', lineHeight: 1 }}>↓</span>
               <span className="font-data" style={{ fontSize: sc(10), color: '#58a6ff', letterSpacing: '0.08em' }}>Drop files</span>
-              <span className="font-data" style={{ fontSize: sc(9), color: '#2d3a4a' }}>.csv · .parquet</span>
+              <span className="font-data" style={{ fontSize: sc(9), color: 'var(--amr-text-dim)' }}>.csv · .parquet</span>
             </div>
           )}
 
           <div style={{ border: '1px dashed #1a2230', borderRadius: 3, padding: '5px 8px', textAlign: 'center', userSelect: 'none' }}>
-            <span className="font-data" style={{ fontSize: sc(9), color: '#2d3a4a', letterSpacing: '0.06em' }}>
+            <span className="font-data" style={{ fontSize: sc(9), color: 'var(--amr-text-dim)', letterSpacing: '0.06em' }}>
               drag & drop · multi-file ok
             </span>
           </div>
@@ -255,7 +255,7 @@ export function InstrumentPanel() {
                   return (
                     <div key={s} onMouseDown={() => pickSuggestion(s)} onMouseEnter={() => setSuggestionIndex(i)} onMouseLeave={() => setSuggestionIndex(-1)}
                       style={{ padding: '4px 8px', fontSize: sc(10), cursor: 'pointer', color: i === suggestionIndex ? '#58a6ff' : (isDir ? '#8b99a8' : '#c9d1d9'), background: i === suggestionIndex ? 'rgba(56,139,253,0.09)' : 'transparent', display: 'flex', alignItems: 'center', gap: 5, overflow: 'hidden' }}>
-                      <span style={{ color: '#2d3a4a', flexShrink: 0, fontSize: 8 }}>{isDir ? '▸' : '·'}</span>
+                      <span style={{ color: 'var(--amr-text-dim)', flexShrink: 0, fontSize: 8 }}>{isDir ? '▸' : '·'}</span>
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}{isDir ? '/' : ''}</span>
                     </div>
                   );
@@ -288,7 +288,7 @@ export function InstrumentPanel() {
 
           {/* Leg A */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <span className="font-data" style={{ fontSize: sc(9), color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Leg A</span>
+            <span className="font-data" style={{ fontSize: sc(9), color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Leg A</span>
             <div style={{ position: 'relative' }}>
               <select value={spreadLegA} onChange={e => setSpreadLegA(e.target.value)} style={selStyle}
                 onFocus={e => { e.target.style.borderColor = '#388bfd'; }}
@@ -296,13 +296,13 @@ export function InstrumentPanel() {
                 <option value="">— select —</option>
                 {instruments.map(i => <option key={i.instrument_id} value={i.instrument_id}>{i.instrument_id}</option>)}
               </select>
-              <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: '#2d3a4a', fontSize: 8, pointerEvents: 'none' }}>▾</span>
+              <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: 'var(--amr-text-dim)', fontSize: 8, pointerEvents: 'none' }}>▾</span>
             </div>
           </div>
 
           {/* Leg B */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <span className="font-data" style={{ fontSize: sc(9), color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Leg B</span>
+            <span className="font-data" style={{ fontSize: sc(9), color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Leg B</span>
             <div style={{ position: 'relative' }}>
               <select value={spreadLegB} onChange={e => setSpreadLegB(e.target.value)} style={selStyle}
                 onFocus={e => { e.target.style.borderColor = '#388bfd'; }}
@@ -310,13 +310,13 @@ export function InstrumentPanel() {
                 <option value="">— select —</option>
                 {instruments.map(i => <option key={i.instrument_id} value={i.instrument_id}>{i.instrument_id}</option>)}
               </select>
-              <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: '#2d3a4a', fontSize: 8, pointerEvents: 'none' }}>▾</span>
+              <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: 'var(--amr-text-dim)', fontSize: 8, pointerEvents: 'none' }}>▾</span>
             </div>
           </div>
 
           {/* β */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <span className="font-data" style={{ fontSize: sc(9), color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase' }}>β hedge ratio</span>
+            <span className="font-data" style={{ fontSize: sc(9), color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>β hedge ratio</span>
             <input
               className="font-data"
               type="number" step="0.0001"
@@ -407,14 +407,14 @@ export function InstrumentPanel() {
                 </div>
                 {!isSpread && (
                   <button onClick={(e) => { e.stopPropagation(); handleReload(inst.file_path, inst.instrument_id); }} title="Reload from file"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 3px', borderRadius: 2, color: '#2d3a4a', fontSize: sc(10), lineHeight: 1 }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 3px', borderRadius: 2, color: 'var(--amr-text-dim)', fontSize: sc(10), lineHeight: 1 }}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#58a6ff'; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#2d3a4a'; }}>
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--amr-text-dim)'; }}>
                     ↺
                   </button>
                 )}
               </div>
-              <div className="font-data" style={{ fontSize: sc(10), color: '#2d3a4a' }}>
+              <div className="font-data" style={{ fontSize: sc(10), color: 'var(--amr-text-dim)' }}>
                 {inst.start_date} – {inst.end_date}
               </div>
               <div className="font-data" style={{ fontSize: sc(10), color: '#1e2833', marginTop: 1 }}>

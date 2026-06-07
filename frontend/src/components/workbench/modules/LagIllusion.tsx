@@ -161,7 +161,7 @@ export function LagIllusion({ instrumentId, dateRange, window: win }: ModuleProp
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 12, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Lag Illusion · ε_c = ε_h + L</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Lag Illusion · ε_c = ε_h + L</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
           {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
           <div style={{ display: 'flex', gap: 6, marginLeft: 'auto', marginRight: 12, alignItems: 'center' }}>
@@ -197,12 +197,12 @@ export function LagIllusion({ instrumentId, dateRange, window: win }: ModuleProp
 
       {/* Legend / honesty panel */}
       <div style={{ width: 188, flexShrink: 0, borderLeft: '1px solid #0e1520', background: '#090d13', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
-        <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Decomposition</div>
+        <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Decomposition</div>
         <Legend color="rgba(88,166,255,0.9)" label="ε_c" desc="causal residual P − μ*_c" />
         <Legend color="rgba(210,153,60,0.85)" label="ε_h" desc="P − μ*_h (vs reference proxy)" />
         <Legend color="rgba(229,108,108,0.85)" label="L" desc="μ*_h − μ*_c (lag)" />
         <div style={{ ...mono, fontSize: 8, color: '#1e2833', marginTop: 10, lineHeight: 1.6 }}>
-          μ*_h is a <b style={{ color: '#3d4d5e' }}>retrospective reference equilibrium proxy</b> (centered smoother, future-using) — <b style={{ color: '#3d4d5e' }}>NOT</b> true equilibrium.
+          μ*_h is a <b style={{ color: 'var(--amr-text)' }}>retrospective reference equilibrium proxy</b> (centered smoother, future-using) — <b style={{ color: 'var(--amr-text)' }}>NOT</b> true equilibrium.
         </div>
         <div style={{ ...mono, fontSize: 8, color: '#1e2833', marginTop: 10, lineHeight: 1.6 }}>
           s≈1: residual is mostly mechanical lag — reading it as reversion is mechanically induced.
@@ -214,7 +214,7 @@ export function LagIllusion({ instrumentId, dateRange, window: win }: ModuleProp
         <div style={{ ...mono, fontSize: 8, color: '#1e2833', marginTop: 10, lineHeight: 1.6 }}>
           First/last k bars masked (no ±k support). Single instrument — does not generalize.
         </div>
-        <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', marginTop: 'auto', paddingTop: 8 }}>
+        <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', marginTop: 'auto', paddingTop: 8 }}>
           shown k={selK} · n={n}
         </div>
       </div>
@@ -227,7 +227,7 @@ function Legend({ color, label, desc }: { color: string; label: string; desc: st
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, padding: '2px 0', borderBottom: '1px solid #0a0f16' }}>
       <span style={{ width: 10, height: 2, background: color, flexShrink: 0, transform: 'translateY(-2px)' }} />
       <span style={{ ...mono, fontSize: 10, color: '#8b99a8', width: 22, flexShrink: 0 }}>{label}</span>
-      <span style={{ ...mono, fontSize: 8, color: '#2d3a4a' }}>{desc}</span>
+      <span style={{ ...mono, fontSize: 8, color: 'var(--amr-text-dim)' }}>{desc}</span>
     </div>
   );
 }

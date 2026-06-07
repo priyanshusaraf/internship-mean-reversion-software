@@ -134,7 +134,7 @@ export function MRScore({ instrumentId, dateRange, window }: ModuleProps) {
       {/* Left: MRScore(t) + B2 vs price */}
       <div style={{ flex: '0 0 58%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 14, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>MRScore (left, 0–100) vs Price (right)</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>MRScore (left, 0–100) vs Price (right)</span>
           <span style={{ ...mono, fontSize: 9, color: C_SCORE }}>MRScore</span>
           <span style={{ ...mono, fontSize: 9, color: C_B2 }}>B2</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
@@ -158,7 +158,7 @@ export function MRScore({ instrumentId, dateRange, window }: ModuleProps) {
       {/* Right: as-of-bar decomposition (raw, no verdict) */}
       <div style={{ flex: '0 0 42%', minWidth: 0, borderLeft: '1px solid #0e1520', display: 'flex', flexDirection: 'column', background: '#070b10', overflowY: 'auto' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px', background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Decomposition</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Decomposition</span>
           <span style={{ ...mono, fontSize: 9, color: '#6f7d8c' }}>{row?.date ?? '—'}{hoverDate ? '' : ' (latest)'}</span>
         </div>
 
@@ -177,7 +177,7 @@ export function MRScore({ instrumentId, dateRange, window }: ModuleProps) {
         <div style={{ padding: '10px 10px 8px', borderBottom: '1px solid #161d27' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
             <span style={{ ...mono, fontSize: 26, color: C_SCORE }}>{fmt(row?.mrscore, 1)}</span>
-            <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>MRScore = 0.20·B1 + 0.60·B2 + 0.20·B3</span>
+            <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>MRScore = 0.20·B1 + 0.60·B2 + 0.20·B3</span>
           </div>
           <div style={{ marginTop: 8 }}>
             <RankBar label="B1 ·0.20" value={contrib?.b1 ?? null} color="#5a8fb8" />
@@ -194,7 +194,7 @@ export function MRScore({ instrumentId, dateRange, window }: ModuleProps) {
 
         {/* Feature ranks by block */}
         <div style={{ padding: '8px 10px', borderBottom: '1px solid #161d27' }}>
-          <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Feature ranks (0–100)</div>
+          <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Feature ranks (0–100)</div>
           <div style={{ ...mono, fontSize: 8, color: '#5a8fb8', margin: '4px 0 1px' }}>B1 — Mean Reliability</div>
           <RankBar label="ADF" value={row?.r_adf ?? null} color="#5a8fb8" />
           <RankBar label="KPSS" value={row?.r_kpss ?? null} color="#5a8fb8" />
@@ -212,7 +212,7 @@ export function MRScore({ instrumentId, dateRange, window }: ModuleProps) {
 
         {/* Raw discriminators */}
         <div style={{ padding: '8px 10px' }}>
-          <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>Raw Block-2 (cross-instrument discriminators)</div>
+          <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>Raw Block-2 (cross-instrument discriminators)</div>
           <div style={{ ...mono, fontSize: 8, color: '#1e2833', marginBottom: 5 }}>
             the self-ranked score is within-instrument relative; these raw values are what separate genuine reverters from nulls
           </div>
@@ -223,7 +223,7 @@ export function MRScore({ instrumentId, dateRange, window }: ModuleProps) {
               { k: 'VR_agg', v: fmt(row?.vr_agg, 3), hint: '<1 = MR · ≈1 = RW' },
             ].map(c => (
               <div key={c.k} style={{ background: '#090d13', border: '1px solid #161d27', borderRadius: 2, padding: '5px 6px' }}>
-                <div style={{ ...mono, fontSize: 8, color: '#2d3a4a' }}>{c.k}</div>
+                <div style={{ ...mono, fontSize: 8, color: 'var(--amr-text-dim)' }}>{c.k}</div>
                 <div style={{ ...mono, fontSize: 13, color: '#8b99a8' }}>{c.v}</div>
                 <div style={{ ...mono, fontSize: 7, color: '#1e2833', lineHeight: 1.3 }}>{c.hint}</div>
               </div>

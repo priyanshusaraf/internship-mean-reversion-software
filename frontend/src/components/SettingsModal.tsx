@@ -1,6 +1,6 @@
 'use client';
 
-import { useUIStore } from '@/lib/store';
+import { useUIStore, TEXT_COLOR_PRESETS } from '@/lib/store';
 
 const FONT_STEPS = [
   { label: 'XS', value: 0.75 },
@@ -16,7 +16,9 @@ const mono: React.CSSProperties = {
 };
 
 export function SettingsModal({ onClose }: { onClose: () => void }) {
-  const { fontScale, leftWidth, rightWidth, chartSplit, lineWidth, setUI, resetUI } = useUIStore();
+  const { fontScale, leftWidth, rightWidth, chartSplit, lineWidth, textColor, setUI, resetUI } = useUIStore();
+  // The swatch shown in the custom picker: chosen color, or the brightened default when unset.
+  const effectiveColor = textColor || '#8b9bb0';
 
   return (
     <>
@@ -46,9 +48,9 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
           </span>
           <button
             onClick={onClose}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#2d3a4a', fontSize: 15, lineHeight: 1, padding: '2px 4px' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--amr-text-dim)', fontSize: 15, lineHeight: 1, padding: '2px 4px' }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#c9d1d9'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#2d3a4a'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--amr-text-dim)'; }}
           >
             ✕
           </button>
@@ -80,8 +82,65 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
                   </button>
                 ))}
               </div>
-              <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', marginTop: 3 }}>
+              <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', marginTop: 3 }}>
                 Current: {Math.round(fontScale * 100)}% — affects panel text and data labels
+              </div>
+            </Field>
+          </Section>
+
+          {/* — Appearance — */}
+          <Section title="Appearance">
+            <Field label="Text color">
+              <div style={{ display: 'flex', gap: 4 }}>
+                {TEXT_COLOR_PRESETS.map(({ label, value }) => {
+                  const sel = textColor === value;
+                  return (
+                    <button
+                      key={label}
+                      onClick={() => setUI({ textColor: value })}
+                      style={{
+                        flex: 1, padding: '5px 0',
+                        ...mono, fontSize: 9, fontWeight: 600,
+                        background: sel ? 'rgba(56,139,253,0.15)' : '#0d1520',
+                        border: `1px solid ${sel ? 'rgba(56,139,253,0.5)' : '#1a2230'}`,
+                        borderRadius: 3,
+                        color: sel ? '#58a6ff' : '#3a4a5c',
+                        cursor: 'pointer', transition: 'all 0.1s',
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                <input
+                  type="color"
+                  value={effectiveColor}
+                  onChange={e => setUI({ textColor: e.target.value })}
+                  style={{
+                    width: 28, height: 22, padding: 0, border: '1px solid #1a2230',
+                    borderRadius: 3, background: '#0d1520', cursor: 'pointer',
+                  }}
+                />
+                <span style={{ ...mono, fontSize: 9, color: '#4a5a6e' }}>
+                  Custom — {textColor ? textColor : 'using default'}
+                </span>
+                {textColor && (
+                  <button
+                    onClick={() => setUI({ textColor: '' })}
+                    style={{
+                      marginLeft: 'auto', ...mono, fontSize: 9, padding: '2px 6px',
+                      background: 'transparent', border: '1px solid #1a2230', borderRadius: 3,
+                      color: '#4a5a6e', cursor: 'pointer',
+                    }}
+                  >
+                    reset
+                  </button>
+                )}
+              </div>
+              <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', marginTop: 3 }}>
+                Sets primary text brightness across panels and data labels
               </div>
             </Field>
           </Section>
@@ -117,7 +176,7 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                 <div style={{ flex: 1, height: lineWidth, background: 'rgba(88,166,255,0.7)', borderRadius: lineWidth }} />
-                <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>μ* EMA preview</span>
+                <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>μ* EMA preview</span>
               </div>
             </Field>
           </Section>
@@ -132,10 +191,10 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
               width: '100%', padding: '6px 0',
               ...mono, fontSize: 10, fontWeight: 600, letterSpacing: '0.06em',
               background: 'transparent', border: '1px solid #1a2230', borderRadius: 3,
-              color: '#2d3a4a', cursor: 'pointer', transition: 'all 0.12s',
+              color: 'var(--amr-text-dim)', cursor: 'pointer', transition: 'all 0.12s',
             }}
             onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = '#2d3a4a'; b.style.color = '#8b99a8'; }}
-            onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = '#1a2230'; b.style.color = '#2d3a4a'; }}
+            onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = '#1a2230'; b.style.color = 'var(--amr-text-dim)'; }}
           >
             Reset to defaults
           </button>
@@ -150,7 +209,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     <div>
       <div style={{
         fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace',
-        fontSize: 9, fontWeight: 700, color: '#2d3a4a',
+        fontSize: 9, fontWeight: 700, color: 'var(--amr-text-dim)',
         letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 10,
         paddingBottom: 6, borderBottom: '1px solid #0f141a',
       }}>

@@ -11,7 +11,7 @@ function Chip({ label, value }: { label: string; value: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
       <span style={{ ...mono, fontSize: 8, color: '#1e2833', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</span>
-      <span style={{ ...mono, fontSize: 10, color: '#3d4d5e' }}>{value}</span>
+      <span style={{ ...mono, fontSize: 10, color: 'var(--amr-text)' }}>{value}</span>
     </div>
   );
 }

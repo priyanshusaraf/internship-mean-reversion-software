@@ -112,7 +112,7 @@ export function VelocityAbsorption({ instrumentId, dateRange }: ModuleProps) {
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4 }}>
       <span style={{ ...mono, fontSize: 10, color, textAlign: 'right' }}>{fmt(s?.beta)}</span>
       <span style={{ ...mono, fontSize: 10, color: '#6f7d8c', textAlign: 'right' }}>{fmt(s?.r2, 4)}</span>
-      <span style={{ ...mono, fontSize: 10, color: '#2d3a4a', textAlign: 'right' }}>{s?.n ?? '—'}</span>
+      <span style={{ ...mono, fontSize: 10, color: 'var(--amr-text-dim)', textAlign: 'right' }}>{s?.n ?? '—'}</span>
     </div>
   );
 
@@ -121,7 +121,7 @@ export function VelocityAbsorption({ instrumentId, dateRange }: ModuleProps) {
       {/* Left: δ vs price (Surface 2) */}
       <div style={{ flex: '0 0 58%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 14, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Velocity Contribution δ vs Price</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Velocity Contribution δ vs Price</span>
           <span style={{ ...mono, fontSize: 9, color: 'rgba(216,166,87,0.9)' }}>δ (left)</span>
           <span style={{ ...mono, fontSize: 9, color: 'rgba(140,160,180,0.6)' }}>price (right)</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
@@ -138,7 +138,7 @@ export function VelocityAbsorption({ instrumentId, dateRange }: ModuleProps) {
       {/* Right: decay table (Surface 1) + raw Δβ (Surface 3) */}
       <div style={{ flex: '0 0 42%', minWidth: 0, borderLeft: '1px solid #0e1520', display: 'flex', flexDirection: 'column', background: '#070b10', overflowY: 'auto' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 10, gap: 8, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Predictive Decay (walk-forward, OOS)</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Predictive Decay (walk-forward, OOS)</span>
         </div>
 
         {/* Surface 1 */}
@@ -175,14 +175,14 @@ export function VelocityAbsorption({ instrumentId, dateRange }: ModuleProps) {
 
         {/* Surface 3 — raw Δβ, no verdict */}
         <div style={{ padding: '8px 10px', borderBottom: '1px solid #161d27' }}>
-          <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>Δβ = β(Restored) − β(Kalman)</div>
+          <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>Δβ = β(Restored) − β(Kalman)</div>
           {dbeta ? (
             <>
               {dbeta.map(({ h, d }) => (
                 <div key={h} style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 1fr', gap: 4, padding: '2px 0', borderBottom: '1px solid #0a0f16' }}>
-                  <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>h = {h}</span>
+                  <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>h = {h}</span>
                   <span style={{ ...mono, fontSize: 10, color: '#8b99a8', textAlign: 'right' }}>{fmt(d)}</span>
-                  <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', textAlign: 'right' }}>{d == null ? '—' : d < 0 ? 'restored↓' : d > 0 ? 'kalman↓' : 'flat'}</span>
+                  <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', textAlign: 'right' }}>{d == null ? '—' : d < 0 ? 'restored↓' : d > 0 ? 'kalman↓' : 'flat'}</span>
                 </div>
               ))}
               <div style={{ marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>

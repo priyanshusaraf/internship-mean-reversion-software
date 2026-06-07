@@ -19,7 +19,7 @@ function fmt(n: number, d = 2) { return n.toFixed(d); }
 function StatRow({ label, value, dim }: { label: string; value: string; dim?: boolean }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #0a0f16' }}>
-      <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.06em' }}>{label}</span>
+      <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.06em' }}>{label}</span>
       <span style={{ ...mono, fontSize: 10, color: dim ? '#3d4d5e' : '#8b99a8' }}>{value}</span>
     </div>
   );
@@ -112,7 +112,7 @@ export function EstimatorInspector({ instrumentId, dateRange, window: win }: Mod
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 16, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Estimator Inspector</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Estimator Inspector</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
           {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
           <span style={{ ...mono, fontSize: 9, color: '#1e2833', marginLeft: 'auto', marginRight: 12 }}>
@@ -136,7 +136,7 @@ export function EstimatorInspector({ instrumentId, dateRange, window: win }: Mod
 
       {/* Stats sidebar */}
       <div style={{ width: 160, flexShrink: 0, borderLeft: '1px solid #0e1520', background: '#090d13', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
-        <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Stats</div>
+        <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Stats</div>
         {s ? (
           <>
             <StatRow label="n" value={String(s.n)} />

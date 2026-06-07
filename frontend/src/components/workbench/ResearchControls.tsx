@@ -20,7 +20,7 @@ export function ResearchControls() {
     }}>
       {/* Header */}
       <div style={{ height: 26, display: 'flex', alignItems: 'center', paddingLeft: 10, borderBottom: '1px solid #161d27' }}>
-        <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Controls</span>
+        <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Controls</span>
       </div>
 
       <div style={{ padding: '10px 10px', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -82,7 +82,7 @@ export function ResearchControls() {
             ['Kurt > 3', 'fat tails — z-score understates risk'],
           ].map(([label, desc]) => (
             <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <span style={{ ...mono, fontSize: 8, color: '#3d4d5e' }}>{label}</span>
+              <span style={{ ...mono, fontSize: 8, color: 'var(--amr-text)' }}>{label}</span>
               <span style={{ ...mono, fontSize: 8, color: '#1e2833', lineHeight: 1.3 }}>{desc}</span>
             </div>
           ))}

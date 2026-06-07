@@ -27,7 +27,7 @@ function Toggle({ on, onClick, label, color }: { on: boolean; onClick: () => voi
         ...mono, fontSize: 9, padding: '2px 8px', borderRadius: 3, letterSpacing: '0.06em',
         background: on ? 'rgba(255,255,255,0.04)' : 'transparent',
         border: `1px solid ${on ? color : '#161d27'}`,
-        color: on ? color : '#2d3a4a', cursor: 'pointer',
+        color: on ? color : 'var(--amr-text-dim)', cursor: 'pointer',
       }}
     >
       {label}
@@ -128,7 +128,7 @@ export function Replay({ instrumentId, dateRange, window: win }: ModuleProps) {
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 12, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Replay</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Replay</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
           {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
           <div style={{ display: 'flex', gap: 6, marginLeft: 'auto', marginRight: 12, alignItems: 'center' }}>
@@ -161,7 +161,7 @@ export function Replay({ instrumentId, dateRange, window: win }: ModuleProps) {
           />
           <button onClick={() => step(1)} disabled={!rows.length} title="Step forward one bar" style={transportBtn(!!rows.length)}>›</button>
           <button onClick={() => setCursor(maxIdx)} disabled={!rows.length} title="Jump to last bar" style={transportBtn(!!rows.length)}>⟯</button>
-          <span style={{ ...mono, fontSize: 9, color: '#3d4d5e', flexShrink: 0, width: 150, textAlign: 'right' }}>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text)', flexShrink: 0, width: 150, textAlign: 'right' }}>
             {at ? `${at.date} · bar ${cursor + 1}/${rows.length}` : '—'}
           </span>
         </div>
@@ -169,7 +169,7 @@ export function Replay({ instrumentId, dateRange, window: win }: ModuleProps) {
 
       {/* As-of-t readout (single bar at cursor — not whole-window stats) */}
       <div style={{ width: 168, flexShrink: 0, borderLeft: '1px solid #0e1520', background: '#090d13', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <div style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>As of t</div>
+        <div style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>As of t</div>
         <Row label="date" value={at?.date ?? '—'} />
         <Row label="close" value={fmt(at?.close)} />
         <Row label="μ* causal" value={fmt(at?.mu_star)} color="rgba(88,166,255,0.9)" />
@@ -196,7 +196,7 @@ function transportBtn(enabled: boolean): React.CSSProperties {
 function Row({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '1px solid #0a0f16' }}>
-      <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.06em' }}>{label}</span>
+      <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.06em' }}>{label}</span>
       <span style={{ ...mono, fontSize: 10, color: color ?? '#8b99a8' }}>{value}</span>
     </div>
   );

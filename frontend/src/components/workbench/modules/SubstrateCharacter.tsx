@@ -133,10 +133,10 @@ export function SubstrateCharacter({ instrumentId, dateRange }: ModuleProps) {
       {/* Left: descriptor sparklines (the PRIMARY read) over price */}
       <div style={{ flex: '0 0 58%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 14, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Descriptors (left) vs Price (right)</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Descriptors (left) vs Price (right)</span>
           <span style={{ ...mono, fontSize: 9, color: C_DE }}>DE</span>
           <span style={{ ...mono, fontSize: 9, color: C_VR }}>VR</span>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>— VR=1 (RW)</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>— VR=1 (RW)</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
           {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
         </div>
@@ -156,7 +156,7 @@ export function SubstrateCharacter({ instrumentId, dateRange }: ModuleProps) {
       {/* Right: as-of-bar read — descriptors first, resemblance scores subordinate */}
       <div style={{ flex: '0 0 42%', minWidth: 0, borderLeft: '1px solid #0e1520', display: 'flex', flexDirection: 'column', background: '#070b10', overflowY: 'auto' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px', background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Character (as-of bar)</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Character (as-of bar)</span>
           <span style={{ ...mono, fontSize: 9, color: '#6f7d8c' }}>{row?.date ?? '—'}{hoverDate ? '' : ' (latest)'}</span>
         </div>
 
@@ -180,7 +180,7 @@ export function SubstrateCharacter({ instrumentId, dateRange }: ModuleProps) {
               { k: 'VolPct', v: row?.vp == null ? '—' : `${fmt(row?.vp, 0)}`, hint: 'vol rank (context only)' },
             ].map(c => (
               <div key={c.k} style={{ background: '#090d13', border: '1px solid #161d27', borderRadius: 2, padding: '6px 7px' }}>
-                <div style={{ ...mono, fontSize: 8, color: '#2d3a4a' }}>{c.k}</div>
+                <div style={{ ...mono, fontSize: 8, color: 'var(--amr-text-dim)' }}>{c.k}</div>
                 <div style={{ ...mono, fontSize: 18, color: '#8b99a8' }}>{c.v}</div>
                 <div style={{ ...mono, fontSize: 7, color: '#1e2833', lineHeight: 1.3 }}>{c.hint}</div>
               </div>
@@ -198,11 +198,11 @@ export function SubstrateCharacter({ instrumentId, dateRange }: ModuleProps) {
             onClick={() => setShowScores(s => !s)}
             style={{ ...mono, fontSize: 9, color: '#6f7d8c', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: 6 }}
           >
-            <span style={{ color: '#2d3a4a' }}>{showScores ? '▾' : '▸'}</span>
+            <span style={{ color: 'var(--amr-text-dim)' }}>{showScores ? '▾' : '▸'}</span>
             Resemblance
             {dom && (
               <span style={{ color: dom.color }}>
-                {dom.label}<span style={{ color: '#2d3a4a' }}> · {row?.confidence ?? '—'}</span>
+                {dom.label}<span style={{ color: 'var(--amr-text-dim)' }}> · {row?.confidence ?? '—'}</span>
               </span>
             )}
           </button>

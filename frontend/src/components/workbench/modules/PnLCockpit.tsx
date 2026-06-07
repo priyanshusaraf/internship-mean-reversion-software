@@ -63,7 +63,7 @@ export function PnLCockpit(_props: ModuleProps) {
 
   // metric values: '—' when no result; skeleton handled by MetricCard via `loading`
   const m = (render: (res: BacktestResult) => { value: string; color?: string }) =>
-    r ? render(r) : { value: '—', color: '#2d3a4a' };
+    r ? render(r) : { value: '—', color: 'var(--amr-text-dim)' };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#070b10' }}>
@@ -75,7 +75,7 @@ export function PnLCockpit(_props: ModuleProps) {
       }}>
         <span style={{ ...mono, fontSize: 12, color: '#c9d1d9', letterSpacing: '0.04em' }}>{strategyLabel}</span>
         <span style={pill(modeLabel, modeColor)}>{modeLabel}</span>
-        <span style={{ ...mono, fontSize: 9, color: '#3d4d5e' }}>
+        <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text)' }}>
           {r ? `${r.start} → ${r.end}` : '— → —'}
         </span>
 
@@ -84,10 +84,10 @@ export function PnLCockpit(_props: ModuleProps) {
 
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
           <input type="text" placeholder="start (ISO)" value={start} onChange={e => setStart(e.target.value.trim())} style={dateInput} />
-          <span style={{ ...mono, fontSize: 10, color: '#2d3a4a' }}>→</span>
+          <span style={{ ...mono, fontSize: 10, color: 'var(--amr-text-dim)' }}>→</span>
           <input type="text" placeholder="end (ISO)" value={end} onChange={e => setEnd(e.target.value.trim())} style={dateInput} />
 
-          {lastRunStr && <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>Last run: {lastRunStr}</span>}
+          {lastRunStr && <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>Last run: {lastRunStr}</span>}
 
           {selectedInstrumentId ? (
             <button onClick={onRun} disabled={loading} style={{
@@ -105,10 +105,10 @@ export function PnLCockpit(_props: ModuleProps) {
           ) : (
             <>
               <button disabled style={{
-                ...mono, fontSize: 10, color: '#3d4d5e', background: '#161d27', border: 'none',
+                ...mono, fontSize: 10, color: 'var(--amr-text)', background: '#161d27', border: 'none',
                 borderRadius: 3, padding: '5px 12px', cursor: 'default',
               }}>Run Backtest</button>
-              <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>Load an instrument first</span>
+              <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>Load an instrument first</span>
             </>
           )}
         </div>
@@ -140,13 +140,13 @@ export function PnLCockpit(_props: ModuleProps) {
             <div style={{ flex: '0 0 60%', minWidth: 0, display: 'flex', flexDirection: 'column', borderRight: '1px solid #0e1520' }}>
               <div style={{ flex: '0 0 55%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ flexShrink: 0, padding: '5px 12px', background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-                  <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.08em' }}>Equity curve (cumulative net P&L)</span>
+                  <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.08em' }}>Equity curve (cumulative net P&L)</span>
                 </div>
                 <EquityChart data={r.equity_curve} />
               </div>
               <div style={{ flex: '0 0 45%', minHeight: 0, display: 'flex', flexDirection: 'column', borderTop: '1px solid #0e1520' }}>
                 <div style={{ flexShrink: 0, padding: '5px 12px', background: '#06090e', borderBottom: '1px solid #0a0f16' }}>
-                  <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.08em' }}>Trade duration vs entry date</span>
+                  <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.08em' }}>Trade duration vs entry date</span>
                 </div>
                 <TradeScatter trades={r.trades} />
               </div>
@@ -155,7 +155,7 @@ export function PnLCockpit(_props: ModuleProps) {
             {/* RIGHT 40% — trade log */}
             <div style={{ flex: '0 0 40%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
               <div style={{ flexShrink: 0, padding: '5px 12px', background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-                <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.08em' }}>Trade log · {r.n_trades}</span>
+                <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.08em' }}>Trade log · {r.n_trades}</span>
               </div>
               <TradeLog trades={r.trades} />
             </div>
@@ -168,7 +168,7 @@ export function PnLCockpit(_props: ModuleProps) {
                 borderRadius: '50%', display: 'inline-block', animation: 'pnl-spin 0.7s linear infinite',
               }} />
             ) : (
-              <span style={{ ...mono, fontSize: 11, color: '#2d3a4a' }}>
+              <span style={{ ...mono, fontSize: 11, color: 'var(--amr-text-dim)' }}>
                 {selectedInstrumentId ? 'Run a backtest to see results' : 'Load an instrument first'}
               </span>
             )}

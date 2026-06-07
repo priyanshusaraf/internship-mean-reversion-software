@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useUIStore, useWorkstationStore } from '@/lib/store';
+import { useUIStore, useWorkstationStore, deriveTextVars } from '@/lib/store';
 import { api } from '@/lib/api';
 import { SettingsModal } from './SettingsModal';
 
@@ -15,12 +15,28 @@ const mono: React.CSSProperties = {
 export function AppNav() {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const { fontScale } = useUIStore();
+  const { fontScale, textColor } = useUIStore();
 
   // Apply font scale as a CSS variable on the root so scaled components can use it
   useEffect(() => {
     document.documentElement.style.setProperty('--amr-scale', String(fontScale));
   }, [fontScale]);
+
+  // Apply user text color: when set, override the three text vars (derived from one primary);
+  // when empty, clear the inline override so globals.css :root brightened defaults win.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (textColor) {
+      const v = deriveTextVars(textColor);
+      root.style.setProperty('--amr-text', v.text);
+      root.style.setProperty('--amr-text-bright', v.bright);
+      root.style.setProperty('--amr-text-dim', v.dim);
+    } else {
+      root.style.removeProperty('--amr-text');
+      root.style.removeProperty('--amr-text-bright');
+      root.style.removeProperty('--amr-text-dim');
+    }
+  }, [textColor]);
 
   // App-wide instrument list fetch. The Workstation panel also fetches, but Workbench/Observatory
   // do not — so a reload that lands directly on those pages (now possible because
@@ -93,7 +109,7 @@ export function AppNav() {
           style={{
             background: 'none', border: '1px solid transparent', borderRadius: 3,
             cursor: 'pointer', padding: '2px 6px',
-            color: '#2d3a4a', fontSize: 11, lineHeight: 1,
+            color: 'var(--amr-text-dim)', fontSize: 11, lineHeight: 1,
             transition: 'all 0.12s',
           }}
           onMouseEnter={e => {
@@ -104,7 +120,7 @@ export function AppNav() {
           }}
           onMouseLeave={e => {
             const b = e.currentTarget as HTMLButtonElement;
-            b.style.color = '#2d3a4a';
+            b.style.color = 'var(--amr-text-dim)';
             b.style.borderColor = 'transparent';
             b.style.background = 'none';
           }}

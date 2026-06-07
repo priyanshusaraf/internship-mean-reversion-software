@@ -40,7 +40,7 @@ export default function WorkbenchPage() {
             <div style={{
               flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
             }}>
-              <span style={{ fontSize: 11, color: '#2d3a4a', fontFamily: 'ui-monospace,monospace' }}>
+              <span style={{ fontSize: 11, color: 'var(--amr-text-dim)', fontFamily: 'ui-monospace,monospace' }}>
                 No instrument selected
               </span>
               <span style={{ fontSize: 10, color: '#1e2833', fontFamily: 'ui-monospace,monospace' }}>

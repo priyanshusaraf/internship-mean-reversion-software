@@ -123,7 +123,7 @@ export function CausalDiff({ instrumentId, dateRange, window: win }: ModuleProps
       {/* Main chart */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 16, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Causal Diff</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Causal Diff</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
           {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
           <span style={{ ...mono, fontSize: 9, color: '#1e2833', marginLeft: 'auto', marginRight: 12 }}>
@@ -163,7 +163,7 @@ export function CausalDiff({ instrumentId, dateRange, window: win }: ModuleProps
                 ['n', String(s.n)],
               ] as [string, string][]).map(([label, value]) => (
                 <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0', borderBottom: '1px solid #0a0f16' }}>
-                  <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>{label}</span>
+                  <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>{label}</span>
                   <span style={{ ...mono, fontSize: 10, color: '#8b99a8' }}>{value}</span>
                 </div>
               ))}

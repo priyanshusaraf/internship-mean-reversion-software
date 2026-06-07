@@ -176,7 +176,7 @@ export function EstimatorCompare({ instrumentId, dateRange, window: win }: Modul
 
   const row = (label: string, ema: string, kal: string, kalBetter?: boolean) => (
     <div key={label} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 4, padding: '2px 0', borderBottom: '1px solid #0a0f16' }}>
-      <span style={{ ...mono, fontSize: 9, color: '#2d3a4a' }}>{label}</span>
+      <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)' }}>{label}</span>
       <span style={{ ...mono, fontSize: 10, color: '#6f7d8c', textAlign: 'right' }}>{ema}</span>
       <span style={{ ...mono, fontSize: 10, color: kalBetter ? '#3fb950' : '#d8a657', textAlign: 'right' }}>{kal}</span>
     </div>
@@ -187,7 +187,7 @@ export function EstimatorCompare({ instrumentId, dateRange, window: win }: Modul
       {/* Left: stacked overlay + residual charts */}
       <div style={{ flex: '0 0 64%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 16, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Estimator Compare — μ* overlay</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Estimator Compare — μ* overlay</span>
           <span style={{ ...mono, fontSize: 9, color: EMA_COLOR }}>EMA-{win}</span>
           <span style={{ ...mono, fontSize: 9, color: KAL_COLOR }}>Kalman (frozen)</span>
           {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
@@ -203,7 +203,7 @@ export function EstimatorCompare({ instrumentId, dateRange, window: win }: Modul
       {/* Right: centering panel — the thesis test */}
       <div style={{ flex: '0 0 36%', minWidth: 0, borderLeft: '1px solid #0e1520', display: 'flex', flexDirection: 'column', background: '#070b10' }}>
         <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 10, gap: 8, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-          <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Centering Panel</span>
+          <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Centering Panel</span>
         </div>
 
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '8px 10px' }}>
@@ -229,7 +229,7 @@ export function EstimatorCompare({ instrumentId, dateRange, window: win }: Modul
               )}
 
               <div style={{ marginTop: 10, padding: '6px 8px', background: '#06090e', border: '1px solid #0e1520', borderRadius: 3 }}>
-                <div style={{ ...mono, fontSize: 8, color: '#2d3a4a', lineHeight: 1.6 }}>
+                <div style={{ ...mono, fontSize: 8, color: 'var(--amr-text-dim)', lineHeight: 1.6 }}>
                   Kalman effective span ≈ <span style={{ color: '#8b99a8' }}>{c.kalmanEffSpan != null ? c.kalmanEffSpan.toFixed(0) : '—'}</span> bars.
                   {' '}For a fair centering comparison set the EMA window near this — otherwise responsiveness, not the velocity state, drives the difference.
                 </div>

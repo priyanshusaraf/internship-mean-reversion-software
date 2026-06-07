@@ -97,24 +97,24 @@ export function ResearchSurface() {
           flexShrink: 0,
         }}
       >
-        <span style={{ ...monoStyle, fontSize: 9, fontWeight: 700, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+        <span style={{ ...monoStyle, fontSize: 9, fontWeight: 700, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
           Research
         </span>
 
         {stats && (
           <>
             <div style={{ width: 1, height: 10, background: '#161d27' }} />
-            <span style={{ ...monoStyle, fontSize: 10, color: '#3d4d5e' }}>
+            <span style={{ ...monoStyle, fontSize: 10, color: 'var(--amr-text)' }}>
               n={stats.n}
             </span>
-            <span style={{ ...monoStyle, fontSize: 10, color: '#3d4d5e' }}>
+            <span style={{ ...monoStyle, fontSize: 10, color: 'var(--amr-text)' }}>
               ε̄={fmt(stats.epsilon_mean)}
             </span>
-            <span style={{ ...monoStyle, fontSize: 10, color: '#3d4d5e' }}>
+            <span style={{ ...monoStyle, fontSize: 10, color: 'var(--amr-text)' }}>
               σ(ε)={fmt(stats.epsilon_std)}
             </span>
             {loading && (
-              <span style={{ ...monoStyle, fontSize: 10, color: '#2d3a4a', marginLeft: 'auto' }}>
+              <span style={{ ...monoStyle, fontSize: 10, color: 'var(--amr-text-dim)', marginLeft: 'auto' }}>
                 loading
               </span>
             )}
@@ -159,7 +159,7 @@ export function ResearchSurface() {
                       padding: '4px 10px',
                       fontSize: 9,
                       fontWeight: 600,
-                      color: '#2d3a4a',
+                      color: 'var(--amr-text-dim)',
                       letterSpacing: '0.08em',
                       textTransform: 'uppercase',
                       borderBottom: '1px solid #0e1520',
@@ -181,7 +181,7 @@ export function ResearchSurface() {
                     borderBottom: '1px solid #0a0f16',
                   }}
                 >
-                  <td style={{ ...monoStyle, padding: '3px 10px', fontSize: 10, color: '#3d4d5e', textAlign: 'right' }}>
+                  <td style={{ ...monoStyle, padding: '3px 10px', fontSize: 10, color: 'var(--amr-text)', textAlign: 'right' }}>
                     {row.date}
                   </td>
                   <td style={{ ...monoStyle, padding: '3px 10px', fontSize: 10, color: '#8b99a8', textAlign: 'right' }}>

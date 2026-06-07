@@ -30,7 +30,7 @@ export function PnLPane({ onRun, canRun }: Props) {
   const tint = habitatTint(habitatScore);
 
   const m = (render: (res: BacktestResult) => { value: string; color?: string }) =>
-    r ? render(r) : { value: '—', color: '#2d3a4a' };
+    r ? render(r) : { value: '—', color: 'var(--amr-text-dim)' };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: C.bg, minHeight: 0 }}>

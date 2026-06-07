@@ -9,9 +9,12 @@ export const C = {
   bgRaised: '#0d1520',
   border: '#161d27',
   borderSoft: '#0e1520',
-  text: '#3d4d5e',
-  textBright: '#8fa3b8',
-  textDim: '#2d3a4a',
+  // Text tokens resolve through CSS vars so they respond live to the Settings text-color
+  // control (defaults defined in globals.css :root, applied/overridden in AppNav). Only the
+  // THREE text tokens are var-backed; bg/border/semantic colors stay literal.
+  text: 'var(--amr-text)',
+  textBright: 'var(--amr-text-bright)',
+  textDim: 'var(--amr-text-dim)',
   accent: '#58a6ff',
   accentBg: 'rgba(56,139,253,0.07)',
   accentBorder: 'rgba(56,139,253,0.25)',

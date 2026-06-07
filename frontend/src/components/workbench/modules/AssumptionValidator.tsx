@@ -58,9 +58,9 @@ function TestStrip({
         <span style={{ ...mono, fontSize: 9, fontWeight: 600, color: isFailing ? '#f85149' : '#3fb950', letterSpacing: '0.08em', width: 36 }}>
           {isFailing ? 'FAIL' : 'PASS'}
         </span>
-        <span style={{ ...mono, fontSize: 9, color: '#3d4d5e', letterSpacing: '0.08em' }}>{label}</span>
+        <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text)', letterSpacing: '0.08em' }}>{label}</span>
         <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>{description}</span>
-        <span style={{ ...mono, fontSize: 9, color: '#3d4d5e', marginLeft: 'auto', marginRight: 12 }}>
+        <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text)', marginLeft: 'auto', marginRight: 12 }}>
           current: {fmt(lastVal)}  threshold: {fmt(threshold)}
         </span>
       </div>
@@ -122,7 +122,7 @@ export function AssumptionValidator({ instrumentId, dateRange, window: win }: Mo
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#070b10' }}>
       {/* Header */}
       <div style={{ height: 26, flexShrink: 0, display: 'flex', alignItems: 'center', paddingLeft: 12, gap: 16, background: '#090d13', borderBottom: '1px solid #0e1520' }}>
-        <span style={{ ...mono, fontSize: 9, color: '#2d3a4a', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Assumption Validator</span>
+        <span style={{ ...mono, fontSize: 9, color: 'var(--amr-text-dim)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Assumption Validator</span>
         {loading && <span style={{ ...mono, fontSize: 9, color: '#1e2833' }}>loading</span>}
         {error && <span style={{ ...mono, fontSize: 9, color: '#f85149' }}>{error}</span>}
         <span style={{ ...mono, fontSize: 9, color: '#1e2833', marginLeft: 'auto', marginRight: 12 }}>
