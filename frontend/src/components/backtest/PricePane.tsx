@@ -33,19 +33,33 @@ import type { OHLCVBar } from '@/lib/types';
 const UP = '#3fb950', DOWN = '#f85149';
 const MU_WINDOW = 20; // EMA/Kalman diagnostics window (μ* overlay only — display)
 
+// Viewport = the chart's visible range as fractions [0,1] of the full series. View-only state,
+// SEPARATE from the committed analysis window (start/end). Zoom/pan changes the viewport and the
+// scrubber minimap, and NEVER triggers a habitat recompute.
+export interface Viewport { from: number; to: number }
+
 interface Props {
   instrumentId: string | null;
   bars: OHLCVBar[];
   loading: boolean;       // OHLC fetch in flight (owned by the page)
   start: string | null;   // committed scrubber window (drives lines/highlight/dim)
   end: string | null;
+  viewport?: Viewport | null;                      // controlled visible range (from the scrubber minimap)
+  onViewportChange?: (v: Viewport) => void;        // chart pan/zoom → report visible range up
 }
 
-export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
+export function PricePane({ instrumentId, bars, loading, start, end, viewport, onViewportChange }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const candleRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const muRef = useRef<ISeriesApi<'Line'> | null>(null);
+
+  // viewport sync plumbing
+  const candleLenRef = useRef(0);          // current candle count (logical-range denominator)
+  const fittedRef = useRef(false);         // has the current data been fit-to-content once?
+  const applyingRef = useRef(false);       // guard: suppress reporting our own programmatic range set
+  const onViewportChangeRef = useRef(onViewportChange);
+  onViewportChangeRef.current = onViewportChange;
 
   // overlay primitives (true vertical lines + highlight band, positioned via timeToCoordinate)
   const startLineRef = useRef<HTMLDivElement>(null);
@@ -71,7 +85,7 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
       // most-recent subset and scrolls the selected window off-screen left. Lower it so the FULL
       // series always fits and the post-window dim overlay covers only the tail.
       timeScale: { borderColor: C.border, minBarSpacing: 0.02 },
-      handleScroll: false, handleScale: false,   // chart is driven by the scrubber, not interactive
+      handleScroll: true, handleScale: true,   // interactive: free zoom/pan (view-only; reported to the scrubber minimap)
       width: hostRef.current.clientWidth, height: hostRef.current.clientHeight,
     });
     candleRef.current = chart.addCandlestickSeries({
@@ -84,13 +98,26 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
     const draw = () => drawOverlay();
     chart.timeScale().subscribeVisibleTimeRangeChange(draw);
 
+    // Report the visible range up as [0,1] fractions whenever the user pans/zooms. Skip the echo of
+    // our OWN programmatic setVisibleLogicalRange (applyingRef) so band-drag → chart → report can't loop.
+    chart.timeScale().subscribeVisibleLogicalRangeChange((range) => {
+      if (!range) return;
+      if (applyingRef.current) { applyingRef.current = false; return; }
+      const len = candleLenRef.current;
+      if (len < 2 || !onViewportChangeRef.current) return;
+      onViewportChangeRef.current({ from: range.from / (len - 1), to: range.to / (len - 1) });
+    });
+
     const ro = new ResizeObserver(() => {
-      if (hostRef.current) chart.applyOptions({ width: hostRef.current.clientWidth, height: hostRef.current.clientHeight });
-      // Re-fit on every resize: the chart is non-interactive (handleScroll/handleScale=false) so there
-      // is no user zoom/pan to preserve, and the initial fitContent often runs while the flex host is
-      // still 0-width — leaving barSpacing locked to a subset of bars (the window scrolls off-screen).
-      // Re-fitting here guarantees the FULL series is shown, so the post-window dim covers only the tail.
-      chart.timeScale().fitContent();
+      if (!hostRef.current) return;
+      const w = hostRef.current.clientWidth, h = hostRef.current.clientHeight;
+      chart.applyOptions({ width: w, height: h });
+      // Fit-to-content only ONCE per dataset (guards the documented 0-width-host init case), then leave
+      // the user's zoom/pan untouched on subsequent resizes. New data resets fittedRef (bars effect).
+      if (!fittedRef.current && w > 0 && candleLenRef.current > 0) {
+        chart.timeScale().fitContent();
+        fittedRef.current = true;
+      }
       draw();
     });
     ro.observe(hostRef.current);
@@ -104,9 +131,27 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
       .filter(b => Number.isFinite(b.close))
       .map(b => ({ time: b.time as Time, open: b.open, high: b.high, low: b.low, close: b.close }));
     candleRef.current.setData(data);
-    if (data.length) chartRef.current?.timeScale().fitContent();
+    candleLenRef.current = data.length;
+    fittedRef.current = false;             // new dataset → allow one fit-to-content
+    if (data.length) { chartRef.current?.timeScale().fitContent(); fittedRef.current = true; }
     drawOverlay();
   }, [bars]);
+
+  // Apply an externally-driven viewport (scrubber minimap drag) to the chart. Skip when the chart is
+  // already there (within half a bar) — this no-ops the echo of our own reported range, breaking the loop.
+  useEffect(() => {
+    const chart = chartRef.current;
+    const len = candleLenRef.current;
+    if (!chart || !viewport || len < 2) return;
+    const from = viewport.from * (len - 1);
+    const to = viewport.to * (len - 1);
+    const cur = chart.timeScale().getVisibleLogicalRange();
+    if (cur && Math.abs(cur.from - from) < 0.5 && Math.abs(cur.to - to) < 0.5) return;
+    applyingRef.current = true;
+    chart.timeScale().setVisibleLogicalRange({ from, to });
+  }, [viewport]);
+
+  const fitView = () => { chartRef.current?.timeScale().fitContent(); };
 
   // ── Kalman μ* overlay (display-only; no JS math) ──
   useEffect(() => {
@@ -216,8 +261,22 @@ export function PricePane({ instrumentId, bars, loading, start, end }: Props) {
       </div>
 
       {/* header chips */}
-      <div style={{ position: 'absolute', top: 6, left: 8, display: 'flex', gap: 8, alignItems: 'center', pointerEvents: 'none' }}>
-        <span style={{ ...mono, fontSize: 9, color: C.textDim, letterSpacing: '0.08em' }}>price · candles · μ* (Kalman)</span>
+      <div style={{ position: 'absolute', top: 6, left: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
+        <span style={{ ...mono, fontSize: 9, color: C.textDim, letterSpacing: '0.08em', pointerEvents: 'none' }}>price · candles · μ* (Kalman)</span>
+        {instrumentId && (
+          <button
+            onClick={fitView}
+            title="Fit full series (reset zoom)"
+            style={{
+              ...mono, fontSize: 9, padding: '1px 6px', cursor: 'pointer',
+              background: C.bgRaised, border: `1px solid ${C.border}`, borderRadius: 3, color: C.textDim,
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = C.accent; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = C.textDim; }}
+          >
+            ⤢ fit
+          </button>
+        )}
         {(loading || muLoading) && <span style={spinner} />}
       </div>
       {start && end && (

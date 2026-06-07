@@ -20,7 +20,7 @@ import { ResizeHandle } from '@/components/layout/ResizeHandle';
 import { api } from '@/lib/api';
 import { useWorkstationStore, useBacktestStore } from '@/lib/store';
 import { C, mono } from '@/components/observatory/ui';
-import { PricePane } from '@/components/backtest/PricePane';
+import { PricePane, type Viewport } from '@/components/backtest/PricePane';
 import { TimelineScrubber } from '@/components/backtest/TimelineScrubber';
 import { PnLPane } from '@/components/backtest/PnLPane';
 import { HabitatPane } from '@/components/backtest/HabitatPane';
@@ -38,6 +38,8 @@ export default function BacktestPage() {
 
   const [bars, setBars] = useState<OHLCVBar[]>([]);
   const [ohlcLoading, setOhlcLoading] = useState(false);
+  // chart visible range [0,1], shared between PricePane (zoom/pan) and the scrubber minimap. View-only.
+  const [viewport, setViewport] = useState<Viewport | null>(null);
 
   // populate the dropdown even on direct navigation (store persists only the id, not the list)
   useEffect(() => {
@@ -168,13 +170,13 @@ export default function BacktestPage() {
           <PanelGroup direction="vertical" autoSaveId="amr-backtest-left">
             <RPanel defaultSize={62} minSize={20}>
               <div style={{ height: '100%', minHeight: 0, borderRight: `1px solid ${C.border}` }}>
-                <PricePane instrumentId={selectedInstrumentId} bars={bars} loading={ohlcLoading} start={start || null} end={end || null} />
+                <PricePane instrumentId={selectedInstrumentId} bars={bars} loading={ohlcLoading} start={start || null} end={end || null} viewport={viewport} onViewportChange={setViewport} />
               </div>
             </RPanel>
             <ResizeHandle dir="vertical" />
             <RPanel defaultSize={38} minSize={15}>
               <div style={{ height: '100%', minHeight: 0, borderRight: `1px solid ${C.border}`, borderTop: `1px solid ${C.border}` }}>
-                <TimelineScrubber dates={dates} disabled={!selectedInstrumentId || ohlcLoading} onCommit={onCommit} />
+                <TimelineScrubber dates={dates} disabled={!selectedInstrumentId || ohlcLoading} onCommit={onCommit} viewport={viewport} onViewportChange={setViewport} />
               </div>
             </RPanel>
           </PanelGroup>

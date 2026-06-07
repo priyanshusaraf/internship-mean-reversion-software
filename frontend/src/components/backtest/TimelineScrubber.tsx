@@ -15,15 +15,22 @@ import { C, mono } from '@/components/observatory/ui';
 
 const MIN_WINDOW = 60; // bars
 
+interface Viewport { from: number; to: number }   // chart visible range as [0,1] fractions
+
 interface Props {
   dates: string[];                 // full ascending date range of the loaded instrument
   disabled: boolean;
   // released=false → init/seed (set store only); released=true → set store AND fetch habitat.
   onCommit: (start: string, end: string, released: boolean) => void;
+  // viewport minimap (chart zoom/pan reflection) — view-only, NEVER commits a window or recomputes.
+  viewport?: Viewport | null;
+  onViewportChange?: (v: Viewport) => void;
 }
 
-export function TimelineScrubber({ dates, disabled, onCommit }: Props) {
+export function TimelineScrubber({ dates, disabled, onCommit, viewport, onViewportChange }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const minimapRef = useRef<HTMLDivElement>(null);
+  const vpDrag = useRef<{ startX: number; from: number; to: number } | null>(null);
   const n = dates.length;
   const maxIdx = Math.max(0, n - 1);
 
@@ -103,10 +110,60 @@ export function TimelineScrubber({ dates, disabled, onCommit }: Props) {
   const rightPct = (i1 / maxIdx) * 100;
   const tooShort = n < MIN_WINDOW;
 
+  // viewport band geometry (clamped to the track)
+  const vpFrom = viewport ? Math.max(0, Math.min(1, viewport.from)) : 0;
+  const vpTo = viewport ? Math.max(0, Math.min(1, viewport.to)) : 1;
+  const vpLeftPct = vpFrom * 100;
+  const vpWidthPct = Math.max(0, (vpTo - vpFrom) * 100);
+  const vpZoomed = viewport != null && (vpFrom > 0.001 || vpTo < 0.999);
+
+  // drag the viewport band → pan the chart (preserve zoom width). Pure view-state; no commit.
+  const startVpDrag = (e: React.MouseEvent) => {
+    if (!viewport || !onViewportChange) return;
+    e.preventDefault();
+    vpDrag.current = { startX: e.clientX, from: viewport.from, to: viewport.to };
+    const width = viewport.to - viewport.from;
+    const rect = minimapRef.current?.getBoundingClientRect();
+    document.body.style.userSelect = 'none';
+    const onMove = (ev: MouseEvent) => {
+      if (!vpDrag.current || !rect || rect.width === 0) return;
+      const delta = (ev.clientX - vpDrag.current.startX) / rect.width;
+      let from = vpDrag.current.from + delta;
+      let to = from + width;
+      if (from < 0) { from = 0; to = width; }
+      if (to > 1) { to = 1; from = 1 - width; }
+      onViewportChange({ from, to });
+    };
+    const onUp = () => {
+      vpDrag.current = null;
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.body.style.userSelect = '';
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  };
+
   return (
     <div style={wrap}>
-      <div style={{ ...mono, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.textDim, marginBottom: 4 }}>
-        window scrubber · {i1 - i0} bars selected {tooShort && <span style={{ color: C.danger }}>· need ≥ {MIN_WINDOW}</span>}
+      <div style={{ ...mono, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.textDim, marginBottom: 4, display: 'flex', justifyContent: 'space-between' }}>
+        <span>window scrubber · {i1 - i0} bars selected {tooShort && <span style={{ color: C.danger }}>· need ≥ {MIN_WINDOW}</span>}</span>
+        {viewport && <span style={{ color: vpZoomed ? C.textBright : C.textDim }}>chart view {Math.round(vpFrom * 100)}–{Math.round(vpTo * 100)}%{vpZoomed ? ' · drag to pan' : ' · full'}</span>}
+      </div>
+
+      {/* viewport minimap — reflects the price chart's zoom/pan; drag to pan the chart (view-only) */}
+      <div ref={minimapRef} style={{ position: 'relative', height: 6, margin: '0 10px 6px', borderRadius: 3, background: '#0b1118', border: `1px solid ${C.border}` }}>
+        <div
+          onMouseDown={startVpDrag}
+          title="chart visible range — drag to pan"
+          style={{
+            position: 'absolute', top: -1, bottom: -1, left: `${vpLeftPct}%`, width: `${vpWidthPct}%`,
+            minWidth: 4, borderRadius: 3,
+            background: vpZoomed ? 'rgba(143,163,184,0.28)' : 'rgba(143,163,184,0.12)',
+            border: `1px solid ${vpZoomed ? 'rgba(143,163,184,0.6)' : 'rgba(143,163,184,0.3)'}`,
+            cursor: onViewportChange ? 'grab' : 'default',
+          }}
+        />
       </div>
 
       {/* track */}
