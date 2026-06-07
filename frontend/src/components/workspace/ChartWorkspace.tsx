@@ -209,6 +209,19 @@ export function ChartWorkspace() {
           loading
         </div>
       )}
+      {selectedInstrumentId && (
+        <button
+          onClick={() => chartRef.current?.timeScale().fitContent()}
+          title="Fit full series (reset zoom)"
+          className="absolute z-10 font-data"
+          style={{
+            top: 8, left: 10, fontSize: 9, padding: '1px 6px', cursor: 'pointer',
+            background: '#0d1520', border: '1px solid #161d27', borderRadius: 3, color: 'var(--amr-text-dim)',
+          }}
+        >
+          ⤢ fit
+        </button>
+      )}
       <div ref={containerRef} className="flex-1 min-h-0" />
     </div>
   );
