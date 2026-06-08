@@ -78,7 +78,10 @@
       "Bash(cp /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/CONTINUATION_STATE.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/HYPOTHESIS_REGISTRY.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/SESSION_BRIEF.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/23_arm_a_v2_rolling_results.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/21_arm_a_v2_results.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/12_institutional_review_post_state_t.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/11_state_t_existence.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/06_kalman_equilibrium_research_update.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/19_arm_a_habitat_results.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/20_arm_a_v2_positive_control_prereg.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/22_arm_a_v2_rolling_local_prereg.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/18_arm_a_habitat_preregistration.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/14_temporal_ontology.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/13_canonical_spread_protocol.md /Users/priyanshusaraf/Desktop/internship-final-reports/all_md/CLAUDE.md /Users/priyanshusaraf/Desktop/internship-final-reports/imp_md/)",
       "Bash(xargs -I{} basename {})",
       "Bash(python3 *)",
-      "Bash(xargs ls -la)"
+      "Bash(xargs ls -la)",
+      "Bash(grep -E '\\\\.\\(py|ts|tsx|js|md\\)$')",
+      "Bash(git *)",
+      "Bash(grep -i 'py$')"
     ]
   }
 }

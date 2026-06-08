@@ -228,4 +228,4 @@ tool**.
 ## NOTE ON SCOPE
 This is the spec for the *interface*. It does **not** authorize new research verdicts — those
 still run through pre-registration + named-agent + cross-model adjudication. The cockpit
-*shows* and *steers*; it does not adjudicate.
+*shows* and *steers*; it does not adjudicate.xx
