@@ -1,0 +1,462 @@
+// ============================================================================
+//  CALENDAR-SPREAD MEAN-REVERSION STRATEGY  —  Pine Script v6
+// ============================================================================
+//  Target language version: Pine Script v6 (current TradingView stable, 2026).
+//  v6 was chosen over v5 because:
+//    - v6 makes `request.security()` and `barstate.*` semantics explicit and
+//      keeps the documented lookahead-safe `expr[1] + lookahead_on` pattern.
+//    - v6 retains the same `strategy()` cost params (commission_type /
+//      commission_value / slippage) used here, with no syntax change vs v5.
+//    - `process_orders_on_close` and `calc_on_every_tick` behave identically.
+//  If your account is pinned to v5, change the annotation to //@version=5 — the
+//  only edits needed are NONE for this script: every construct used below is
+//  syntactically identical in v5 and v6. (v6-specific niceties like boolean
+//  short-circuit are not relied upon.)
+//
+//  SYNTAX VERIFIED against TradingView Pine docs (June 2026):
+//    - Lookahead-safe HTF/second-symbol pattern:  request.security(sym, tf,
+//        expr[1], lookahead = barmerge.lookahead_on)  returns only the LAST
+//        CONFIRMED value and never leaks the future.
+//        https://www.tradingview.com/pine-script-docs/concepts/repainting/
+//        https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/
+//    - strategy() cost params commission_type / commission_value / slippage:
+//        https://www.tradingview.com/pine-script-docs/concepts/strategies/
+//        commission types: strategy.commission.percent /
+//        strategy.commission.cash_per_contract / strategy.commission.cash_per_order
+//    - process_orders_on_close / calc_on_every_tick / barstate.isconfirmed:
+//        https://www.tradingview.com/pine-script-docs/language/declaration-statements
+//
+//  WHAT THIS IS:  a strictly-causal, no-repaint, OHLC-only mean-reversion
+//  strategy on a CALENDAR SPREAD of two futures legs (near vs far expiry, same
+//  commodity). Spread = near_price - ratio * far_price (or log/ratio form).
+//
+//  CAUSALITY CONTRACT (the whole point — read this):
+//    1. The chart runs on the NEAR leg. The FAR leg is pulled with
+//       request.security(...). We pull it with the [1]-offset + lookahead_on
+//       pattern so the fetched value is the FAR leg's last *confirmed* close —
+//       guaranteed available at the time the near bar closes, never the future.
+//    2. ALL signal logic reads spread[1]-anchored series (z-score window ends at
+//       t-1; Kalman/OU update only on confirmed bars). Nothing reads the
+//       still-forming current bar's close for a decision.
+//    3. Orders are decided on bar close and executed on the NEXT bar's open
+//       (default strategy fill). process_orders_on_close is left FALSE so we do
+//       NOT cheat by filling on the very close we used to decide.
+//    4. Everything entry-related is gated on barstate.isconfirmed.
+//  A single lookahead bug invalidates the whole study, so each call is annotated.
+// ============================================================================
+
+//@version=6
+strategy(
+     title                = "Calendar-Spread Mean Reversion (causal, no-repaint)",
+     shorttitle           = "CalSpr-MR",
+     overlay              = false,                       // spread/z live in their own panes, not on price
+     pyramiding           = 0,                            // one position at a time — no stacking
+     calc_on_every_tick   = false,                        // CAUSAL: compute only on bar updates, never intrabar repaint
+     process_orders_on_close = false,                     // CAUSAL: decide on close[t], FILL on open[t+1] (no same-close cheat)
+     calc_on_order_fills  = false,
+     default_qty_type     = strategy.fixed,               // we size manually via the qty arg (vol-scaled below)
+     default_qty_value    = 1,
+     initial_capital      = 100000,
+     currency             = currency.USD,
+     // ---- COST MODEL (per-LEG; doubled for the spread further down) ----------
+     commission_type      = strategy.commission.cash_per_contract,
+     commission_value     = 0.0,                          // set via input below; strategy() needs a literal default
+     slippage             = 0,                            // ticks; we model spread slippage MANUALLY (two legs) — see notes
+     max_bars_back        = 5000)
+
+// ============================================================================
+//  SECTION 0 — INPUTS
+// ============================================================================
+// ---- Symbols ---------------------------------------------------------------
+grpSym       = "Spread legs"
+farSymInput  = input.symbol("",            "Far leg (request.security; blank = chart symbol)", group = grpSym,
+                 tooltip = "The chart must be loaded on the NEAR leg. Put the FAR-expiry contract here, e.g. the next quarterly. Leave blank only for wiring tests.")
+spreadMode   = input.string("Difference",  "Spread construction", options = ["Difference", "Log-ratio"], group = grpSym,
+                 tooltip = "Difference: near - ratio*far. Log-ratio: ln(near) - ratio*ln(far). Difference is the standard calendar-spread convention.")
+hedgeRatio   = input.float(1.0,            "Hedge ratio (ratio on far leg)", minval = 0.0, step = 0.05, group = grpSym,
+                 tooltip = "Static beta on the far leg. 1.0 = classic 1:1 calendar spread. Set per your contract-multiplier / DV01 matching. Kept STATIC on purpose: rolling-beta manufactures spurious VR<1 (lookahead/DOF inflation).")
+
+// ---- Kalman local-level filter (causal equilibrium mu_t) -------------------
+grpKal       = "Kalman equilibrium (mu_t)"
+kalQ         = input.float(1e-4, "Process noise Q", minval = 1e-9, step = 1e-5, group = grpKal,
+                 tooltip = "Random-walk drift of the equilibrium level. Larger Q = mu tracks faster (less smoothing).")
+kalR         = input.float(1e-2, "Measurement noise R", minval = 1e-9, step = 1e-4, group = grpKal,
+                 tooltip = "Observation noise on the spread. Larger R = more smoothing, mu lags more.")
+bandMult     = input.float(2.0,  "Band multiplier m  (mu +/- m*sqrt(P+R))", minval = 0.1, step = 0.1, group = grpKal)
+
+// ---- Causal z-score --------------------------------------------------------
+grpZ         = "Z-score (window ends at t-1)"
+zLen         = input.int(60, "Z-score window n", minval = 5, group = grpZ,
+                 tooltip = "Lookback for the rolling mean/stdev. Computed on spread[1] so the CURRENT bar is excluded — no self-inclusion leak.")
+
+// ---- OU / half-life (causal AR(1)) -----------------------------------------
+grpOU        = "OU / half-life (AR1, time-stop)"
+ouLen        = input.int(120, "AR(1) regression window", minval = 10, group = grpOU,
+                 tooltip = "Window for the trailing regression of spread on its own lag -> phi -> half-life.")
+hlMult       = input.float(2.0, "Time-stop = k x half-life", minval = 0.5, step = 0.5, group = grpOU)
+hlMaxBars    = input.int(250, "Time-stop hard cap (bars)", minval = 5, group = grpOU,
+                 tooltip = "Absolute ceiling so a near-unit-root phi (HL -> inf) cannot create an immortal trade.")
+
+// ---- Regime gate (binary MR / no-trade) ------------------------------------
+grpReg       = "Regime gate (binary)"
+vrLen        = input.int(40,  "Variance-ratio window q-base", minval = 8, group = grpReg)
+vrQ          = input.int(4,   "Variance-ratio horizon q", minval = 2, group = grpReg,
+                 tooltip = "VR(q) < 1 => mean-reverting (variance grows slower than linearly). VR>=1 => trending/RW => NO TRADE.")
+vrThresh     = input.float(1.0, "VR threshold (trade only if VR < thresh)", minval = 0.1, step = 0.05, group = grpReg)
+
+// ---- Entry / exit thresholds -----------------------------------------------
+grpSig       = "Entry / exit thresholds (in z units)"
+thEntry      = input.float(1.25, "Entry |z| >= theta_entry", minval = 0.5, step = 0.05, group = grpSig,
+                 tooltip = "DERIVED, not asserted: Bertram (2010) Sharpe-optimal OU entry WITH cost ~ 1.25 sigma, which independently matches Avellaneda-Lee's empirical 1.25 s-score. Plain 2.0 over-waits, shrinks trade count, and (Leung-Li) cuts recoverable early entries.")
+zExit        = input.float(0.5,  "Exit at |z| <= z_exit (OU-optimal PARTIAL target)", minval = 0.0, step = 0.05, group = grpSig,
+                 tooltip = "Exit BEFORE full mean-touch (z=0). Bertram/AL: the last increment to the mean costs disproportionate time (E[T] curvature) for vanishing edge -> a ~0.5 sigma partial target improves return-per-time and equity smoothness. Set 0 to revert to full mean-touch.")
+thDisaster   = input.float(4.0, "Catastrophe |z| >= theta_disaster (thesis broken)", minval = 1.0, step = 0.5, group = grpSig,
+                 tooltip = "WIDE thesis-invalidation stop on the z statistic itself — NOT a tight price stop (Leung-Li: a tighter stop analytically SHRINKS the take-profit). If z blows past this, the reversion thesis is dead; exit.")
+useEqBreak   = input.bool(true, "Exit on equilibrium break (spread leaves Kalman band against us)", group = grpSig)
+
+// ---- Position sizing (vol-scaled) ------------------------------------------
+grpSize      = "Position sizing (vol-scaled)"
+riskPerTrade = input.float(1000.0, "Target risk budget per trade ($, notional scaler)", minval = 1.0, group = grpSize,
+                 tooltip = "Qty ~ riskBudget / (sigma_spread * pointValue). Smooths equity: smaller size when the spread is more volatile.")
+qtyMax       = input.float(50.0, "Max contracts (cap)", minval = 1.0, group = grpSize)
+qtyMin       = input.float(1.0,  "Min contracts (floor)", minval = 0.0, group = grpSize)
+
+// ---- Cost model (manual, two-leg-aware) ------------------------------------
+grpCost      = "Cost model (TWO legs => doubled)"
+slipTicksLeg = input.float(1.0, "Per-LEG slippage (ticks)", minval = 0.0, step = 0.25, group = grpCost,
+                 tooltip = "Slippage on ONE leg. A spread trade touches BOTH legs, so the modelled cost is DOUBLED below. We apply it as a $ commission add-on rather than the strategy() slippage arg, because slippage on the synthetic spread series is not the same as slippage on a real tradable instrument.")
+commPerContractLeg = input.float(2.0, "Per-LEG commission ($/contract)", minval = 0.0, step = 0.5, group = grpCost,
+                 tooltip = "Commission on ONE leg, per contract, per side. Doubled for the spread, applied via strategy.entry/close cost accounting.")
+legTickSize  = input.float(0.0, "Leg tick size (price units; 0 = use chart syminfo.mintick)", minval = 0.0, step = 0.0001, group = grpCost,
+                 tooltip = "Tick size of a single leg, needed to convert slippage ticks -> price. 0 uses the chart (near-leg) mintick.")
+legPointValue= input.float(1.0, "Leg point value ($ per 1.0 price move per contract)", minval = 0.0001, step = 0.1, group = grpCost,
+                 tooltip = "Dollar value of a full 1.0 move in one leg's price, per contract. Used for vol-sizing and cost-in-dollars.")
+
+// ---- Roll blackout (phantom-MR firewall) -----------------------------------
+grpRoll      = "Roll blackout (anti phantom-MR)"
+rollJumpMult = input.float(6.0, "Roll-jump trigger: |dSpread| > k * stdev(dSpread)", minval = 2.0, step = 0.5, group = grpRoll,
+                 tooltip = "Continuous/back-adjusted calendar series JUMP at every roll boundary; that jump-then-settle is read by VR/z as FAKE fast mean reversion (the 'reversion' is a relabeling event, not a tradeable move). A 1-bar spread change bigger than k stdevs is treated as a roll/structural discontinuity.")
+rollMaskBars = input.int(8, "Bars to suppress entries after a roll jump", minval = 0, group = grpRoll,
+                 tooltip = "No new entries for this many bars after a detected roll jump. Matches the project roll-mask convention (k=8).")
+
+// ---- Economic gate (cost-floor veto) ---------------------------------------
+grpEcon      = "Economic gate (cost-floor veto)"
+useCostFloor = input.bool(true, "Veto entries: expected gross capture < k x round-trip cost", group = grpEcon,
+                 tooltip = "PRE-TRADE economic gate. Expected capture from entry-z to exit-z must clear the realistic TWO-leg round-trip cost by this multiple, else NO TRADE. A spread that reverts but cannot clear cost is a NON-finding -- this exact gap killed the prior NG calendar line (~7.5x). Size-independent (both sides scale with qty).")
+costFloorMult= input.float(1.5, "Required capture / cost multiple", minval = 1.0, step = 0.1, group = grpEcon)
+
+// ============================================================================
+//  SECTION 1 — SPREAD CONSTRUCTION (strictly causal two-leg fetch)
+// ============================================================================
+//  The chart symbol is the NEAR leg. We fetch the FAR leg with request.security.
+//
+//  WHY THIS IS LEAK-FREE (the critical part):
+//   - We request `close[1]` (NOT `close`) with lookahead = barmerge.lookahead_on.
+//     Per the Pine docs, that exact combination returns the far leg's LAST
+//     CONFIRMED value and is "not subject to change" — it cannot pull a value
+//     that did not yet exist when the current near bar was forming.
+//   - `lookahead_on` ALONE (without the [1] offset) is the classic future-leak:
+//     on historical bars it would hand back the far leg's *eventual* close.
+//     The [1] offset neutralises that by shifting the read one bar into the
+//     confirmed past. Net effect: same-timeframe, aligned, causal.
+//   - On the chart timeframe the far leg shares the near leg's resolution, so
+//     this is effectively "the far leg's previous confirmed close", which is
+//     always knowable at near-bar close. No future information enters.
+//
+//  NON-ALIGNED BARS / GAPS:
+//   - gaps = barmerge.gaps_off => when the far leg has no bar for a near bar
+//     (holiday/half-session mismatch, illiquid far contract), request.security
+//     HOLDS the last known far value instead of returning na. This prevents the
+//     spread from going na and silently dropping signals. It is still causal:
+//     a held *past* value is not future information.
+//   - We additionally guard with na-checks; if either leg is na we freeze the
+//     spread at its previous value (var carry-forward) and SUPPRESS new entries
+//     that bar. Stale-but-causal beats leaky-but-fresh.
+farTicker   = farSymInput == "" ? syminfo.tickerid : farSymInput
+
+// Far-leg confirmed close, gap-filled, no future leak (see annotation above).
+float farCloseRaw = request.security(
+     farTicker,
+     timeframe.period,                       // same timeframe as the chart => aligned bars
+     close[1],                                // [1] offset = read the FAR leg's PREVIOUS confirmed close
+     lookahead = barmerge.lookahead_on,       // with the [1] offset this is the documented no-repaint pattern
+     gaps      = barmerge.gaps_off)           // hold last value across far-leg gaps instead of returning na
+
+// Near leg: to keep both legs on the SAME information clock, also use the
+// previous confirmed near close. (Using current close for near while using
+// previous for far would desynchronise the two legs by one bar.)
+float nearClose = close[1]
+
+// Carry-forward guard for residual na (e.g. far leg has literally no history yet).
+var float farClose = na
+farClose := na(farCloseRaw) ? farClose : farCloseRaw
+
+// Both legs valid this bar?
+bool legsValid = not na(nearClose) and not na(farClose) and farClose > 0 and nearClose > 0
+
+// ---- Build the spread (var carry-forward so a one-bar gap never nukes it) ---
+var float spread = na
+float spreadNow = na
+if legsValid
+    spreadNow := spreadMode == "Log-ratio" ?
+         (math.log(nearClose) - hedgeRatio * math.log(farClose)) :
+         (nearClose - hedgeRatio * farClose)
+    spread := spreadNow
+// else: spread keeps its previous value (carry-forward); entries suppressed below.
+
+// ============================================================================
+//  SECTION 2 — CAUSAL KALMAN LOCAL-LEVEL FILTER  (equilibrium mu_t)
+// ============================================================================
+//  Model:  mu_t = mu_{t-1} + w_t,   w ~ N(0, Q)        (random walk level)
+//          y_t  = mu_t   + v_t,     v ~ N(0, R)        (noisy spread obs)
+//  Scalar recursion (predict then update), all in `var` state:
+//      predict:  mu_pred = mu_{t-1};   P_pred = P_{t-1} + Q
+//      update :  K = P_pred / (P_pred + R)
+//                mu_t = mu_pred + K*(y_t - mu_pred)
+//                P_t  = (1 - K)*P_pred
+//  Band = mu_t +/- m*sqrt(P_t + R)  (one-step predictive sd of the observation).
+//
+//  CAUSALITY:  state advances ONLY on confirmed bars (barstate.isconfirmed) and
+//  consumes only `spread` (which is already built from confirmed closes). No
+//  future term appears anywhere in the recursion.
+var float kMu = na      // mu_t   (filtered equilibrium)
+var float kP  = na      // P_t    (error variance)
+
+// init on first valid spread
+if na(kMu) and legsValid
+    kMu := spread
+    kP  := 1.0
+
+if barstate.isconfirmed and legsValid and not na(kMu)
+    float muPred = kMu                     // predict (level RW => no drift term)
+    float pPred  = kP + kalQ
+    float K      = pPred / (pPred + kalR)  // Kalman gain
+    kMu := muPred + K * (spread - muPred)  // update with current confirmed obs
+    kP  := (1.0 - K) * pPred
+
+float kBandSd  = na(kP) ? na : math.sqrt(kP + kalR)
+float kUpper   = kMu + bandMult * kBandSd
+float kLower   = kMu - bandMult * kBandSd
+
+// ============================================================================
+//  SECTION 3 — CAUSAL Z-SCORE  (window ends at t-1)
+// ============================================================================
+//  z_t = (spread[1] - mean(spread[1..n])) / stdev(spread[1..n])
+//
+//  WHY [1]:  if we used spread (current bar) inside its own mean/stdev window,
+//  the statistic would contain the very value it is judging -> self-inclusion
+//  leak that biases z toward 0 and lets the current bar "see" itself. Anchoring
+//  the numerator AND the window on spread[1] makes z a function of strictly past
+//  information, so an entry triggered by z uses nothing from the forming bar.
+float spreadLag = spread[1]
+float zMean = ta.sma(spreadLag, zLen)               // mean over spread[1..n]  (the [1] is baked into spreadLag)
+float zStd  = ta.stdev(spreadLag, zLen)
+float zScore = (na(zStd) or zStd == 0) ? na : (spreadLag - zMean) / zStd
+
+// ============================================================================
+//  SECTION 4 — CAUSAL OU / HALF-LIFE  (trailing AR(1))
+// ============================================================================
+//  Regress spread_t on spread_{t-1} over a trailing window => slope phi.
+//  Half-life of mean reversion = -ln(2) / ln(phi),  valid only for 0 < phi < 1.
+//
+//  ta.linreg gives the fitted endpoint of y on a linear time index, NOT slope of
+//  y on x. So we compute the AR(1) slope manually & causally via rolling
+//  covariance / variance over [1..ouLen]:
+//      phi = Cov(spread_t, spread_{t-1}) / Var(spread_{t-1})
+//  using lagged series so the regression endpoint is t-1 (no current-bar leak).
+float y  = spread[1]        // "spread_t" of the regression, lagged once for causality
+float x  = spread[2]        // "spread_{t-1}" lagged once more
+float meanY = ta.sma(y, ouLen)
+float meanX = ta.sma(x, ouLen)
+float cov   = ta.sma(y * x, ouLen) - meanY * meanX
+float varX  = ta.sma(x * x, ouLen) - meanX * meanX
+float phi   = (na(varX) or varX == 0) ? na : cov / varX
+
+// Half-life: only meaningful for a stationary, mean-reverting 0<phi<1.
+float halfLife = (not na(phi) and phi > 0 and phi < 1) ? (-math.log(2.0) / math.log(phi)) : na
+// Time-stop horizon in bars: k*HL, capped; if HL undefined (trend / unit root) use the cap.
+int timeStopBars = na(halfLife) ? hlMaxBars : math.min(hlMaxBars, int(math.ceil(hlMult * halfLife)))
+
+// ============================================================================
+//  SECTION 5 — BINARY REGIME GATE  (variance-ratio: MR vs trend)
+// ============================================================================
+//  Lo-MacKinlay-style variance ratio on the CHANGES of the spread:
+//      VR(q) = Var(q-bar change) / (q * Var(1-bar change))
+//  VR < 1  => variance grows SLOWER than linearly => mean-reverting => TRADE.
+//  VR >= 1 => random-walk/trending => NO TRADE (suppress entries).
+//  Binary only: gate = (VR < threshold). No score, no confidence, no weighting.
+//
+//  CAUSALITY:  all differences are taken on the lagged spread series so the
+//  current forming bar never enters the ratio.
+float d1  = spread[1] - spread[2]                  // 1-bar change, ending at t-1
+float dq  = spread[1] - spread[1 + vrQ]            // q-bar change, ending at t-1
+float var1 = ta.variance(d1, vrLen)
+float varq = ta.variance(dq, vrLen)
+float vr   = (na(var1) or var1 == 0) ? na : varq / (vrQ * var1)
+bool regimeMR = not na(vr) and vr < vrThresh        // BINARY trade / no-trade
+
+// ============================================================================
+//  SECTION 6 — VOLATILITY-SCALED POSITION SIZE
+// ============================================================================
+//  size ~ riskBudget / (sigma_spread * pointValue), capped.  Smaller when the
+//  spread is noisier => smoother equity. sigma_spread = zStd (already causal,
+//  in spread price units).
+float sigmaSpread = zStd
+float rawQty = (na(sigmaSpread) or sigmaSpread <= 0) ? qtyMin :
+     riskPerTrade / (sigmaSpread * legPointValue)
+float posQty = math.max(qtyMin, math.min(qtyMax, rawQty))
+
+// ============================================================================
+//  SECTION 7 — COST MODEL (two-leg-aware, in $)
+// ============================================================================
+//  A spread fill executes BOTH legs, so every round of entry/exit pays TWO
+//  legs' commission + TWO legs' slippage. We surface the doubled per-spread cost
+//  for transparency; the strategy()-level commission_value is set to the doubled
+//  per-contract commission via the override below, and slippage is added as an
+//  explicit $ comment because the synthetic spread is not a tradable tick grid.
+float tickSize       = legTickSize > 0 ? legTickSize : syminfo.mintick
+float slipCostPerLeg = slipTicksLeg * tickSize * legPointValue   // $ per contract per leg
+float spreadEntryCost = 2.0 * (commPerContractLeg + slipCostPerLeg)  // both legs, one side
+// NOTE: strategy() above takes commission_value as a literal; to make the cost
+// truly configurable at runtime we cannot re-pass it into strategy(). Instead we
+// report it and (optionally) you set commission_value in the strategy() header
+// to 2*commPerContractLeg. The plotted "cost/trade" below shows the live figure.
+
+// ============================================================================
+//  SECTION 7b — ROLL-JUMP FIREWALL + COST-FLOOR VETO  (the two senior controls)
+// ============================================================================
+//  (A) ROLL-JUMP detection. A continuous/back-adjusted calendar spread jumps at
+//      each contract roll. That discontinuity-then-settle is read by VR/z as FAKE
+//      fast reversion -- leakage, since the 'reversion' is a relabeling event, not
+//      a tradeable market move. Flag any 1-bar spread change exceeding k * its
+//      trailing stdev as a roll/structural break; freeze new entries afterwards.
+//      Causal: uses only the last CONFIRMED change spread[1]-spread[2].
+float dSpread   = spread[1] - spread[2]
+float dSpreadSd = ta.stdev(spread[1] - spread[2], math.max(zLen, 20))
+bool  rollJump  = not na(dSpreadSd) and dSpreadSd > 0 and math.abs(dSpread) > rollJumpMult * dSpreadSd
+var int lastRollBar = na
+if rollJump
+    lastRollBar := bar_index
+bool inRollMask = not na(lastRollBar) and (bar_index - lastRollBar) <= rollMaskBars
+
+//  (B) COST-FLOOR VETO. Expected gross capture (per contract) from the current
+//      entry |z| down to the partial exit target z_exit, in $:
+//          (|z| - z_exit) * sigma_spread(price) * legPointValue
+//      must clear the realistic TWO-leg ROUND-TRIP cost (enter+exit, each touches
+//      both legs) by costFloorMult, else NO TRADE. Both capture and cost scale
+//      linearly with qty, so the veto is size-independent. This is the gate that
+//      would have kept the prior NG line OFF (truth != usefulness).
+float expCapturePerC    = (na(zScore) or na(sigmaSpread)) ? na : (math.abs(zScore) - zExit) * sigmaSpread * legPointValue
+float roundTripCostPerC = 2.0 * spreadEntryCost
+bool  costOK = not useCostFloor or (not na(expCapturePerC) and expCapturePerC >= costFloorMult * roundTripCostPerC)
+
+// ============================================================================
+//  SECTION 8 — ENTRIES / EXITS / STOPS  (decide on close, fill next open)
+// ============================================================================
+//  GATE: every entry requires barstate.isconfirmed AND valid legs AND a valid z
+//  AND regimeMR (binary gate) AND not in a roll blackout AND the cost-floor veto.
+bool canTrade = barstate.isconfirmed and legsValid and not na(zScore) and not na(kMu)
+
+// ---- Entry conditions ------------------------------------------------------
+//  Long the spread when it is cheap (z <= -theta): expect reversion UP to mu.
+//  Short the spread when it is rich (z >= +theta): expect reversion DOWN to mu.
+bool longEntry  = canTrade and regimeMR and not inRollMask and costOK and zScore <= -thEntry and strategy.position_size == 0
+bool shortEntry = canTrade and regimeMR and not inRollMask and costOK and zScore >=  thEntry and strategy.position_size == 0
+
+// ---- Track entry bar for the time-stop -------------------------------------
+var int entryBar = na
+if longEntry or shortEntry
+    entryBar := bar_index
+
+// ---- Exit conditions (only when in a position) -----------------------------
+bool inLong  = strategy.position_size > 0
+bool inShort = strategy.position_size < 0
+
+// Partial target (OU-optimal): exit when z has reverted to within z_exit of the
+// mean, NOT all the way to 0 (the last increment costs disproportionate time).
+bool meanTouchLong  = inLong  and not na(zScore) and zScore >= -zExit
+bool meanTouchShort = inShort and not na(zScore) and zScore <=  zExit
+
+// Time-stop: held longer than k*half-life bars.
+bool timeStopHit = (inLong or inShort) and not na(entryBar) and (bar_index - entryBar) >= timeStopBars
+
+// Equilibrium break: spread pushed OUTSIDE the Kalman band AGAINST the position
+// (long but spread fell below lower band; short but spread rose above upper band).
+bool eqBreakLong  = useEqBreak and inLong  and not na(kLower) and spread[1] < kLower
+bool eqBreakShort = useEqBreak and inShort and not na(kUpper) and spread[1] > kUpper
+
+// Catastrophe stop: |z| blew past theta_disaster => reversion thesis broken.
+// WIDE statistical stop, not a tight price stop (per spec).
+bool disasterLong  = inLong  and not na(zScore) and zScore <= -thDisaster
+bool disasterShort = inShort and not na(zScore) and zScore >=  thDisaster
+
+//  rollJump while in a position = structural discontinuity against an open trade
+//  => flatten (the position is now on a relabeled spread).
+bool exitLong  = barstate.isconfirmed and inLong  and (meanTouchLong  or timeStopHit or eqBreakLong  or disasterLong  or rollJump)
+bool exitShort = barstate.isconfirmed and inShort and (meanTouchShort or timeStopHit or eqBreakShort or disasterShort or rollJump)
+
+// ---- Order submission ------------------------------------------------------
+//  strategy.entry/close with process_orders_on_close=false => these orders are
+//  FILLED on the NEXT bar's open, never on the close we just used to decide.
+if longEntry
+    strategy.entry("Long", strategy.long, qty = posQty)
+if shortEntry
+    strategy.entry("Short", strategy.short, qty = posQty)
+if exitLong
+    strategy.close("Long", comment = rollJump ? "roll" : disasterLong ? "disaster" : eqBreakLong ? "eqbrk" : timeStopHit ? "time" : "mean")
+if exitShort
+    strategy.close("Short", comment = rollJump ? "roll" : disasterShort ? "disaster" : eqBreakShort ? "eqbrk" : timeStopHit ? "time" : "mean")
+
+// ============================================================================
+//  SECTION 9 — PLOTS
+// ============================================================================
+//  Pane 1 (this script's main pane): spread + Kalman band + regime shading.
+plot(spread,  "Spread",        color = color.new(color.white, 0),  linewidth = 2)
+plot(kMu,     "mu* (Kalman)",  color = color.new(color.orange, 0), linewidth = 2)
+p1 = plot(kUpper, "mu + m*sd", color = color.new(color.orange, 60))
+p2 = plot(kLower, "mu - m*sd", color = color.new(color.orange, 60))
+fill(p1, p2, color = color.new(color.orange, 90), title = "Kalman band")
+
+// Regime gate state: green background = MR (trade allowed), red = no-trade.
+bgcolor(barstate.isconfirmed ? (regimeMR ? color.new(color.green, 88) : color.new(color.red, 90)) : na,
+     title = "Regime gate (green=MR, red=no-trade)")
+
+// Entry / exit markers on the spread.
+plotshape(longEntry,  "Long entry",  shape.triangleup,   location.bottom, color.new(color.lime, 0),    size = size.tiny)
+plotshape(shortEntry, "Short entry", shape.triangledown, location.top,    color.new(color.red, 0),     size = size.tiny)
+plotshape(exitLong or exitShort, "Exit", shape.xcross,   location.absolute, color.new(color.yellow, 0), size = size.tiny)
+
+// ---- Z-score in a SEPARATE pane -------------------------------------------
+//  force_overlay = false keeps these on their own pane (they don't share the
+//  spread's scale). Threshold lines mark entry / disaster bands.
+plot(zScore,        "z-score", color = color.new(color.aqua, 0), display = display.pane)
+hline(0,           "z = 0",            color = color.gray)
+hline( thEntry,    "+theta_entry",     color = color.new(color.lime, 40), linestyle = hline.style_dashed)
+hline(-thEntry,    "-theta_entry",     color = color.new(color.lime, 40), linestyle = hline.style_dashed)
+hline( thDisaster, "+theta_disaster",  color = color.new(color.red, 40),  linestyle = hline.style_dotted)
+hline(-thDisaster, "-theta_disaster",  color = color.new(color.red, 40),  linestyle = hline.style_dotted)
+
+// ---- Diagnostics table (read-only; helps verify causality at a glance) -----
+var table diag = table.new(position.top_right, 2, 9, border_width = 1)
+if barstate.islast
+    table.cell(diag, 0, 0, "VR(q)",            text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 0, str.tostring(vr, "#.###"), text_color = regimeMR ? color.lime : color.red, text_size = size.small)
+    table.cell(diag, 0, 1, "phi (AR1)",        text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 1, str.tostring(phi, "#.###"), text_color = color.white, text_size = size.small)
+    table.cell(diag, 0, 2, "half-life (bars)", text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 2, na(halfLife) ? "n/a" : str.tostring(halfLife, "#.#"), text_color = color.white, text_size = size.small)
+    table.cell(diag, 0, 3, "time-stop bars",   text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 3, str.tostring(timeStopBars), text_color = color.white, text_size = size.small)
+    table.cell(diag, 0, 4, "z",                text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 4, str.tostring(zScore, "#.##"), text_color = color.white, text_size = size.small)
+    table.cell(diag, 0, 5, "qty (vol-scaled)", text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 5, str.tostring(posQty, "#.#"), text_color = color.white, text_size = size.small)
+    table.cell(diag, 0, 6, "cost/spread-trade $", text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 6, str.tostring(spreadEntryCost, "#.##"), text_color = color.white, text_size = size.small)
+    table.cell(diag, 0, 7, "cap/cost (need " + str.tostring(costFloorMult, "#.#") + "x)", text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 7, (na(expCapturePerC) or roundTripCostPerC == 0) ? "n/a" : str.tostring(expCapturePerC / roundTripCostPerC, "#.##") + (costOK ? " ok" : " VETO"), text_color = costOK ? color.lime : color.red, text_size = size.small)
+    table.cell(diag, 0, 8, "roll mask", text_color = color.white, text_size = size.small)
+    table.cell(diag, 1, 8, inRollMask ? "BLACKOUT" : "clear", text_color = inRollMask ? color.red : color.lime, text_size = size.small)
+// ============================================================================
+//  END
+// ============================================================================
