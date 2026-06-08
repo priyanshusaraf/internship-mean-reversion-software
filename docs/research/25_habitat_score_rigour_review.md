@@ -12,7 +12,7 @@ trader/PM, each re-running the engines via Bash against the live source) synthes
 
 > **Headline for the governor (read first).** Two findings dominate everything else. **(1) The apparatus you
 > asked me to improve is not the apparatus that ships.** The RW∧GARCH∧MA(1) triple-AND gate, q∈{2,5,10,20},
-> N=200 you described is the doc-20 *positive-control* path (`evaluate_v2`). The **live** habitat scorer
+> N=200 you described is thea doc-20 *positive-control* path (`evaluate_v2`). The **live** habitat scorer
 > (`habitat_score_full`) is materially weaker: **RW + MA(1) only — no GARCH**, q∈{5,10,20}, N=2000, and a
 > **continuous percentile** with **no frozen α and no panel-multiplicity control.** **(2) All three proposed
 > additions are net-negative or redundant as proposed.** A and B both estimate the near-unit-root AR(1) root

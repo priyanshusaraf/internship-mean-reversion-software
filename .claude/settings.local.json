@@ -81,7 +81,8 @@
       "Bash(xargs ls -la)",
       "Bash(grep -E '\\\\.\\(py|ts|tsx|js|md\\)$')",
       "Bash(git *)",
-      "Bash(grep -i 'py$')"
+      "Bash(grep -i 'py$')",
+      "WebSearch"
     ]
   }
 }

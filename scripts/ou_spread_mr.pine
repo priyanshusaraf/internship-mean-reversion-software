@@ -1,0 +1,89 @@
+// OU Spread MR — Ornstein-Uhlenbeck mean-reversion on a spread, the verified method (deep-research 2026-06-09).
+// NOT indicator-stacking. Three statistical pieces, each load-bearing:
+//   1. HALF-LIFE GATE  — estimate OU reversion speed on a rolling window (regress dX on X_lag -> b<0,
+//                        half-life = -ln2/b). Trade ONLY when the spread is genuinely & fast-reverting.
+//                        When half-life blows out / b>=0 -> stop + flatten. THIS is the OOS-break kill.
+//   2. Z-SCORE SIGNAL  — z = (X - mean) / stdev on PAST bars only (causal, no self-inclusion).
+//   3. EXIT-NEAR-MEAN  — close as z returns toward 0 (not on sign-flip). The verified win-rate lever.
+//
+// HOW TO USE (avoids the request.security chart-chart=0 trap entirely):
+//   apply to a NATIVE TradingView SPREAD SYMBOL typed into the symbol box, e.g.
+//       SI1!/HG1!        (silver/copper ratio — the one spread that survived OOS here)
+//       SI1!*0.62-HG1!   (beta-weighted)        BRN1!-WBS1!   (Brent-WTI)     NG1!-NG2! (NG calendar)
+//   the strategy runs on that synthetic chart's own close -> fixed qty=1 sizes it -> it TAKES TRADES.
+//
+// Causal / no-repaint: every stat uses confirmed past bars; decide on close, fill next bar.
+//@version=6
+strategy("OU Spread MR", shorttitle="OU-MR", overlay=false,
+     pyramiding=0, calc_on_every_tick=false, process_orders_on_close=false,
+     initial_capital=100000, default_qty_type=strategy.fixed, default_qty_value=1,
+     commission_type=strategy.commission.percent, commission_value=0.02, slippage=1,
+     max_bars_back=5000)
+
+// ---- inputs ----
+useLog  = input.bool(false, "Use log(price) as the spread X", group="Spread")
+zLen    = input.int(40, "Z-score lookback", minval=10, group="Signal")
+zEntry  = input.float(2.0, "Entry |z|",  step=0.1, group="Signal")
+zExit   = input.float(0.5, "Exit |z| (near mean — win-rate lever)", step=0.1, group="Signal")
+zStop   = input.float(3.0, "Disaster stop |z|", step=0.1, group="Signal")
+hlWin   = input.int(120, "Half-life window", minval=30, group="OU gate")
+hlLo    = input.float(2,  "Min half-life (bars)", group="OU gate")
+hlHi    = input.float(40, "Max half-life (bars)", group="OU gate")
+useGate = input.bool(true, "Require OU half-life gate", group="OU gate")
+timeMult= input.float(3.0, "Time stop = mult x half-life", step=0.5, group="Exit")
+allowL  = input.bool(true, "Allow longs (spread cheap)", group="Side")
+allowS  = input.bool(true, "Allow shorts (spread rich)", group="Side")
+
+// ---- spread series ----
+X = useLog ? math.log(close) : close
+
+// ---- z-score (causal: mean/stdev exclude current bar) ----
+basis = ta.sma(X[1], zLen)
+dev   = ta.stdev(X[1], zLen)
+z     = dev > 0 ? (X - basis) / dev : na
+
+// ---- OU half-life gate: rolling slope b of  dX = a + b*X_lag  over hlWin ----
+dX    = X - X[1]
+Xlag  = X[1]
+mXlag = ta.sma(Xlag, hlWin)
+mdX   = ta.sma(dX,   hlWin)
+covXd = ta.sma(Xlag * dX, hlWin) - mXlag * mdX
+varX  = ta.variance(Xlag, hlWin)
+b     = varX > 0 ? covXd / varX : na
+hl    = (not na(b) and b < 0) ? -math.log(2) / b : na
+gate  = not useGate or (not na(hl) and hl >= hlLo and hl <= hlHi)
+
+// ---- entries ----
+warm     = bar_index > hlWin + zLen
+canT     = barstate.isconfirmed and warm
+longSig  = canT and allowL and gate and not na(z) and z <= -zEntry and strategy.position_size == 0
+shortSig = canT and allowS and gate and not na(z) and z >=  zEntry and strategy.position_size == 0
+
+var int entryBar = na
+if longSig
+    strategy.entry("L", strategy.long)
+    entryBar := bar_index
+if shortSig
+    strategy.entry("S", strategy.short)
+    entryBar := bar_index
+
+// ---- exits: near-mean target, disaster stop, half-life time stop, gate-break kill ----
+held  = not na(entryBar) ? bar_index - entryBar : 0
+tstop = not na(hl) ? math.max(5, int(timeMult * hl)) : 60
+if strategy.position_size > 0 and barstate.isconfirmed
+    if (not na(z) and (z >= -zExit or math.abs(z) >= zStop)) or not gate or held >= tstop
+        strategy.close("L")
+if strategy.position_size < 0 and barstate.isconfirmed
+    if (not na(z) and (z <= zExit or math.abs(z) >= zStop)) or not gate or held >= tstop
+        strategy.close("S")
+
+// ---- plots ----
+hline(0, "mean", color=color.new(color.gray, 60))
+plot( zEntry, "entry+", color=color.new(color.red, 70))
+plot(-zEntry, "entry-", color=color.new(color.green, 70))
+plot( zExit,  "exit+",  color=color.new(color.gray, 80))
+plot(-zExit,  "exit-",  color=color.new(color.gray, 80))
+plot(z, "z", color=color.new(color.blue, 0))
+bgcolor(gate ? na : color.new(color.orange, 90), title="gate OFF (not reverting)")
+plotshape(longSig,  "Long",  shape.triangleup,   location.bottom, color.new(color.lime, 0), size=size.tiny)
+plotshape(shortSig, "Short", shape.triangledown, location.top,    color.new(color.red, 0),  size=size.tiny)
