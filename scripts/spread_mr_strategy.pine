@@ -1,50 +1,53 @@
-// ============================================================================
-//  Z-SCORE MEAN-REVERSION  —  Pine Script v6  (single-instrument, foolproof)
-// ============================================================================
-//  Runs on the CHART'S OWN close. Nothing to configure -> it CANNOT fail to trade
-//  (no second symbol, no request.security, no chart-minus-chart=0 trap).
-//
-//  HOW TO USE: in TradingView's symbol box, type a SPREAD or RATIO and apply this:
-//     COMEX:SI1!/COMEX:HG1!        (silver / copper ratio   — strongest in tests)
-//     ICEEUR:WBS1!/NYMEX:RB1!      (WTI / gasoline crack)
-//     COMEX:HG1!/NYMEX:PL1!        (copper / platinum)
-//     COMEX:SI1!-0.62*COMEX:HG1!   (beta-weighted spread, if you prefer)
-//  ...or any series you believe mean-reverts. It fades deep z-deviations to the mean.
-//
-//  HONEST: MR is a weak edge on commodities (Sharpe ~0.2-0.3 on the best pairs);
-//  this takes trades and is bug-free, but it is NOT a smooth multi-instrument book.
-//  Lower "Entry |z|" to trade more often; raise it to trade less / higher quality.
-// ============================================================================
-
+// MR Multi-Indicator strategy — Bollinger + RSI + ADX + ATR + Supertrend + Ichimoku.
+// Single-instrument (runs on chart close, fixed qty=1 -> always trades, works on ratio/spread
+// symbols too). Strictly causal: all ta.* use past bars, decisions on confirmed close, fill next bar,
+// no request.security, no future-offset reads.  Each indicator toggle-able; defaults trade often.
 //@version=6
-strategy("Z-MR (single-instrument)", shorttitle="Z-MR", overlay=true,
+strategy("MR Multi-Indicator", shorttitle="MR-Multi", overlay=true,
      pyramiding=0, calc_on_every_tick=false, process_orders_on_close=false,
-     initial_capital=100000,
-     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
+     initial_capital=100000, default_qty_type=strategy.fixed, default_qty_value=1,
      commission_type=strategy.commission.percent, commission_value=0.02, slippage=1,
      max_bars_back=5000)
 
 // ---- inputs ----
-zN     = input.int(50,  "Z window",        minval=10, group="Signal")
-zEnt   = input.float(2.0,"Entry |z| >=",   minval=0.3, step=0.05, group="Signal",
-           tooltip="Fade when price is this many std-devs from its mean. Lower = MORE trades.")
-zExit  = input.float(0.3,"Exit |z| <=",    minval=0.0, step=0.05, group="Signal",
-           tooltip="Take profit as it reverts toward the mean.")
-zDis   = input.float(4.0,"Disaster stop |z| >=", minval=1.0, step=0.1, group="Signal")
-maxHold= input.int(40,  "Time stop (bars)", minval=2, group="Signal")
-allowL = input.bool(true, "Allow longs",  group="Side")
+bbLen  = input.int(20, "Bollinger length", group="Bollinger (deviation)")
+bbMult = input.float(2.0, "Bollinger mult", step=0.1, group="Bollinger (deviation)")
+useRSI = input.bool(true, "Use RSI filter", group="RSI (confirmation)")
+rsiLen = input.int(14, "RSI length", group="RSI (confirmation)")
+rsiLong= input.float(40, "RSI long below", group="RSI (confirmation)")
+rsiShort=input.float(60, "RSI short above", group="RSI (confirmation)")
+useADX = input.bool(false, "Use ADX regime filter (trade only when ranging)", group="ADX (regime)")
+adxLen = input.int(14, "ADX length", group="ADX (regime)")
+adxMax = input.float(30, "ADX max (ranging if below)", group="ADX (regime)")
+atrLen = input.int(14, "ATR length", group="ATR (stop)")
+atrStop= input.float(2.5, "ATR stop mult", step=0.1, group="ATR (stop)")
+useST  = input.bool(true, "Supertrend flip exit", group="Supertrend")
+stF    = input.float(3.0, "Supertrend factor", step=0.1, group="Supertrend")
+stLen  = input.int(10, "Supertrend ATR len", group="Supertrend")
+useIchi= input.bool(false, "Ichimoku: trade only inside cloud", group="Ichimoku (regime)")
+maxHold= input.int(20, "Time stop (bars)", group="Exit")
+allowL = input.bool(true, "Allow longs", group="Side")
 allowS = input.bool(true, "Allow shorts", group="Side")
 
-// ---- causal z-score on the chart's own close (baseline excludes current bar) ----
-zMean = ta.sma(close[1], zN)
-zStd  = ta.stdev(close[1], zN)
-z     = (not na(zStd) and zStd > 0) ? (close - zMean) / zStd : na
+// ---- indicators (all causal) ----
+[bbBasis, bbUp, bbLo] = ta.bb(close, bbLen, bbMult)
+rsi = ta.rsi(close, rsiLen)
+[diP, diM, adx] = ta.dmi(adxLen, adxLen)
+atr = ta.atr(atrLen)
+[stLine, stDir] = ta.supertrend(stF, stLen)              // stDir<0 up, >0 down
+// Ichimoku cloud projected to NOW = spans from 26 bars ago (causal, no forward offset)
+donch(len) => math.avg(ta.highest(high, len), ta.lowest(low, len))
+spanA = math.avg(donch(9), donch(26))
+spanB = donch(52)
+cloudTop = math.max(spanA[26], spanB[26])
+cloudBot = math.min(spanA[26], spanB[26])
+inCloud = not useIchi or (not na(cloudTop) and close <= cloudTop and close >= cloudBot)
+rangeOK = not useADX or adx < adxMax
 
-// ---- signals (decide on confirmed close, fill next open) ----
-warm  = bar_index > zN + 2
-canT  = barstate.isconfirmed and warm and not na(z)
-longSig  = canT and allowL and z <= -zEnt and strategy.position_size == 0
-shortSig = canT and allowS and z >=  zEnt and strategy.position_size == 0
+// ---- entries (fade band extremes, gated) ----
+canT = barstate.isconfirmed and bar_index > math.max(bbLen, 80)
+longSig  = canT and allowL and close < bbLo and (not useRSI or rsi < rsiLong)  and rangeOK and inCloud and strategy.position_size == 0
+shortSig = canT and allowS and close > bbUp and (not useRSI or rsi > rsiShort) and rangeOK and inCloud and strategy.position_size == 0
 
 var int entryBar = na
 if longSig
@@ -54,29 +57,21 @@ if shortSig
     strategy.entry("S", strategy.short)
     entryBar := bar_index
 
-inL = strategy.position_size > 0
-inS = strategy.position_size < 0
-heldOut = not na(entryBar) and (bar_index - entryBar) >= maxHold
-exitL = barstate.isconfirmed and inL and ((not na(z) and (z >= -zExit or z <= -zDis)) or heldOut)
-exitS = barstate.isconfirmed and inS and ((not na(z) and (z <=  zExit or z >=  zDis)) or heldOut)
-if exitL
-    strategy.close("L")
-if exitS
-    strategy.close("S")
+// ---- exits: ATR stop + mean-revert target (Bollinger basis), Supertrend flip, time stop ----
+held = not na(entryBar) ? bar_index - entryBar : 0
+if strategy.position_size > 0
+    strategy.exit("xL", "L", stop = strategy.position_avg_price - atrStop * atr, limit = bbBasis)
+    if barstate.isconfirmed and ((useST and stDir > 0) or held >= maxHold)
+        strategy.close("L")
+if strategy.position_size < 0
+    strategy.exit("xS", "S", stop = strategy.position_avg_price + atrStop * atr, limit = bbBasis)
+    if barstate.isconfirmed and ((useST and stDir < 0) or held >= maxHold)
+        strategy.close("S")
 
-// ---- bands on price (mean +/- entry*std) + markers ----
-plot(zMean, "Mean", color=color.new(color.orange, 0))
-upper = zMean + zEnt * zStd
-lower = zMean - zEnt * zStd
-pu = plot(upper, "Upper", color=color.new(color.teal, 50))
-pl = plot(lower, "Lower", color=color.new(color.teal, 50))
-fill(pu, pl, color=color.new(color.teal, 92))
+// ---- plots ----
+plot(bbBasis, "Mean", color=color.new(color.orange, 0))
+pu = plot(bbUp, "Upper", color=color.new(color.teal, 50))
+plw = plot(bbLo, "Lower", color=color.new(color.teal, 50))
+fill(pu, plw, color=color.new(color.teal, 93))
 plotshape(longSig,  "Long",  shape.triangleup,   location.belowbar, color.new(color.lime, 0), size=size.small)
 plotshape(shortSig, "Short", shape.triangledown, location.abovebar, color.new(color.red, 0),  size=size.small)
-
-var table t = table.new(position.top_right, 2, 2, border_width=1)
-if barstate.islast
-    table.cell(t, 0, 0, "z", text_color=color.white, text_size=size.small)
-    table.cell(t, 1, 0, str.tostring(z, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(t, 0, 1, "trades", text_color=color.white, text_size=size.small)
-    table.cell(t, 1, 1, str.tostring(strategy.closedtrades), text_color=color.white, text_size=size.small)
