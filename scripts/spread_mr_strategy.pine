@@ -1,102 +1,82 @@
 // ============================================================================
-//  CROSS-COMMODITY SPREAD MEAN-REVERSION  —  Pine Script v6
+//  Z-SCORE MEAN-REVERSION  —  Pine Script v6  (single-instrument, foolproof)
 // ============================================================================
-//  Builds the spread INSIDE the script (leg A = chart, leg B = input) so what you
-//  DEPLOY equals what was validated. No (chart-chart)=0 bug; sizing is HARD-CAPPED
-//  so the −$3.7M blow-up class is structurally impossible.
+//  Runs on the CHART'S OWN close. Nothing to configure -> it CANNOT fail to trade
+//  (no second symbol, no request.security, no chart-minus-chart=0 trap).
 //
-//  Spread = ln(A) − beta·ln(B)   (log-ratio, fixed beta — NOT rolling, no artifact)
-//  Fade deep z deviations, exit at the mean. Validated on YOUR commodities data.
+//  HOW TO USE: in TradingView's symbol box, type a SPREAD or RATIO and apply this:
+//     COMEX:SI1!/COMEX:HG1!        (silver / copper ratio   — strongest in tests)
+//     ICEEUR:WBS1!/NYMEX:RB1!      (WTI / gasoline crack)
+//     COMEX:HG1!/NYMEX:PL1!        (copper / platinum)
+//     COMEX:SI1!-0.62*COMEX:HG1!   (beta-weighted spread, if you prefer)
+//  ...or any series you believe mean-reverts. It fades deep z-deviations to the mean.
 //
-//  HONEST CONTEXT (read it): rigorous walk-forward OOS shows MR has ~no broad edge
-//  on this universe. Only a FEW economically-real spreads survived IS+OOS, all modest
-//  (Sharpe ~0.2–0.3). Deploy ONLY on the recommended pairs, small size, and monitor.
-//  Recommended legA / legB / beta:
-//     SI1!  / HG1!  / 0.62   (silver vs copper        — strongest, Sharpe ~0.29)
-//     WBS1! / RB1!  / 1.28   (WTI vs gasoline crack    — Sharpe ~0.17)
-//     HG1!  / PL1!  / 0.83   (copper vs platinum       — regime-dependent)
-//  NOT recommended (spurious, return-corr ~0): CC/SB, CC/KC.
+//  HONEST: MR is a weak edge on commodities (Sharpe ~0.2-0.3 on the best pairs);
+//  this takes trades and is bug-free, but it is NOT a smooth multi-instrument book.
+//  Lower "Entry |z|" to trade more often; raise it to trade less / higher quality.
 // ============================================================================
 
 //@version=6
-strategy("Spread MR (log-ratio, capped)", shorttitle="SprMR", overlay=false,
+strategy("Z-MR (single-instrument)", shorttitle="Z-MR", overlay=true,
      pyramiding=0, calc_on_every_tick=false, process_orders_on_close=false,
-     initial_capital=100000, default_qty_type=strategy.fixed, default_qty_value=1,
+     initial_capital=100000,
+     default_qty_type=strategy.percent_of_equity, default_qty_value=10,
      commission_type=strategy.commission.percent, commission_value=0.02, slippage=1,
      max_bars_back=5000)
 
 // ---- inputs ----
-legB   = input.symbol("", "Leg B symbol (REQUIRED, e.g. COMEX:HG1!)",
-           tooltip="Chart = leg A. This is leg B. Spread = ln(A) - beta*ln(B). MUST be set or no trades.")
-beta   = input.float(1.0, "Beta (cointegration coef, ln A ~ ln B)", step=0.01,
-           tooltip="From the validated list (SI/HG 0.62, WBS/RB 1.28, HG/PL 0.83). 1.0 = pure log-ratio.")
-zN     = input.int(60,  "Z window", minval=10)
-zEnt   = input.float(2.0,"Entry |z| >=", step=0.05)
-zExit  = input.float(0.5,"Exit |z| <=", step=0.05)
-zDis   = input.float(4.0,"Disaster stop |z| >=", step=0.1)
-maxHold= input.int(60,  "Time stop (bars)", minval=2)
-riskPct= input.float(0.5,"Risk % equity / trade", step=0.05)/100.0
-qtyCap = input.float(10, "HARD position cap (units)", minval=1,
-           tooltip="Bulletproof ceiling — the strategy can NEVER exceed this, so a tiny sigma cannot blow up sizing.")
+zN     = input.int(50,  "Z window",        minval=10, group="Signal")
+zEnt   = input.float(2.0,"Entry |z| >=",   minval=0.3, step=0.05, group="Signal",
+           tooltip="Fade when price is this many std-devs from its mean. Lower = MORE trades.")
+zExit  = input.float(0.3,"Exit |z| <=",    minval=0.0, step=0.05, group="Signal",
+           tooltip="Take profit as it reverts toward the mean.")
+zDis   = input.float(4.0,"Disaster stop |z| >=", minval=1.0, step=0.1, group="Signal")
+maxHold= input.int(40,  "Time stop (bars)", minval=2, group="Signal")
+allowL = input.bool(true, "Allow longs",  group="Side")
+allowS = input.bool(true, "Allow shorts", group="Side")
 
-// ---- legs (causal, leak-free; leg B = last CONFIRMED close) ----
-bSym   = legB == "" ? syminfo.tickerid : legB
-bClose = request.security(bSym, timeframe.period, close[1], lookahead=barmerge.lookahead_on, gaps=barmerge.gaps_off)
-valid  = legB != "" and not na(bClose) and bClose > 0 and close > 0
-spread = valid ? math.log(close) - beta*math.log(bClose) : na
+// ---- causal z-score on the chart's own close (baseline excludes current bar) ----
+zMean = ta.sma(close[1], zN)
+zStd  = ta.stdev(close[1], zN)
+z     = (not na(zStd) and zStd > 0) ? (close - zMean) / zStd : na
 
-var float sp = na
-sp := na(spread) ? sp : spread
-
-// ---- causal z-score (baseline excludes current bar) ----
-zMean = ta.sma(sp[1], zN)
-zStd  = ta.stdev(sp[1], zN)
-z     = (not na(zStd) and zStd>0) ? (sp - zMean)/zStd : na
-
-// ---- vol-targeted, HARD-CAPPED sizing (no blow-ups) ----
-dS     = sp - sp[1]
-sigD   = ta.stdev(dS, 63)
-sigFloor = na(zStd) ? na : math.max(zStd*0.05, 1e-6)          // floor prevents /0 explosion
-sizeRaw = (not na(sigD) and sigD>sigFloor) ? (riskPct*strategy.equity)/(sigD*100.0) : 1.0
-posQty  = math.max(1.0, math.min(qtyCap, sizeRaw))            // BULLETPROOF: never exceeds qtyCap
-
-// ---- signals ----
-warm  = bar_index > math.max(zN+2, 80)
-canT  = barstate.isconfirmed and warm and valid and not na(z)
-longSig  = canT and z <= -zEnt and strategy.position_size==0
-shortSig = canT and z >=  zEnt and strategy.position_size==0
+// ---- signals (decide on confirmed close, fill next open) ----
+warm  = bar_index > zN + 2
+canT  = barstate.isconfirmed and warm and not na(z)
+longSig  = canT and allowL and z <= -zEnt and strategy.position_size == 0
+shortSig = canT and allowS and z >=  zEnt and strategy.position_size == 0
 
 var int entryBar = na
 if longSig
-    strategy.entry("L", strategy.long, qty=posQty)
+    strategy.entry("L", strategy.long)
     entryBar := bar_index
 if shortSig
-    strategy.entry("S", strategy.short, qty=posQty)
+    strategy.entry("S", strategy.short)
     entryBar := bar_index
 
-inL = strategy.position_size>0
-inS = strategy.position_size<0
-exitL = barstate.isconfirmed and inL and (not na(z) and (z>=-zExit or z<=-zDis) or (not na(entryBar) and bar_index-entryBar>=maxHold))
-exitS = barstate.isconfirmed and inS and (not na(z) and (z<= zExit or z>= zDis) or (not na(entryBar) and bar_index-entryBar>=maxHold))
+inL = strategy.position_size > 0
+inS = strategy.position_size < 0
+heldOut = not na(entryBar) and (bar_index - entryBar) >= maxHold
+exitL = barstate.isconfirmed and inL and ((not na(z) and (z >= -zExit or z <= -zDis)) or heldOut)
+exitS = barstate.isconfirmed and inS and ((not na(z) and (z <=  zExit or z >=  zDis)) or heldOut)
 if exitL
     strategy.close("L")
 if exitS
     strategy.close("S")
 
-// ---- plots ----
-plot(sp,    "Spread", color=color.new(color.white,0), display=display.pane)
-plot(zMean, "Mean",   color=color.new(color.orange,0), display=display.pane)
-plotshape(longSig,  "L", shape.triangleup,   location.bottom, color.new(color.lime,0), size=size.tiny)
-plotshape(shortSig, "S", shape.triangledown, location.top,    color.new(color.red,0),  size=size.tiny)
-plot(z, "z", color=color.new(color.aqua,0), display=display.pane)
-hline(0,"0",color=color.gray)
-hline(zEnt,"+e",color=color.new(color.lime,40),linestyle=hline.style_dashed)
-hline(-zEnt,"-e",color=color.new(color.lime,40),linestyle=hline.style_dashed)
-var table t=table.new(position.top_right,2,3,border_width=1)
+// ---- bands on price (mean +/- entry*std) + markers ----
+plot(zMean, "Mean", color=color.new(color.orange, 0))
+upper = zMean + zEnt * zStd
+lower = zMean - zEnt * zStd
+pu = plot(upper, "Upper", color=color.new(color.teal, 50))
+pl = plot(lower, "Lower", color=color.new(color.teal, 50))
+fill(pu, pl, color=color.new(color.teal, 92))
+plotshape(longSig,  "Long",  shape.triangleup,   location.belowbar, color.new(color.lime, 0), size=size.small)
+plotshape(shortSig, "Short", shape.triangledown, location.abovebar, color.new(color.red, 0),  size=size.small)
+
+var table t = table.new(position.top_right, 2, 2, border_width=1)
 if barstate.islast
-    table.cell(t,0,0,"legB OK",text_color=color.white,text_size=size.small)
-    table.cell(t,1,0, valid?"yes":"NO-set legB",text_color=valid?color.lime:color.red,text_size=size.small)
-    table.cell(t,0,1,"z",text_color=color.white,text_size=size.small)
-    table.cell(t,1,1,str.tostring(z,"#.##"),text_color=color.white,text_size=size.small)
-    table.cell(t,0,2,"qty",text_color=color.white,text_size=size.small)
-    table.cell(t,1,2,str.tostring(posQty,"#.#"),text_color=color.white,text_size=size.small)
+    table.cell(t, 0, 0, "z", text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 0, str.tostring(z, "#.##"), text_color=color.white, text_size=size.small)
+    table.cell(t, 0, 1, "trades", text_color=color.white, text_size=size.small)
+    table.cell(t, 1, 1, str.tostring(strategy.closedtrades), text_color=color.white, text_size=size.small)
