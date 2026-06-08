@@ -68,9 +68,11 @@ shortSig = canT and z >=  zEnt and strategy.position_size==0
 
 var int entryBar = na
 if longSig
-    strategy.entry("L", strategy.long, qty=posQty); entryBar := bar_index
+    strategy.entry("L", strategy.long, qty=posQty)
+    entryBar := bar_index
 if shortSig
-    strategy.entry("S", strategy.short, qty=posQty); entryBar := bar_index
+    strategy.entry("S", strategy.short, qty=posQty)
+    entryBar := bar_index
 
 inL = strategy.position_size>0
 inS = strategy.position_size<0
@@ -87,7 +89,8 @@ plot(zMean, "Mean",   color=color.new(color.orange,0), display=display.pane)
 plotshape(longSig,  "L", shape.triangleup,   location.bottom, color.new(color.lime,0), size=size.tiny)
 plotshape(shortSig, "S", shape.triangledown, location.top,    color.new(color.red,0),  size=size.tiny)
 plot(z, "z", color=color.new(color.aqua,0), display=display.pane)
-hline(0,"0",color=color.gray); hline(zEnt,"+e",color=color.new(color.lime,40),linestyle=hline.style_dashed)
+hline(0,"0",color=color.gray)
+hline(zEnt,"+e",color=color.new(color.lime,40),linestyle=hline.style_dashed)
 hline(-zEnt,"-e",color=color.new(color.lime,40),linestyle=hline.style_dashed)
 var table t=table.new(position.top_right,2,3,border_width=1)
 if barstate.islast
