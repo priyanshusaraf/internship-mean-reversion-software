@@ -92,11 +92,14 @@ def load_ohlcv(file_path: str) -> pd.DataFrame:
             )
 
     # Truncate to day precision — DuckDB stores DATE (day-level).
+    # Intraday files carry a time-of-day component; pure-daily files do not.
+    had_intraday = bool((df.index != df.index.normalize()).any())
     df.index = df.index.normalize()
 
-    # If day-level duplicates exist (intraday data: multiple bars on the same calendar day),
-    # resample to daily OHLCV rather than rejecting the file.
-    if df.index.duplicated().any():
+    # Intraday data (multiple bars per calendar day) is resampled to daily OHLCV.
+    # Duplicate dates in a pure-daily file are corruption, not intraday data —
+    # fall through to the rejection guard below instead of silently aggregating.
+    if had_intraday and df.index.duplicated().any():
         df = df.resample('D').agg({
             'open': 'first',
             'high': 'max',
