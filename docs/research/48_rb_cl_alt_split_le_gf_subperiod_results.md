@@ -68,8 +68,12 @@ f_βupdate = 0.000000 < τ=0.10: PASS. F6 definitionally admissible.
 | 2 | 0.9887 | 0.1876 |
 | 5 | 0.9547 | 0.0399 |
 | 10 | 0.9000 | 0.0080 |
-| **20** | **0.9008** | **0.0798** |
+| **20** | **0.9008** | **0.0639**¹ |
 | 40 | 0.9533 | 0.3493 |
+
+¹ CORRECTED (four-lens review): the q-grid run uses SEED_A+30 and gives p=0.0639 (per
+`48_results.json`); the original doc transcribed the primary 4-null run's p=0.0798 (SEED_A+0) here.
+Both values fail α=0.0167; the seed-to-seed spread (0.064–0.080) is surrogate Monte-Carlo noise.
 
 Primary statistic is VR(20) only. Secondary q values are informational; they do not change the verdict per §A.7 and Revision-2 Mandate 4.
 
@@ -96,9 +100,24 @@ Note: the excised-IS arm shows stronger signal (p=0.0279) than the full IS. The 
 **N power paths:** 500  
 **α:** 0.0167  
 
-**Empirical power: 500/500 = 1.000**
+~~**Empirical power: 500/500 = 1.000**~~ **STRUCK — IMPLEMENTATION DEFECT (four-lens review, 2026-06-10). Corrected empirical power: 142/500 = 0.284.**
 
-Interpretation: an apparatus with 6,131 IS bars and true VR=0.898 has essentially 100% power to detect at α=0.0167. The failure to confirm (p=0.0798) therefore reflects genuine absence of sufficient sub-diffusion signal at this level, not a power limitation. The alternative split (IS≈6,100) was correctly motivated on power grounds, and it did raise power — but the spread does not actually beat the α=0.0167 threshold even with this sample size.
+> **CORRECTION (REVISED, no silent rewrite).** The original run simulated AR(1) in LEVELS
+> (`path[t]=φ·path[t−1]+ε`) while the calibration formula describes a series whose INCREMENTS are
+> AR(1). A stationary level-AR(1) has realized VR(20)≈0.047 — an extreme sub-diffusion object that
+> trivially rejects RW, manufacturing power=1.000. Caught independently by the statistical and
+> adversarial lenses; sim corrected to increments-AR(1) cumulated (realized VR(20)=0.8954 ≈ target
+> 0.898, verified), re-run with identical seeds/α/n: **power = 0.284** — consistent with doc 45's
+> 30–40% estimate (doc 45 was right; this sim was the defective one).
+>
+> **Interpretation (REVISED):** the apparatus is UNDERPOWERED (~28%) at α=0.0167 for an effect of
+> exactly this size. The original claim "failure to confirm reflects genuine absence, not a power
+> limitation" is **INADMISSIBLE and struck**. The honest statement: RB-CL IS sub-diffusion was
+> **not detected** across three pre-named looks; with ~28% power per look, non-detection is fully
+> consistent with a true VR≈0.898 going unobserved. The ARCHIVE verdict stands regardless — the
+> frozen §A.10 kill is unconditional on p_rw ≥ 0.0167 (the alpha-spending rule was the binding
+> commitment, not the power claim) — but it is an "alpha budget exhausted / not detected" archive,
+> NOT a "demonstrated absent" archive.
 
 ### Jackknife Concentration Check
 
@@ -356,7 +375,7 @@ Independence ρ=0.013 (doc 45 Gate B) remains confirmed but is irrelevant — th
 | RB-CL | DEFERRED-OOS-SIGNAL | **ARCHIVED (PERMANENT)** | Third look p=0.0798 ≥ 0.0167; §A.10 kill criterion 4 |
 | LE-GF | §11.8 IS-ONLY CONFIRMED | **§11.8 IS-ONLY CONFIRMED (unchanged)** | Test B does not archive; OOS weakness structural |
 
-**RB-CL archive is unconditional and permanent.** No fourth split, no alternative construction, no θ-tuning rescue. The apparatus is validated (power=1.000; LE-GF positive control confirmed in doc 46). RB-CL IS sub-diffusion is not supported.
+**RB-CL archive is unconditional and permanent.** No fourth split, no alternative construction, no θ-tuning rescue. ~~The apparatus is validated (power=1.000...)~~ REVISED (four-lens review): corrected power is 0.284 — the archive rests on the exhausted 3-look alpha budget (the binding pre-commitment), and is a "not detected" archive, not a "demonstrated absent" archive. RB-CL IS sub-diffusion is not confirmed; it is not thereby proven absent.
 
 **LE-GF IS anchor is preserved.** The IS VR result from doc 46 (p_rw=0.024) stands. Test B failure does not weaken the IS finding. LE-GF is IS-anchored but OOS-unconfirmed.
 
@@ -381,3 +400,43 @@ The combination pre-registration (doc 49) **cannot be opened** — it requires b
 The standing §11.8 mandate remains: the apparatus can detect a known real reverter (LE-GF confirmed; NG confirmed conditionally). The next high-information action is identifying a second instrument with IS VR confirmation to reconstruct the two-sleeve book. Candidates per the hypothesis registry should be evaluated under a new pre-registration.
 
 *Results frozen 2026-06-10. No parameters, thresholds, or verdicts may be revised post-execution.*
+
+---
+
+## FOUR-LENS REVIEW (2026-06-10, post-execution) — corrections & surviving caveats
+
+Mandatory multi-lens survival run (statistical + adversarial + trader/PM; research lens = this doc).
+Verdicts per lens: Test A **ADMISSIBLE-WITH-CAVEAT** (statistical, adversarial) · Test B **ADMISSIBLE**
+(both) · trader: LE-GF **MERELY-TRUE**, RB-CL/NG/combination **NON-FINDING** at current breadth.
+
+**Corrections applied above (marked, no silent rewrite):**
+1. **Power sim IMPLEMENTATION defect** — level-vs-increment AR(1) bug; power 1.000 → **0.284**
+   (sim corrected in `run_48_rb_cl_alt_split_le_gf.py`, re-run, realized VR verified 0.8954).
+   "Genuine absence" interpretation struck; doc-45's 30–40% power estimate vindicated.
+2. **q-grid transcription** — q=20 grid value is 0.0639 (SEED_A+30), not 0.0798 (SEED_A+0); both fail α.
+
+**Surviving caveats (binding on any future citation of doc 48):**
+- **Test A archive = "not detected at ~28% power per look, alpha budget exhausted"** — NOT evidence
+  of absence. Any future RB-CL mention must carry this framing. The permanent archive stands on the
+  frozen spending rule.
+- **Test B OOS is short**: actual LE-GF data begins 2002-08-14, so the 70/30 rule puts OOS start at
+  **2019-05-24** (~1,767 bars), not the prereg's stated "≈2014-08". The split RULE was followed
+  exactly (no DOF inflation); the prereg's date prose was wrong.
+- **Cross-doc Sharpe non-comparability**: full-OOS Sharpe 0.342 here vs 0.233 (docs 44/46) reflects a
+  different OOS start, not "added data"; the +0.009 ex-COVID delta is internally consistent within
+  doc 48 only.
+- **Prereg text contradiction (non-gating)**: Revision-2 Mandate-1 prose says excise from 2020-01-01;
+  Part IV frozen constant (which the runner correctly obeyed) says 2020-03-01. The arm is
+  informational either way.
+- **Placebo effective-N ≈ 4** (overlapping 18-month windows); the Criterion-2 FAIL survives the
+  non-overlapping check ([0.639, 0.207, 0.297, 0.382] vs COVID 0.351), so the caveat is not load-bearing here.
+
+**Trader-lens adjudication (doc-48 strategic consequence):** LE-GF's 2.7× IS→OOS Sharpe compression
+(0.939 → ~0.34) is now UNEXPLAINED — the COVID attribution from docs 45/46 is **FALSIFIED** (placebo
+rank 53.7th pctile). An IS-anchored paper-trade "harvest" on a system with an unexplained 2.7× OOS
+decay is exploration, not harvest. Highest-EV next action: **pre-registered IS VR screening of the
+remaining literature-anchored candidates in the 46 TRUSTED legs** — Gold–Silver first (textbook
+cointegration; Escribano–Granger 1998; doubles as the strongest remaining §11.8 anchor candidate),
+Platinum–Palladium second (PGM substitution economics; non-energy, non-livestock diversifier).
+Sequential, pre-registered cohort, no argmax across instruments. NG raw-leg acquisition is apparatus
+maintenance, not book-unblocking (the 7.5× expectancy gap is back-adj-independent).

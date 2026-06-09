@@ -497,12 +497,17 @@ def run_test_a() -> dict:
     power_rejections = 0
     alpha_power = PASS_P_RW_A
     for i in range(n_power_paths):
-        # Simulate AR(1) path (stationary, zero-mean)
-        path_pow = np.empty(n_pow)
-        path_pow[0] = 0.0
+        # CORRECTED (doc 48 four-lens review): vr_ar1_theoretical describes a series whose
+        # INCREMENTS are AR(1) with parameter phi. The original run simulated AR(1) in LEVELS,
+        # whose increments have realized VR(20)≈0.047 — an extreme sub-diffusion object that
+        # trivially rejects RW (claimed power=1.000 was an artifact). Simulate AR(1) increments
+        # and cumulate so the realized VR(20) of the path is the calibrated 0.898.
+        dr_pow = np.empty(n_pow - 1)
         eps_pow = rng_pow.normal(0, sig_ou_pow, n_pow - 1)
-        for t in range(1, n_pow):
-            path_pow[t] = phi_target * path_pow[t-1] + eps_pow[t-1]
+        dr_pow[0] = eps_pow[0]
+        for t in range(1, n_pow - 1):
+            dr_pow[t] = phi_target * dr_pow[t-1] + eps_pow[t]
+        path_pow = np.concatenate(([0.0], np.cumsum(dr_pow)))
         # Test against RW surrogates (N=200 for speed inside power loop)
         _, p_pow, _ = surrogate_pval(path_pow, VR_Q_PRIMARY, 200,
                                      SEED_A + 1000 + i, "rw")

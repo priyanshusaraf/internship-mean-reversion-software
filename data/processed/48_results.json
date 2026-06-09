@@ -100,8 +100,10 @@
       "n_power_paths": 500,
       "alpha": 0.0167,
       "rejections": 500,
-      "empirical_power": 1.0,
-      "note": "AR(1) path calibrated to VR=0.898 at q=20; test repeated N_power_paths times at N=200 speed surrogates"
+      "empirical_power": 0.284,
+      "note": "AR(1) path calibrated to VR=0.898 at q=20; test repeated N_power_paths times at N=200 speed surrogates",
+      "empirical_power_ORIGINAL_DEFECTIVE": 1.0,
+      "correction_2026_06_10": "Original sim built AR(1) in levels (realized VR(20)~0.047) while calibrated for AR(1) increments; power=1.000 was an artifact. Corrected increments-AR(1) sim (realized VR(20)=0.8954, same seeds/alpha/n): power=142/500=0.284. See doc 48 four-lens review."
     },
     "jackknife": {
       "full_vr20": 0.9008,

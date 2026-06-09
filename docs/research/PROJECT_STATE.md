@@ -1,6 +1,6 @@
 # AMR Project State
 
-**Last updated:** 2026-06-06 (doc 47: T2.5 trend-death NO_CONTENT — t_β signal too permissive (18-20% fire rate); 0/4 instruments hit both criteria; sign inconsistent; Stage-2 blocked; redesign path: R²/CUSUM + instrument selection + fire rate <5%). Gate 0 (doc 46): LE-GF §11.8 anchor IS-only confirmed.
+**Last updated:** 2026-06-10 (doc 48: RB-CL alt-split IS VR p_rw=0.0798 ≥ α=0.0167 → **ARCHIVED PERMANENT** — "not detected" archive, NOT demonstrated-absent (four-lens review caught power-sim bug: claimed 1.000 → corrected 0.284); LE-GF ex-COVID OOS Sharpe=0.351 < 0.50 + placebo rank 53.7th pctile → **COVID attribution of OOS weakness FALSIFIED**, OOS-STRUCTURAL-WEAKNESS, IS anchor unchanged; combination gate BLOCKED; programme at single-sleeve IS-anchor status. Next: pre-registered second-sleeve IS VR screening — GC-SI first, PL-PA second.) Prior: doc 47 T2.5 NO_CONTENT; doc 46 LE-GF §11.8 IS-only anchor.
 
 ---
 
@@ -8,9 +8,10 @@
 
 | Hypothesis | Status | Next action |
 |---|---|---|
-| **RB-CL sleeve** | **DEFERRED-OOS-SIGNAL** — Gate A excision FAIL (IS VR p=0.313); IS economics +$0.424 positive; power issue (30-40%), not falsification; sub-diffusion concentrated post-2018 | Reopen: IS VR confirmation on alternative split (1998-2023 IS, 2023-2026 OOS); OR cross-habitat IS VR replication |
-| **LE-GF sleeve** | **MERELY-TRUE + §11.8 IS-ONLY CONFIRMED (doc 46)** — IS VR p_rw=0.024 (IS-only, 4 surrogates), IS Sharpe=0.939; OOS Sharpe=0.233 (COVID); full-period illusion ruled out | Track 1: pre-register trade rules → IS sanity → 2022-2026 sub-period check → live paper. Track 1 runs BACKGROUND. |
-| Portfolio combination | **INSUFFICIENT** — Gate A failed; combination untestable; independence CONFIRMED (ρ=0.013) informational | Reopen after RB-CL IS VR confirmed; pre-register combination test separately |
+| **Second-sleeve IS VR screening (GC-SI → PL-PA)** | **ACTIVE — prereg PENDING (doc 48 trader lens)** — the only live path to the two-sleeve book; GC-SI doubles as strongest remaining §11.8 anchor candidate | Freeze prereg (doc 49): cohort order, splits, α, costs before any VR inspected; sequential, no argmax |
+| **RB-CL sleeve** | **ARCHIVED PERMANENT (doc 48)** — third look p_rw=0.0798 ≥ 0.0167; 3-look alpha budget exhausted; corrected power 0.284/look → "not detected," NOT demonstrated-absent | None. No fourth look, ever. |
+| **LE-GF sleeve** | **MERELY-TRUE; §11.8 IS-ONLY anchor stands (doc 46)** — but doc 48 **FALSIFIED the COVID attribution** of OOS weakness (ex-COVID Sharpe 0.351 ≈ full 0.342; placebo rank 53.7th pctile): the 2.7× IS→OOS compression is structural & unexplained | Track-1 paper-harvest DEMOTED (exploration, not harvest, until decay mechanism named). Standalone reopen: new prereg w/ mechanism beyond COVID |
+| Portfolio combination | **BLOCKED (doc 48)** — RB-CL archived; LE-GF OOS-structurally-weak; independence ρ=0.013 preserved for a future qualified pair | Reopen: a NEW second instrument with IS VR + OOS economics (Sharpe>0.50, n≥30) → fresh combination prereg |
 | Arm A v2 — β=1 calendar MR | CONDITIONAL SURVIVAL (NG confirms; uneconomic before cost) | Low priority; gated behind crack-β confirmation |
 | Kalman μ* (instrumentation) | ACTIVE — terminal/descriptive | No action needed |
 | Residual Ecology | ACTIVE — gated, very low priority | Gated behind positive control |
@@ -119,6 +120,16 @@
 
 ## Highest-information next steps (SINGLE NEXT ACTION)
 
+**UPDATED 2026-06-10 (doc 48):** the crack-β execution below is DONE (docs 39–48; RB-CL archived,
+LE-GF IS-only anchor). The single next action is now: **freeze prereg doc 49 — second-sleeve IS VR
+screening, GC-SI first then PL-PA, frozen-β, doc-46 protocol, sequential, no argmax** — then run it.
+If both fail: declare the spread-MR book infeasible at current breadth and surface to researcher.
+Secondary standing items: NG1!/NG2! raw-leg acquisition (apparatus maintenance — unblocks NG back-adj
+closure, does NOT unblock the book); LE-GF OOS-decay mechanism (open question, no admissible
+hypothesis named yet; COVID falsified by doc 48 placebo control).
+
+<details><summary>Superseded (2026-06-05): crack-β execution plan</summary>
+
 **EXECUTE crack-β F5+F6 on real HO2!-CL2! data** — the §11.8 positive control is BLOCKING.
 
 ```python
@@ -135,3 +146,5 @@ F5: beta = presample_ols_beta(A, B, pre_sample_fraction=0.25)  # frozen after pr
 **If both fail:** apparatus may need recalibration; run NG back-adj closure to verify the calendar kills.
 
 **Forbidden:** new ontology, substrate expansion, dynamic β families (F1/F2/F3 inadmissible — zombie-prohibition now applies), modification of frozen pre-registration parameters.
+
+</details>
