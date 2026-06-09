@@ -1,3 +1,4 @@
 # Memory Index
 
 - [MRScore Plan 2026-06-02](project_mrscore_plan.md) — Canonical MRScore spec (doc 01), phase plan, temporal integrity rules for DRC/HitRate, open decisions, authorization question, ADANIENT regime warning
+- [RB-CL / LE-GF Reopen Pre-Reg](project_rb_cl_le_gf_reopen_prereg.md) — 2026-06-10 Revision 1 (adversarial audit): Test A leg=CL2! (NOT CL1!), no primary excision, α=0.0167 (3-look Bonferroni), IS_END=2022-12-31; Test B ex-COVID 2020-01-01→2021-06-30, dual-criterion (Sharpe>0.50 AND ≥90th pctile placebo); combination p<0.0167 + dual-criterion

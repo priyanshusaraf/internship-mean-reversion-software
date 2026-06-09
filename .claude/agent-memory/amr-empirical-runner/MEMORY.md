@@ -1,0 +1,5 @@
+# Memory Index
+
+- [RB-CL Permanent Archive](project_rb_cl_archived.md) — doc 48 (2026-06-10): RB-CL PERMANENTLY ARCHIVED; third look p=0.0798≥0.0167; power=1.000 proves it's not a power problem; no fourth look ever
+- [LE-GF OOS Status](project_le_gf_oos_status.md) — doc 48 (2026-06-10): OOS-STRUCTURAL-WEAKNESS; Sharpe_ex_covid=0.351≤0.50; COVID mechanism not specific (placebo rank 53.7th pctile); IS anchor (p=0.024) intact
+- [Programme Single-Sleeve Status](project_single_sleeve_status.md) — doc 48 combination gate BLOCKED; next = identify second instrument with IS VR confirmation for two-sleeve book
