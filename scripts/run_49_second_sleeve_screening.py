@@ -942,7 +942,10 @@ def run_pair(
         underpowered_sg = bool(obs_power is not None and obs_power < 0.30)
         print(f"  §11.8 underpowered: {underpowered_sg}")
 
-        result["verdict"] = "SPEED_GATE_KILL"
+        # CORRECTED (doc 49 four-lens review): the frozen tree routes ANY GC-SI failure with
+        # power < 0.30 to INCONCLUSIVE-UNDERPOWERED + mandatory §11.8 report — the speed gate
+        # is not exempt. The original hardcoded SPEED_GATE_KILL bypassed the pre-registered branch.
+        result["verdict"] = "INCONCLUSIVE-UNDERPOWERED" if underpowered_sg else "SPEED_GATE_KILL"
         result["construction"] = _construction_block(
             n_aligned, n_is_total, n_oos_total, n_is_valid, n_oos_valid,
             n_roll_masked_total, idx_is, idx_oos, beta_val, f_bu, pre_n,

@@ -8,7 +8,7 @@
 
 | Hypothesis | Status | Next action |
 |---|---|---|
-| **Second-sleeve IS VR screening (GC-SI → PL-PA)** | **ACTIVE — prereg 49 FROZEN (rev 1, audited)** — the only live path to the two-sleeve book; GC-SI doubles as strongest remaining §11.8 anchor candidate | EXECUTE prereg 49 (GC-SI first, fixed-sequence α=0.025; flat-bar + ADR_003 gates; FileNotFound=BUG not verdict) |
+| **Second-sleeve IS VR screening (GC-SI → PL-PA)** | **EXECUTED (doc 49) → COHORT-UNRESOLVED-UNDERPOWERED** — GC-SI kill CONSTRUCTION-INDUCED (level-β on 2× ratio drift; no market evidence); PL-PA = PL2! data inadmissible (pair untested); "book infeasible" STRUCK | **RESEARCHER DECISION:** GC-SI log-spread re-test prereg — how to alpha-price the audit's contaminated peek (log-ratio VR 0.947 IS / 0.797 OOS seen during defect diagnosis) |
 | **RB-CL sleeve** | **ARCHIVED PERMANENT (doc 48)** — third look p_rw=0.0798 ≥ 0.0167; 3-look alpha budget exhausted; corrected power 0.284/look → "not detected," NOT demonstrated-absent | None. No fourth look, ever. |
 | **LE-GF sleeve** | **MERELY-TRUE; §11.8 IS-ONLY anchor stands (doc 46)** — but doc 48 **FALSIFIED the COVID attribution** of OOS weakness (ex-COVID Sharpe 0.351 ≈ full 0.342; placebo rank 53.7th pctile): the 2.7× IS→OOS compression is structural & unexplained | Track-1 paper-harvest DEMOTED (exploration, not harvest, until decay mechanism named). Standalone reopen: new prereg w/ mechanism beyond COVID |
 | Portfolio combination | **BLOCKED (doc 48)** — RB-CL archived; LE-GF OOS-structurally-weak; independence ρ=0.013 preserved for a future qualified pair | Reopen: a NEW second instrument with IS VR + OOS economics (Sharpe>0.50, n≥30) → fresh combination prereg |

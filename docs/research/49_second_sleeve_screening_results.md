@@ -272,3 +272,73 @@ This is NOT identical to the pre-registration's SPREAD-MR-BOOK-INFEASIBLE-AT-CUR
 ---
 
 *Results frozen 2026-06-10. All pre-registered gates applied in order. No post-hoc adjustments.*
+
+---
+
+## FOUR-LENS REVIEW (2026-06-10, post-execution) — VERDICT-INVALIDATING CORRECTIONS
+
+Adversarial + statistical lenses (independent, both reproduced every number exactly). Both returned
+**INADMISSIBLE-AS-EVIDENCE** for the GC-SI label and the cohort leaf as originally written. The
+corrections below are binding; the original prose above is retained per no-silent-rewrite.
+
+### Correction 1 — GC-SI verdict: ~~SPEED_GATE_KILL / "genuine negative"~~ → **INCONCLUSIVE-UNDERPOWERED + CONSTRUCTION-INADMISSIBLE**
+
+- **Frozen-tree bypass (METHODOLOGY, CRITICAL):** the pre-registered tree routes *any* GC-SI
+  failure with power < 0.30 to INCONCLUSIVE-UNDERPOWERED with a mandatory §11.8 report. Power =
+  0.176 at reference VR=0.90 (and 0.006 at observed VR) — both < 0.30. The runner's speed-gate
+  branch hardcoded SPEED_GATE_KILL and bypassed the branch (its own JSON said
+  `apparatus_status: UNDERPOWERED, 11_8_trigger: true`, contradicting the prose). "VR>1 means
+  nothing to detect regardless of power" is post-hoc reasoning the prereg never authorized — a
+  test with 17.6% power at VR=0.90 cannot distinguish trending from moderately-mean-reverting.
+  Runner branch fixed (`run_49...py`, no frozen constant touched).
+- **Construction-induced kill (METHODOLOGY, decisive — statistical lens):** the gold/silver ratio
+  drifted **39.9 → 83.1** across the active IS window; a frozen level-β (39.48, fit 1998–2005)
+  cannot track a 2× ratio drift, so the level spread mechanically inherits the drift as trend —
+  **64.6% of Var(spread) is a deterministic linear trend**. IS VR(20)≈1.01 was a near-guaranteed
+  outcome of the construction, not a market read. For a ratio-cointegrated pair the admissible
+  object is the log-spread; the prereg's relegation of log-spread to informational-only doomed the
+  test ex ante. **The GC-SI result carries no evidence for or against gold–silver MR.**
+- **§11.8 NOT validly exercised:** the apparatus was never given an admissible construction to
+  confirm. "Apparatus is sound / genuine negative" is struck. LE-GF (crack domain) remains the only
+  standing §11.8 confirmation; this run neither strengthens nor impugns it.
+
+### Correction 2 — Cohort leaf: ~~COHORT-EXHAUSTED → book infeasible at current breadth~~ → **COHORT-UNRESOLVED-UNDERPOWERED**
+
+No admissible second-sleeve test was completed: GC-SI tested the wrong object (level-β on a
+ratio-drifting pair); PL-PA tested contaminated data (verdict attaches to the PL2! *data source*,
+not to platinum–palladium MR, which remains untested). The book remains BLOCKED for lack of a
+second sleeve, but **"infeasible at current breadth" is struck** — it claimed a market negative the
+evidence does not support.
+
+### §11.8 apparatus report (owed by the frozen tree, delivered here)
+
+| Quantity | Value |
+|---|---|
+| Observed IS VR(20) (level construction) | 1.0106 |
+| Power at observed VR | 0.006 |
+| Power at reference VR=0.90, n=3,155, α=0.025 | **0.176** |
+| n required for power ≥ 0.30 at VR=0.90 | ~4,500–5,000 bars |
+| Binding constraint | data depth (active-IS 45% slice = 3,155 bars) **and** construction object |
+
+### CONTAMINATION DISCLOSURE (binding on any future GC-SI pre-registration)
+
+During defect diagnosis the statistical lens computed the **log-ratio** VR on the same windows:
+**VR(20) = 0.947 (IS) / 0.797 (OOS)** — sub-diffusive, i.e. favorable. This was a diagnostic peek,
+not a test. **Any future GC-SI log-spread pre-registration is therefore NOT blind**: it must
+disclose this look, count it in its alpha accounting, and pre-commit thresholds accordingly. A
+"rescue read" of these numbers as evidence is forbidden (Trap 7).
+
+### Corrected registry transitions
+
+| Object | Original (struck) | Corrected |
+|---|---|---|
+| GC-SI | SCREENED-NEGATIVE | **INCONCLUSIVE-UNDERPOWERED / CONSTRUCTION-INADMISSIBLE** (no market claim) |
+| PL-PA | MEASUREMENT-INADMISSIBLE | unchanged — but attaches to PL2! data source; pair untested |
+| Cohort | COHORT-EXHAUSTED (book infeasible) | **COHORT-UNRESOLVED-UNDERPOWERED** |
+| §11.8 | "not triggered / apparatus sound" | **not validly exercised**; LE-GF remains sole anchor |
+
+**Next admissible action (researcher decision required):** a GC-SI **log-spread** re-test under a
+NEW pre-registration that (a) discloses and alpha-prices the contaminated peek, (b) freezes the
+log-ratio construction as primary, (c) addresses the data-depth power constraint. The peek
+contamination makes the alpha accounting genuinely non-trivial — surfaced to researcher rather than
+auto-frozen.

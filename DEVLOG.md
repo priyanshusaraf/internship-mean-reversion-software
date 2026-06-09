@@ -32,3 +32,24 @@
   GC-SI failing to confirm = apparatus-recalibration signal), **PL-PA second**; frozen-β, doc-46
   protocol, sequential, cohort/α/splits frozen before any VR inspected, no argmax. Both fail →
   declare spread-MR book infeasible at current breadth.
+
+## 2026-06-10b (autonomous tick) — Doc 49 executed; four-lens review INVALIDATED the terminal labels
+
+- **Executed prereg 49:** GC-SI speed-gate fail (level-spread IS VR(20)=1.0106, p_rw=0.6418);
+  PL-PA halted at flat-bar gate (PL2! 12.39% post-trim, pervasive 1998–2007). Runner labeled
+  GC-SI "clean kill" and cohort "EXHAUSTED → book infeasible."
+- **Four-lens review (adversarial + statistical, independent) — both INADMISSIBLE-AS-EVIDENCE:**
+  1. **Frozen-tree bypass:** power 0.176 (ref VR=0.90) < 0.30 mandates INCONCLUSIVE-UNDERPOWERED +
+     §11.8 report; the speed-gate branch hardcoded SPEED_GATE_KILL (runner JSON itself said
+     UNDERPOWERED/11_8_trigger=true). Branch fixed in run_49 script.
+  2. **Construction-induced kill (decisive):** gold/silver ratio drifted 39.9→83.1 over IS; frozen
+     level-β=39.48 inherits the drift as trend (64.6% of Var(spread) = linear trend) → VR≈1 was
+     near-guaranteed by construction. Log-ratio same windows: VR=0.947 IS / 0.797 OOS. GC-SI result
+     carries NO market evidence either way. §11.8 not validly exercised.
+- **Corrected labels (doc 49 + JSON + registry + PROJECT_STATE):** GC-SI = INCONCLUSIVE-UNDERPOWERED
+  / CONSTRUCTION-INADMISSIBLE; PL-PA = data-source verdict, pair untested; cohort =
+  COHORT-UNRESOLVED-UNDERPOWERED; "book infeasible at current breadth" STRUCK.
+- **CONTAMINATION DISCLOSURE:** the audit's diagnostic peek at GC-SI log-ratio VR (favorable) means
+  any future GC-SI log-spread prereg is NOT blind — must disclose + alpha-price the look.
+- **BLOCKED → RESEARCHER DECISION:** how to alpha-price the contaminated peek in the GC-SI
+  log-spread re-test prereg (the only named live path to the second sleeve). Not auto-frozen.

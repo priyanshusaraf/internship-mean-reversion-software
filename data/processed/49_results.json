@@ -61,7 +61,7 @@
       },
       "mask_method": "increment_jump_mask (frozen engine, k=8.0, window=60)"
     },
-    "verdict": "SPEED_GATE_KILL",
+    "verdict": "INCONCLUSIVE-UNDERPOWERED",
     "construction": {
       "n_aligned_total": 7016,
       "n_is_total": 4911,
@@ -123,16 +123,18 @@
       "f_betaupdate": "PASS (0.000000)",
       "aligned_bars": "PASS (7016)",
       "speed_gate_N200": "KILL (p_rw=0.6418 > 0.2)"
-    }
+    },
+    "verdict_ORIGINAL_DEFECTIVE": "SPEED_GATE_KILL"
   },
   "screening_decision": {
-    "gc_si_verdict": "SPEED_GATE_KILL",
+    "gc_si_verdict": "INCONCLUSIVE-UNDERPOWERED",
     "gc_si_passed": false,
     "gc_si_failed_clean": true,
     "gc_si_inconclusive_underpowered": false,
     "gc_si_bug": false,
     "pl_pa_verdict": "MEASUREMENT-INADMISSIBLE",
-    "pl_pa_passed": false
+    "pl_pa_passed": false,
+    "gc_si_verdict_ORIGINAL_DEFECTIVE": "SPEED_GATE_KILL"
   },
   "apparatus_check_11_8": {
     "gc_si_verdict": "SPEED_GATE_KILL",
@@ -159,7 +161,7 @@
       "n_rows_dropped": 783
     }
   },
-  "cohort_verdict": "COHORT-EXHAUSTED-PL-PA-MEASUREMENT-INADMISSIBLE",
+  "cohort_verdict": "COHORT-UNRESOLVED-UNDERPOWERED",
   "next_action": "GC-SI: speed gate kill (VR\u22481.01, p_rw=0.64 >> 0.20); \u00a711.8 power check required. PL-PA: MEASUREMENT-INADMISSIBLE due to pervasive flat-bar contamination in PL2! (12.4%+ even after trim to 1994). Surface to researcher: (a) PL2! data requires cohort-audit trimming to post-2008 or use of a different PL data source; (b) GC-SI \u00a711.8 apparatus investigation required (observed VR\u22481.01 is super-diffusive); (c) recommend expansion to equity pairs or FX if commodity spread cohort exhausted.",
   "registry_transitions": [
     {
@@ -179,5 +181,7 @@
       "from": "BLOCKED",
       "to": "BLOCKED-COHORT-MEASUREMENT-INADMISSIBLE"
     }
-  ]
+  ],
+  "cohort_verdict_ORIGINAL_DEFECTIVE": "COHORT-EXHAUSTED-PL-PA-MEASUREMENT-INADMISSIBLE",
+  "four_lens_correction_2026_06_10": "GC-SI relabeled SPEED_GATE_KILL->INCONCLUSIVE-UNDERPOWERED per frozen tree (power 0.176<0.30 at ref VR; 0.006 at obs VR). Statistical lens: kill was CONSTRUCTION-INDUCED \u2014 frozen level-beta on a ratio drifting 39.9->83.1 makes VR~1 near-guaranteed (trend share of Var=0.646); log-ratio same window VR(20)=0.947 IS / 0.797 OOS (DIAGNOSTIC PEEK \u2014 contaminates any future GC-SI prereg; must be disclosed and alpha-spent). Cohort leaf corrected COHORT-EXHAUSTED->COHORT-UNRESOLVED-UNDERPOWERED: no admissible second-sleeve test was completed (GC-SI wrong-object, PL-PA data-inadmissible). 'Book infeasible' claim struck."
 }
