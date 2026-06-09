@@ -1,0 +1,183 @@
+{
+  "pre_registration": {
+    "doc": "49",
+    "revision": "1",
+    "date_frozen": "2026-06-10",
+    "hypothesis": "IS VR(20) < 1 vs RW null; fixed-sequence GC-SI then PL-PA",
+    "beta_mode": "F5 presample-OLS (frozen, PRESAMPLE_FRAC=0.25)",
+    "seed_gc_si": 20260610,
+    "seed_pl_pa": 20260611,
+    "alpha_per_instrument": 0.025,
+    "fwer_bound": 0.05,
+    "cost_primary": 0.005,
+    "vr_q_primary": 20,
+    "vr_q_grid": [
+      2,
+      5,
+      10,
+      20,
+      40
+    ],
+    "n_surr_speed": 200,
+    "n_surr_full": 500
+  },
+  "gc_si": {
+    "pair": "GC-SI",
+    "leg1": "GC2!",
+    "leg2": "SI2!",
+    "seed": 20260610,
+    "adr003_assertions": {
+      "SI2!_event_date": "2026-01-29",
+      "SI2!_event_caught": true,
+      "SI2!_raw_pret": 0.3106,
+      "SI2!_robust_z": 15.45,
+      "GC2!_event_date": "1999-09-27",
+      "GC2!_event_caught": true,
+      "GC2!_raw_pret": 0.0208,
+      "GC2!_robust_z": 19.26,
+      "n_gc2_masked_total": 12,
+      "n_si2_masked_total": 6
+    },
+    "flat_bar": {
+      "presample_frac": 0.25,
+      "presample_n": 1754,
+      "GC2!_flat_pct_presample": 1.083,
+      "SI2!_flat_pct_presample": 1.482,
+      "trimmed": true,
+      "trim_start_date": "1998-07-07",
+      "n_rows_dropped": 340,
+      "gate": "PASS"
+    },
+    "roll_mask_stats": {
+      "GC2!": {
+        "total_raw_bars": 8848,
+        "masked_bars_in_aligned": 12,
+        "mask_pct_in_aligned": 0.171
+      },
+      "SI2!": {
+        "total_raw_bars": 7356,
+        "masked_bars_in_aligned": 6,
+        "mask_pct_in_aligned": 0.0855
+      },
+      "mask_method": "increment_jump_mask (frozen engine, k=8.0, window=60)"
+    },
+    "verdict": "SPEED_GATE_KILL",
+    "construction": {
+      "n_aligned_total": 7016,
+      "n_is_total": 4911,
+      "n_oos_total": 2105,
+      "n_is_valid": 3155,
+      "n_oos_valid": 2098,
+      "n_roll_masked": 15,
+      "presample_bars": 1754,
+      "is_start": "1998-07-07",
+      "is_end": "2018-01-21",
+      "oos_start": "2018-01-22",
+      "oos_end": "2026-06-03",
+      "beta_value": 39.481602,
+      "beta_mode": "F5 presample-OLS (frozen)",
+      "f_betaupdate": 0.0,
+      "trimmed_early_splice": true,
+      "trim_start_date": "1998-07-07",
+      "n_rows_dropped_trim": 340
+    },
+    "vr_results_is": {
+      "vr20_speed": 1.0106,
+      "p_rw_N200": 0.6418,
+      "speed_gate": "KILL"
+    },
+    "power_simulation": {
+      "at_observed_vr": {
+        "vr_target": 1.0106,
+        "phi_target_ar1": 0.00557,
+        "vr_ar1_theoretical": 1.0106,
+        "mean_realized_vr": 0.9961,
+        "vr_calibration_ok": true,
+        "n_is_valid": 3155,
+        "n_paths": 500,
+        "alpha": 0.025,
+        "rejections": 3,
+        "empirical_power": 0.006
+      },
+      "at_reference_vr_090": {
+        "vr_target": 0.9,
+        "phi_target_ar1": -0.055394,
+        "vr_ar1_theoretical": 0.9,
+        "mean_realized_vr": 0.8871,
+        "vr_calibration_ok": true,
+        "n_is_valid": 3155,
+        "n_paths": 500,
+        "alpha": 0.025,
+        "rejections": 88,
+        "empirical_power": 0.176
+      }
+    },
+    "apparatus_11_8": {
+      "empirical_power_at_observed_vr": 0.006,
+      "underpowered": true,
+      "apparatus_status": "UNDERPOWERED"
+    },
+    "kill_gates": {
+      "file_readable": "PASS",
+      "flat_bar": "PASS",
+      "f_betaupdate": "PASS (0.000000)",
+      "aligned_bars": "PASS (7016)",
+      "speed_gate_N200": "KILL (p_rw=0.6418 > 0.2)"
+    }
+  },
+  "screening_decision": {
+    "gc_si_verdict": "SPEED_GATE_KILL",
+    "gc_si_passed": false,
+    "gc_si_failed_clean": true,
+    "gc_si_inconclusive_underpowered": false,
+    "gc_si_bug": false,
+    "pl_pa_verdict": "MEASUREMENT-INADMISSIBLE",
+    "pl_pa_passed": false
+  },
+  "apparatus_check_11_8": {
+    "gc_si_verdict": "SPEED_GATE_KILL",
+    "observed_vr": 1.0106,
+    "empirical_power_at_observed_vr": 0.006,
+    "power_adequate": false,
+    "apparatus_status": "UNDERPOWERED",
+    "11_8_trigger": true
+  },
+  "pl_pa": {
+    "pair": "PL-PA",
+    "leg1": "PL2!",
+    "leg2": "PA1!",
+    "seed": 20260611,
+    "verdict": "MEASUREMENT-INADMISSIBLE",
+    "measurement_inadmissible_reason": "flat_bar_pct_exceeds_5pct_post_trim",
+    "flat_bar": {
+      "presample_frac": 0.25,
+      "presample_n": 1582,
+      "PL2!_flat_pct_posttrim": 12.389,
+      "PA1!_flat_pct_posttrim": 0.948,
+      "trimmed": true,
+      "trim_start_date": "1994-06-06",
+      "n_rows_dropped": 783
+    }
+  },
+  "cohort_verdict": "COHORT-EXHAUSTED-PL-PA-MEASUREMENT-INADMISSIBLE",
+  "next_action": "GC-SI: speed gate kill (VR\u22481.01, p_rw=0.64 >> 0.20); \u00a711.8 power check required. PL-PA: MEASUREMENT-INADMISSIBLE due to pervasive flat-bar contamination in PL2! (12.4%+ even after trim to 1994). Surface to researcher: (a) PL2! data requires cohort-audit trimming to post-2008 or use of a different PL data source; (b) GC-SI \u00a711.8 apparatus investigation required (observed VR\u22481.01 is super-diffusive); (c) recommend expansion to equity pairs or FX if commodity spread cohort exhausted.",
+  "registry_transitions": [
+    {
+      "pair": "GC-SI",
+      "from": "ACTIVE",
+      "to": "SCREENED-NEGATIVE",
+      "note": "speed gate kill; VR=1.01 super-diffusive; \u00a711.8 applies"
+    },
+    {
+      "pair": "PL-PA",
+      "from": "ACTIVE",
+      "to": "MEASUREMENT-INADMISSIBLE",
+      "note": "PL2! flat-bar contamination pervasive 1998-2008; construction halt"
+    },
+    {
+      "pair": "Portfolio/book",
+      "from": "BLOCKED",
+      "to": "BLOCKED-COHORT-MEASUREMENT-INADMISSIBLE"
+    }
+  ]
+}
