@@ -53,3 +53,18 @@
   any future GC-SI log-spread prereg is NOT blind — must disclose + alpha-price the look.
 - **BLOCKED → RESEARCHER DECISION:** how to alpha-price the contaminated peek in the GC-SI
   log-spread re-test prereg (the only named live path to the second sleeve). Not auto-frozen.
+
+## 2026-06-10c — Doc 50: GC-SI log-ratio → INCONCLUSIVE-UNDERPOWERED; peek exposed as window-specific
+
+- User said "continue" → researcher-delegate adjudication of the contaminated-peek alpha problem:
+  log-ratio β=1 definitional (no presample, kills doc-49 wrong-object defect, recovers full series);
+  α=0.0167 (3-look family incl. the peek); audit added: PASS leaf = PEEK-CONDITIONED (IS is ~64%
+  peeked rows; Bonferroni can't price run-selection) + MANDATORY disjoint unpeeked 1998-2005 check.
+- **Result (frozen tree followed exactly, incl. universal underpowered branch):** speed-gate
+  p_rw=0.468; power 0.228 → INCONCLUSIVE-UNDERPOWERED. Substance: full-IS VR(20)=0.985 (near-RW);
+  **unpeeked 1998-2005 slice VR=1.16 p=0.93 — TRENDS**; only the peeked windows are favorable
+  (2005-2018: 0.947; OOS: 0.773 p=0.018, non-promotable). The disjoint check caught the peek as
+  window-specific selection — the audit mandate earned its keep.
+- Registry/PROJECT_STATE updated; reopen = pre-1998 data depth (re-run frozen spec, no redesign).
+- **RESEARCHER DECISION (new):** (a) acquire pre-1998 GC/SI history (power unlock), (b) accept
+  single-sleeve status → LE-GF economics prereg as primary path, (c) new platinum data for PL-PA.

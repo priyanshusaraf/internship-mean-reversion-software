@@ -8,6 +8,7 @@
 
 | Hypothesis | Status | Next action |
 |---|---|---|
+| **GC-SI log-ratio (doc 50)** | **INCONCLUSIVE-UNDERPOWERED** — full-IS VR=0.985 near-RW; unpeeked 1998-2005 slice TRENDS (VR=1.16); favorable numbers only in peeked windows (selection caught by disjoint check); power 0.228 | **RESEARCHER DECISION:** (a) pre-1998 metals history acquisition → re-run frozen doc-50 spec; (b) single-sleeve LE-GF economics focus; (c) new platinum source for PL-PA |
 | **Second-sleeve IS VR screening (GC-SI → PL-PA)** | **EXECUTED (doc 49) → COHORT-UNRESOLVED-UNDERPOWERED** — GC-SI kill CONSTRUCTION-INDUCED (level-β on 2× ratio drift; no market evidence); PL-PA = PL2! data inadmissible (pair untested); "book infeasible" STRUCK | **RESEARCHER DECISION:** GC-SI log-spread re-test prereg — how to alpha-price the audit's contaminated peek (log-ratio VR 0.947 IS / 0.797 OOS seen during defect diagnosis) |
 | **RB-CL sleeve** | **ARCHIVED PERMANENT (doc 48)** — third look p_rw=0.0798 ≥ 0.0167; 3-look alpha budget exhausted; corrected power 0.284/look → "not detected," NOT demonstrated-absent | None. No fourth look, ever. |
 | **LE-GF sleeve** | **MERELY-TRUE; §11.8 IS-ONLY anchor stands (doc 46)** — but doc 48 **FALSIFIED the COVID attribution** of OOS weakness (ex-COVID Sharpe 0.351 ≈ full 0.342; placebo rank 53.7th pctile): the 2.7× IS→OOS compression is structural & unexplained | Track-1 paper-harvest DEMOTED (exploration, not harvest, until decay mechanism named). Standalone reopen: new prereg w/ mechanism beyond COVID |

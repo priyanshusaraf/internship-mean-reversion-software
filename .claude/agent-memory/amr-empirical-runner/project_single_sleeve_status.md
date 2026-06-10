@@ -1,23 +1,27 @@
 ---
 name: project_single_sleeve_status
-description: Programme is at single-sleeve IS-anchor status after doc 48 (2026-06-10) — need second instrument with IS VR confirmation for two-sleeve book
+description: Programme single-sleeve; combination gate BLOCKED; 46-leg cohort exhausted at current data depth (doc 50 2026-06-10 — GC-SI log-ratio INCONCLUSIVE-UNDERPOWERED)
 metadata:
   type: project
 ---
 
-As of 2026-06-10 (doc 48), the programme is at single-sleeve status.
+As of 2026-06-10 (doc 50), the programme is at single-sleeve status. The 46-TRUSTED-leg cohort is exhausted at current data depth for the two-sleeve IS VR screen.
 
-**Combination gate:** PERMANENTLY BLOCKED on the current RB-CL + LE-GF pair.
-- RB-CL: ARCHIVED permanently
-- LE-GF: IS-only confirmed; OOS economics structural weakness (not COVID-specific)
+**Combination gate:** PERMANENTLY BLOCKED; no second sleeve confirmed.
+- RB-CL: ARCHIVED permanently (doc 48)
+- LE-GF: IS-only confirmed (p=0.024); OOS-STRUCTURAL-WEAKNESS (doc 48)
+- GC-SI level-β: CONSTRUCTION-INADMISSIBLE (doc 49 — 64.6% Var from ratio drift)
+- GC-SI log-ratio: INCONCLUSIVE-UNDERPOWERED (doc 50 — IS VR=0.985, power=0.228 < 0.30)
+- PL-PA: DEFERRED-MEASUREMENT-INADMISSIBLE (PL2! flat-bar 1998-2007, doc 49)
 
-**What the two-sleeve book requires:**
-1. A NEW second instrument with pre-registered IS VR confirmation (p < 0.05, full programme rigor)
-2. The same instrument with confirmed OOS economics (Sharpe > 0.50, n ≥ 30 trades)
-3. Then re-run combination pre-registration (a new doc-49 equivalent)
+**Cohort status:** The 46 TRUSTED legs have been evaluated. No second sleeve confirmed. The bottleneck is now data depth (n_IS ≈ 4,900 bars is insufficient for power ≥ 0.30 at α=0.0167 with ref VR=0.90) and data quality (PL2! contaminated).
 
-**Independence:** ρ=0.013 (RB-CL vs LE-GF, doc 45 Gate B) is locked and informational — it would apply to a future combination if LE-GF is paired with a different second sleeve.
+**What the two-sleeve book requires (options):**
+(a) Acquire pre-1998 GC2!/SI2! history to extend n_IS beyond ~5,000+ bars for adequate power
+(b) Accept single-sleeve LE-GF as primary path; focus on LE-GF economics and book-level cost testing
+(c) PL-PA: requires new platinum data source with flat-bar assessment + new prereg
+(d) Different asset class (equity pairs, FX) — different economics, new prereg required
 
-**Why:** Both doc-48 tests failed. The apparatus is validated (LE-GF IS anchor confirmed; power simulation shows near-unity power at 6K+ bars). The failure of RB-CL is genuine. The programme should look for a new second instrument candidate from the hypothesis registry candidates (DEFERRED instruments with reopen triggers).
+**Why:** Doc 50 disjoint sub-window (1998-07-07→2005-07) showed VR=1.16 (super-diffusive, p=0.928) — the only unpeeked IS slice shows NO sub-diffusion, which is a meaningful negative signal independent of the power issue.
 
-**How to apply:** When asked about two-sleeve book status, report single-sleeve. When asked about next steps, point toward identifying a new second instrument candidate from the registry — not re-testing RB-CL variants.
+**How to apply:** When asked about programme status, report cohort exhausted at current data depth. Next highest-value action is likely LE-GF economics track (separate economics prereg) not new cohort screening.

@@ -1,0 +1,130 @@
+{
+  "flat_bar": {
+    "is_window_rows": 4911,
+    "GC2!_flat_pct_is": 0.509,
+    "SI2!_flat_pct_is": 0.57,
+    "ohlc_available": true,
+    "threshold_pct": 5.0,
+    "gate": "PASS"
+  },
+  "adr003": {
+    "SI2!_caught": true,
+    "SI2!_date": "2026-01-29",
+    "SI2!_log_ret": -0.37195,
+    "SI2!_robust_z": 22.93,
+    "SI2!_target": "2026-01-29",
+    "SI2!_prereg_z": 15.45,
+    "GC2!_caught": true,
+    "GC2!_date": "1999-09-26",
+    "GC2!_log_ret": 0.01113,
+    "GC2!_robust_z": 10.09,
+    "GC2!_target": "1999-09-27",
+    "GC2!_prereg_z": 19.26
+  },
+  "construction": {
+    "n_bars_raw_gc": 8848,
+    "n_bars_raw_si": 7356,
+    "n_aligned_pre_trim": 7696,
+    "n_rows_dropped_trim": 340,
+    "n_aligned_post_trim": 7016,
+    "trim_start_date": "1998-07-07",
+    "actual_start_date": "1998-07-07",
+    "actual_end_date": "2026-06-03",
+    "n_gc_masked": 17,
+    "n_si_masked": 14,
+    "n_combined_masked": 25,
+    "n_valid_total": 6991,
+    "n_is_rows": 4911,
+    "n_oos_rows": 2105,
+    "n_is_valid": 4893,
+    "n_oos_valid": 2098,
+    "is_start": "1998-07-07",
+    "is_end": "2018-01-21",
+    "oos_start": "2018-01-22",
+    "oos_end": "2026-06-03",
+    "beta_mode": "\u03b2=1.0 definitional (log space)",
+    "f_betaupdate": 0.0
+  },
+  "verdict": "INCONCLUSIVE-UNDERPOWERED",
+  "vr_speed_gate": {
+    "vr20": 0.985057,
+    "p_rw_N200": 0.467662,
+    "surr_dist_N200": {
+      "p5": 0.8934,
+      "p50": 0.9874,
+      "p95": 1.1043,
+      "n": 200
+    },
+    "kill": true
+  },
+  "power": {
+    "ref_vr": {
+      "vr_target": 0.9,
+      "phi_target_ar1": -0.055394,
+      "vr_ar1_theoretical": 0.9,
+      "mean_realized_vr": 0.8965,
+      "vr_calibration_ok": true,
+      "n_is_valid": 4893,
+      "n_paths": 500,
+      "alpha": 0.016666666666666666,
+      "rejections": 114,
+      "empirical_power": 0.228
+    },
+    "obs_vr": {
+      "vr_target": 0.9851,
+      "phi_target_ar1": -0.007924,
+      "vr_ar1_theoretical": 0.9851,
+      "mean_realized_vr": 0.9846,
+      "vr_calibration_ok": true,
+      "n_is_valid": 4893,
+      "n_paths": 500,
+      "alpha": 0.016666666666666666,
+      "rejections": 10,
+      "empirical_power": 0.02
+    },
+    "underpowered": true
+  },
+  "kill_gates": {
+    "f_betaupdate": "PASS (0.000 by construction)",
+    "flat_bar": "PASS",
+    "adr003": "PASS",
+    "speed_gate_N200": "KILL (p_rw=0.467662 > 0.2)",
+    "power_branch": "UNDERPOWERED (power=0.228)",
+    "jackknife": "NOT REACHED",
+    "full_test_N500": "NOT REACHED",
+    "oos_sign_reversal": "NOT REACHED"
+  },
+  "disjoint_subwindow": {
+    "start": "1998-07-07",
+    "end": "2005-06-30",
+    "n_rows": 1745,
+    "n_valid": 1737,
+    "vr20": 1.160184,
+    "p_rw_N500": 0.928144,
+    "surr_dist": {
+      "p5": 0.7886,
+      "p50": 0.9863,
+      "p95": 1.1907,
+      "n": 500
+    },
+    "interpretation": "FAIL \u2014 sub-diffusion absent in unpeeked slice",
+    "mandate": "Revision-1 Mandate 2"
+  },
+  "oos_secondary": {
+    "n_rows": 2105,
+    "n_valid": 2098,
+    "oos_start": "2018-01-22",
+    "oos_end": "2026-06-03",
+    "vr20": 0.773016,
+    "p_rw_N500_lower_tail": 0.017964,
+    "p_upper_tail": null,
+    "surr_dist": {
+      "p5": 0.8191,
+      "p50": 0.9882,
+      "p95": 1.1782,
+      "n": 500
+    },
+    "oos_sign_reversal_flag": false,
+    "note": "NON-PROMOTABLE (OOS peeked); informational for early-exit path"
+  }
+}
